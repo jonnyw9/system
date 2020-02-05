@@ -8,9 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class FrontController {
@@ -48,6 +47,13 @@ public class FrontController {
         model.addAttribute("user", user);
         model.addAttribute("event", new Event());
         return "addEvent";
+    }
+
+    @PostMapping("/event/add")
+    public String addEvent(@ModelAttribute Event event, BindingResult bindingResult, Model model){
+        //Save the event
+        //Redirect to the homepage
+        return "";
     }
 
     @GetMapping("/error")
