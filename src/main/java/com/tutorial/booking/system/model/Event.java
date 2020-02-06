@@ -1,17 +1,19 @@
 package com.tutorial.booking.system.model;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
+import java.util.Date;
 
 @Entity
 @Table(name = "bs_event")
 public class Event {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int eventId;
 
-    private String eventStart;
-    private String eventEnd;
+    private Timestamp eventStart;
+    private Timestamp eventEnd;
 
     private String title;
 
@@ -35,19 +37,19 @@ public class Event {
         this.eventId = eventId;
     }
 
-    public String getEventStart() {
+    public Timestamp getEventStart() {
         return eventStart;
     }
 
-    public void setEventStart(String eventStart) {
+    public void setEventStart(Timestamp eventStart) {
         this.eventStart = eventStart;
     }
 
-    public String getEventEnd() {
+    public Timestamp getEventEnd() {
         return eventEnd;
     }
 
-    public void setEventEnd(String eventEnd) {
+    public void setEventEnd(Timestamp eventEnd) {
         this.eventEnd = eventEnd;
     }
 
