@@ -2,6 +2,7 @@ package com.tutorial.booking.system.Controller;
 
 import com.tutorial.booking.system.Service.EventService;
 import com.tutorial.booking.system.Service.UserService;
+import com.tutorial.booking.system.dao.EventDao;
 import com.tutorial.booking.system.dao.UserDao;
 import com.tutorial.booking.system.model.Event;
 import com.tutorial.booking.system.model.User;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.text.ParseException;
 
 @Controller
 public class FrontController {
@@ -50,15 +53,17 @@ public class FrontController {
         makeUserDao(authentication);
         model.addAttribute("user", user);
         System.out.println(user.getUserId());
-        model.addAttribute("event", new Event());
+        model.addAttribute("event", new EventDao());
         return "addEvent";
     }
 
     @PostMapping("/event/add")
-    public String addEvent(@ModelAttribute Event event, BindingResult bindingResult, Model model){
+    public String addEvent(@ModelAttribute EventDao event, BindingResult bindingResult, Model model) throws ParseException {
         //Save the event
-        System.out.println(event);
-        System.out.println(event.getEventStart());
+        //System.out.println(event);
+        System.out.println(event.toString());
+
+
         eventService.add(event);
 
         //Redirect to the homepage

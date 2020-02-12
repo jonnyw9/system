@@ -1,21 +1,13 @@
-package com.tutorial.booking.system.model;
+package com.tutorial.booking.system.dao;
 
-import javax.persistence.*;
-import java.sql.Time;
-import java.sql.Timestamp;
-import java.sql.Date;
+import com.tutorial.booking.system.model.User;
 
+public class EventDao {
 
-@Entity
-@Table(name = "bs_event")
-public class Event {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int eventId;
 
-    private Timestamp eventStart;
-    private Timestamp eventEnd;
+    private String eventStart;
+    private String eventEnd;
 
     private String title;
 
@@ -23,29 +15,8 @@ public class Event {
 
     private boolean accepted;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "creatorUserId", referencedColumnName = "userId")
     private User creatorUserId;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "recipientUserId", referencedColumnName = "userId")
     private User recipientUserId;
-
-    public Event(){}
-
-    //Add date stuff
-    public Event(int eventId, Timestamp eventStart, Timestamp eventEnd, String title, String description,
-                 User creatorUserId, User recipientUserId){
-
-        this.eventId = eventId;
-        this.title = title;
-        this.description = description;
-        this.accepted = false;
-        this.creatorUserId = creatorUserId;
-        this.recipientUserId = recipientUserId;
-        this.eventStart = eventStart;
-        this.eventEnd = eventEnd;
-    }
 
     public int getEventId() {
         return eventId;
@@ -55,19 +26,19 @@ public class Event {
         this.eventId = eventId;
     }
 
-    public Timestamp getEventStart() {
+    public String getEventStart() {
         return eventStart;
     }
 
-    public void setEventStart(Timestamp eventStart) {
+    public void setEventStart(String eventStart) {
         this.eventStart = eventStart;
     }
 
-    public Timestamp getEventEnd() {
+    public String getEventEnd() {
         return eventEnd;
     }
 
-    public void setEventEnd(Timestamp eventEnd) {
+    public void setEventEnd(String eventEnd) {
         this.eventEnd = eventEnd;
     }
 
@@ -109,5 +80,19 @@ public class Event {
 
     public void setRecipientUserId(User recipientUserId) {
         this.recipientUserId = recipientUserId;
+    }
+
+    @Override
+    public String toString() {
+        return "EventDao{" +
+                "eventId=" + eventId +
+                ", eventStart='" + eventStart + '\'' +
+                ", eventEnd='" + eventEnd + '\'' +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", accepted=" + accepted +
+                ", creatorUserId=" + creatorUserId +
+                ", recipientUserId=" + recipientUserId +
+                '}';
     }
 }
