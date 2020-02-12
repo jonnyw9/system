@@ -6,11 +6,16 @@
 </head>
 <body>
 <ul>
-    <li th:text="${user.getFirstName()}"/>
-    <li th:text="${user.getLastName()}"/>
-    <li th:text="${user.getEmail()}" />
-
     <li><a href="/event/add">Add Event</a></li>
+    <!-- Here logout and go home -->
 </ul>
+
+<section id="events">
+    <!-- Here do thymeleaf listing -->
+    <ul th:each="event : ${events}">
+        <li><a th:href="@{'/event/view/' + ${event.eventId}}" th:text="${event.title}"></a></li>
+    </ul>
+</section>
+
 </body>
 </html>

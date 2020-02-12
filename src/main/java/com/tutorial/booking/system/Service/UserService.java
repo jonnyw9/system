@@ -17,8 +17,14 @@ public class UserService {
     public UserDao getUserByUserName(String email){
         Optional<User> user = userRepository.findByEmail(email);
 
-        UserDao returnUser = user.map(UserDao::new).get();
+        return user.map(UserDao::new).get();
+    }
 
-        return returnUser;
+    public User getUserById(int id){
+
+        Optional<User> user = userRepository.findByUserId(id);
+
+        return user.orElse(null);
+
     }
 }

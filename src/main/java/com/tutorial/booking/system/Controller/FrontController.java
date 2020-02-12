@@ -1,5 +1,6 @@
 package com.tutorial.booking.system.Controller;
 
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import com.tutorial.booking.system.Service.EventService;
 import com.tutorial.booking.system.Service.UserService;
 import com.tutorial.booking.system.dao.EventDao;
@@ -14,6 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
+import java.util.List;
 
 @Controller
 public class FrontController {
@@ -44,7 +46,13 @@ public class FrontController {
     @GetMapping("/student")
     public String student(Authentication authentication, Model model){
         makeUserDao(authentication);
+        int userId = user.getUserId();
+
+        List<Event> events = eventService.getEventsForUser(userId);
+
+        model.addAttribute("events", events);
         model.addAttribute("user", user);
+
         return "student";
     }
 
@@ -60,12 +68,7 @@ public class FrontController {
     @PostMapping("/event/add")
     public String addEvent(@ModelAttribute EventDao event, BindingResult bindingResult, Model model) throws ParseException {
         //Save the event
-        //System.out.println(event);
-        System.out.println(event.toString());
-
-
         eventService.add(event);
-
         //Redirect to the homepage
         return "index";
     }
@@ -73,6 +76,14 @@ public class FrontController {
     @GetMapping("/error")
     public String error(){
         return "login";
+    }
+
+    @GetMapping("/event/view/{id}")
+    public String viewEvent(@PathVariable("id") int id, Model model){
+
+        model.addAttribute("event", eventService.getByEventId(id));
+
+        return "viewEvent";
     }
 
     public void makeUserDao(Authentication authentication){

@@ -1,10 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>View Event</title>
 </head>
 <body>
+<h1>View Event</h1>
+<section id="eventDetails">
+    <h2 th:text="${'Title: ' + event.title}"></h2>
+    <div id="eventStart"><p th:text="${'Start: ' + event.eventStart}"></p></div>
+    <div id="eventEnd"><p th:text="${'End: ' + event.eventEnd}"></p></div>
+    <div id="description"><p th:text="${'Description: ' + event.description}"></p></div>
+    <div id="creator"><p th:text="${'Creator: ' + event.creatorUserId.getFirstName()} +' '+ ${event.creatorUserId.getLastName()}"></p></div>
+    <div id="recipient"><p th:text="${'Recipient: ' + event.recipientUserId.getFirstName()} +' '+ ${event.recipientUserId.getLastName()}"></p></div>
+    <div id="accepted"><p th:text="${'Has been accepted: ' + event.accepted}"></p></div>
 
+    <button><a th:href="@{'/event/edit/' + ${event.eventId}}">Edit Event</a></button>
+</section>
 </body>
 </html>
