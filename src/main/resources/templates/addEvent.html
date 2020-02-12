@@ -6,7 +6,6 @@
 </head>
 <body>
 <h1>Add Event</h1>
-<h2 th:text="${user.getUserId()}"></h2>
     <form action="#" th:action="@{/event/add}" th:object="${event}" method="post">
         <input type="hidden" id="creatorUserId" name="creatorUserId" th:attr="value = ${user.userId}"/>
         <input type="hidden" id="recipientUserId" name="recipientUserId" value="2" />

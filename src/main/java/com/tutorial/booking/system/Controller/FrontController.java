@@ -86,6 +86,19 @@ public class FrontController {
         return "viewEvent";
     }
 
+
+    @GetMapping("/event/edit/{id}")
+    public String editEvent(@PathVariable("id") int id, Model model){
+
+        EventDao eventDao = new EventDao(eventService.getByEventId(id));
+
+        model.addAttribute("event", eventDao);
+
+        return "editEvent";
+    }
+
+
+
     public void makeUserDao(Authentication authentication){
         System.out.println(authentication.getName());
         user = userService.getUserByUserName(authentication.getName());

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Event</title>
+</head>
+<body>
+<h1>Edit Event</h1>
+<form action="#" th:action="@{/event/add}" th:object="${event}" method="post">
+    <input type="hidden" id="creatorUserId" name="creatorUserId" th:attr="value = ${user.userId}"/>
+    <input type="hidden" id="recipientUserId" name="recipientUserId" value="2" />
+    <p><input type="datetime-local" min="2020-02-02T9:09:00" max="2020-02-02T9:18:00" id="eventStart" name="eventStart" th:value="*{eventStart}"/></p>
+    <p><input type="datetime-local" min="2020-02-02T9:09:00" max="2020-02-02T9:18:00 "id="eventEnd" name="eventEnd" th:value="*{eventEnd}"></p>
+    <p><input type="text" id="title" name="title" th:value="*{title}"></p>
+    <p><input type="text" id="description" name="description" th:value="*{description}"></p>
+    <p><input type="submit" value="Submit"></p>
+</form>
+</body>
+</html>

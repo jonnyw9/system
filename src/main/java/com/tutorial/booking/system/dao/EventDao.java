@@ -1,5 +1,6 @@
 package com.tutorial.booking.system.dao;
 
+import com.tutorial.booking.system.model.Event;
 import com.tutorial.booking.system.model.User;
 
 public class EventDao {
@@ -17,6 +18,33 @@ public class EventDao {
 
     private User creatorUserId;
     private User recipientUserId;
+
+    public EventDao() {
+    }
+
+    public EventDao(int eventId, String eventStart, String eventEnd, String title, String description, boolean accepted,
+                    User creatorUserId, User recipientUserId) {
+        this.eventId = eventId;
+        this.eventStart = eventStart;
+        this.eventEnd = eventEnd;
+        this.title = title;
+        this.description = description;
+        this.accepted = accepted;
+        this.creatorUserId = creatorUserId;
+        this.recipientUserId = recipientUserId;
+    }
+
+    public EventDao (Event event){
+        this.eventId = event.getEventId();
+        this.title = event.getTitle();
+        this.description = event.getDescription();
+        this.accepted = event.isAccepted();
+        this.creatorUserId = event.getCreatorUserId();
+        this.recipientUserId = event.getRecipientUserId();
+
+        this.eventStart = event.getEventStart().toString();
+        this.eventEnd = event.getEventEnd().toString();
+    }
 
     public int getEventId() {
         return eventId;
