@@ -56,13 +56,13 @@ CREATE TABLE calendar(
 
 CREATE TABLE bs_event(
     event_id int(150) auto_increment primary key NOT NULL,
-    event_start DATETIME NOT NULL,
-    event_end DATETIME NOT NULL,
+    event_start DATETIME,
+    event_end DATETIME,
     title varchar(50),
     description varchar (250),
 	accepted tinyint(1),
-    creator_user_id int(150) NOT NULL,
-    recipient_user_id int(150) NOT NULL,
+    creator_user_id int(150),
+    recipient_user_id int(150),
     foreign key (creator_user_id) references bs_user(user_id),
     foreign key (recipient_user_id) references bs_user(user_id)
 );
