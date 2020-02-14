@@ -53,4 +53,52 @@ public class EventService {
         return optionalEvent.orElse(null);
     }
 
+    public String changeTimestapToString(Timestamp time){
+        String returnTime = time.toString().substring(0,16);
+
+        returnTime = returnTime.replace(' ', 'T');
+
+        System.out.println(returnTime);
+
+        return returnTime;
+    }
+
+    public void updateEvent(EventDao eventDao){
+
+        System.out.println(eventDao.toString());
+
+        Timestamp eventStart = Timestamp.valueOf((eventDao.getEventStart() + ":00").replace("T", " "));
+
+        Timestamp eventEnd = Timestamp.valueOf((eventDao.getEventEnd() + ":00").replace("T", " "));
+
+        Event event = getByEventId(eventDao.getEventId());
+
+        System.out.println(event.toString());
+
+
+        event.setDescription(eventDao.getDescription());
+        event.setEventEnd(eventEnd);
+        event.setEventStart(eventStart);
+        event.setTitle(eventDao.getTitle());
+
+        //Update to the database
+        //eventRepository.updateEvent(eventDao.getEventId(), eventDao.getTitle(), eventDao.getDescription(), eventStart,
+            //eventEnd);
+        eventRepository.save(event);
+    }
+
+    public void cancelEvent(int eventId){
+
+        Event event = getByEventId(eventId);
+
+
+        //Can't delete with these columns containing data so have to nullify them
+        event.setCreatorUserId(null);
+        event.setRecipientUserId(null);
+        eventRepository.save(event);
+
+        
+        eventRepository.delete(event);
+    }
+
 }

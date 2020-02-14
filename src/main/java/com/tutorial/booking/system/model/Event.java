@@ -110,4 +110,18 @@ public class Event {
     public void setRecipientUserId(User recipientUserId) {
         this.recipientUserId = recipientUserId;
     }
+
+    @Override
+    public String toString() {
+        return "Event{" +
+                "eventId=" + eventId +
+                ", eventStart=" + eventStart +
+                ", eventEnd=" + eventEnd +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", accepted=" + accepted +
+                ", creatorUserId=" + creatorUserId +
+                ", recipientUserId=" + recipientUserId +
+                '}';
+    }
 }

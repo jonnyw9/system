@@ -32,6 +32,8 @@ public class EventDao {
         this.accepted = accepted;
         this.creatorUserId = creatorUserId;
         this.recipientUserId = recipientUserId;
+        this.eventStart = eventStart;
+        this.eventEnd = eventEnd;
     }
 
     public EventDao (Event event){
@@ -42,8 +44,6 @@ public class EventDao {
         this.creatorUserId = event.getCreatorUserId();
         this.recipientUserId = event.getRecipientUserId();
 
-        this.eventStart = event.getEventStart().toString();
-        this.eventEnd = event.getEventEnd().toString();
     }
 
     public int getEventId() {

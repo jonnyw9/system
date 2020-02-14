@@ -7,8 +7,9 @@
 <body>
 <h1>Edit Event</h1>
 <form action="#" th:action="@{/event/edit}" th:object="${event}" method="post">
-    <input type="hidden" id="creatorUserId" name="creatorUserId" th:value="*{creatorUserId}"/>
-    <input type="hidden" id="recipientUserId" name="recipientUserId" th:value="*{recipientUserId}" />
+    <input type="hidden" id="eventId" name="eventId" th:field="*{eventId}"/>
+    <input type="hidden" id="creatorUserId" name="creatorUserId" th:field="*{creatorUserId}"/>
+    <input type="hidden" id="recipientUserId" name="recipientUserId" th:field="*{recipientUserId}" />
     <p><input type="datetime-local"  id="eventStart" name="eventStart" th:value="*{eventStart}"/></p>
     <p><input type="datetime-local" id="eventEnd" name="eventEnd" th:value="*{eventEnd}"></p>
     <p><input type="text" id="title" name="title" th:value="*{title}"></p>

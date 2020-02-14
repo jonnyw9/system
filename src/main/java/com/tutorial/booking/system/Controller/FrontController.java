@@ -90,11 +90,35 @@ public class FrontController {
     @GetMapping("/event/edit/{id}")
     public String editEvent(@PathVariable("id") int id, Model model){
 
-        EventDao eventDao = new EventDao(eventService.getByEventId(id));
+        Event event = eventService.getByEventId(id);
+
+        EventDao eventDao = new EventDao(event);
+
+        eventDao.setEventStart(eventService.changeTimestapToString(event.getEventStart()));
+
+        eventDao.setEventEnd(eventService.changeTimestapToString(event.getEventEnd()));
+
+        System.out.println(eventDao.toString());
 
         model.addAttribute("event", eventDao);
 
         return "editEvent";
+    }
+
+    @PostMapping("/event/edit")
+    public String editEvent(@ModelAttribute EventDao event, BindingResult bindingResult, Model model){
+        System.out.println(event.toString());
+        eventService.updateEvent(event);
+
+        return "index";
+    }
+
+    @GetMapping("/event/cancel/{id}")
+    public String deleteEvent(@PathVariable("id") int id, Model model){
+
+        eventService.cancelEvent(id);
+
+        return "index";
     }
 
 

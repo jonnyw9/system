@@ -16,6 +16,7 @@
     <div id="accepted"><p th:text="${'Has been accepted: ' + event.accepted}"></p></div>
 
     <button><a th:href="@{'/event/edit/' + ${event.eventId}}">Edit Event</a></button>
+    <button><a th:href="@{'/event/cancel/' + ${event.eventId}}">Cancel Event</a></button>
 </section>
 </body>
 </html>
