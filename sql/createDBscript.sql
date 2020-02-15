@@ -63,6 +63,7 @@ CREATE TABLE bs_event(
 	accepted tinyint(1),
     creator_user_id int(150),
     recipient_user_id int(150),
+    active tinyint(1),
     foreign key (creator_user_id) references bs_user(user_id),
     foreign key (recipient_user_id) references bs_user(user_id)
 );

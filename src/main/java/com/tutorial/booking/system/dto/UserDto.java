@@ -24,6 +24,9 @@ public class UserDto {
     @NotEmpty
     private String confirmPassword;
 
+    private boolean student;
+    private boolean staff;
+
     public UserDto() {
     }
 
@@ -80,5 +83,21 @@ public class UserDto {
 
     public void setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
+    }
+
+    public boolean isStudent() {
+        return student;
+    }
+
+    public void setStudent(boolean student) {
+        this.student = student;
+    }
+
+    public boolean isStaff() {
+        return staff;
+    }
+
+    public void setStaff(boolean staff) {
+        this.staff = staff;
     }
 }

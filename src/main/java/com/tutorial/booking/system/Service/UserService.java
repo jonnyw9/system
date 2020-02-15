@@ -51,9 +51,11 @@ public class UserService {
         user.setPassword(password);
 
         Roles roles = new Roles();
-        roles.setStudent(true);
+        roles.setStudent(userDto.isStudent());
+        roles.setStaff(userDto.isStaff());
+        roles.setAdmin(false);
         user.setRoleId(roles);
-        
+
         userRepository.save(user);
     }
 }
