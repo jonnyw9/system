@@ -97,7 +97,6 @@ public class EventService {
         event.setRecipientUserId(null);
         eventRepository.save(event);
 
-        
         eventRepository.delete(event);
     }
 

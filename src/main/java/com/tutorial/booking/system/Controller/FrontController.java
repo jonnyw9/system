@@ -33,17 +33,12 @@ public class FrontController {
         return "index";
     }
 
-    @RequestMapping("/staff")
-    public String staff(){
-        return "staff";
-    }
-
     @GetMapping("/admin")
     public String admin(){
         return "admin";
     }
 
-    @GetMapping("/student")
+    @GetMapping("/home")
     public String student(Authentication authentication, Model model){
         makeUserDao(authentication);
         int userId = user.getUserId();
@@ -53,7 +48,7 @@ public class FrontController {
         model.addAttribute("events", events);
         model.addAttribute("user", user);
 
-        return "student";
+        return "home";
     }
 
     @GetMapping("/event/add")

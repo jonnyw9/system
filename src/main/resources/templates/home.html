@@ -2,9 +2,21 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Booking System</title>
 </head>
 <body>
+<h1 th:text="'Welcome ' + ${user.getFirstName()} + '!'"></h1>
+<ul>
+    <li><a href="/event/add">Add Event</a></li>
+    <!-- Here logout and go home -->
+</ul>
+
+<section id="events">
+    <!-- Here do thymeleaf listing -->
+    <ul th:each="event : ${events}">
+        <li><a th:href="@{'/event/view/' + ${event.eventId}}" th:text="${event.title}"></a></li>
+    </ul>
+</section>
 
 </body>
 </html>
