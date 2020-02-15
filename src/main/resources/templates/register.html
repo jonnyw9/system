@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Booking System</title>
+</head>
+<body>
+<h1>Register</h1>
+<form action="#" th:action="@{/register}" th:object="${user}" method="post">
+    <div>
+        <label>Firstname: </label>
+        <input id="firstName" name="firstName" th:field="*{firstName}" />
+        <p th:each="error: ${#fields.errors('firstName')}"
+           th:text="${error}">Validation error</p>
+    </div>
+    <div>
+         <label>Lastname: </label>
+         <input id="lastName" name="lastName" th:field="*{lastName}" />
+         <p th:each="error : ${#fields.errors('lastName')}"
+           th:text="${error}">Validation error</p>
+    </div>
+    <div>
+        <label>Email: </label>
+        <input id="email" name="email" th:field="*{email}" />
+        <p th:each="error : ${#fields.errors('email')}"
+           th:text="${error}">Validation error</p>
+    </div>
+    <div>
+        <label>Password: </label>
+        <input type="password" id="password" name="password" th:field="*{password}" />
+        <p th:each="error : ${#fields.errors('password')}"
+           th:text="${error}">Validation error</p>
+    </div>
+    <div>
+        <label>Confirm Password: </label>
+        <input type="password" id="confirmPassword" name="confirmPassword" th:field="*{confirmPassword}"/>
+    </div>
+    <button type="submit" value="Submit">Submit</button>
+</form>
+</body>
+</html>

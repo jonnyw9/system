@@ -14,13 +14,13 @@ DROP TABLE IF EXISTS password;
 DROP TABLE IF EXISTS bs_user;
 
 CREATE TABLE password(
-	password_id INT(150) primary key NOT NULL,
+	password_id INT(150) auto_increment primary key NOT NULL,
 	password VARCHAR(255)
 );
 
 
 CREATE TABLE bs_user(
-	user_id int(150) primary key NOT NULL,
+	user_id int(150) auto_increment primary key NOT NULL,
 	email varchar(100),
 	first_name varchar(100),
 	last_name varchar(100),
@@ -68,7 +68,7 @@ CREATE TABLE bs_event(
 );
 
 CREATE TABLE roles(
-	role_id int(150) primary key NOT NULL,
+	role_id int(150) auto_increment primary key NOT NULL,
     staff tinyint(1),
     student tinyint(1),
     admin tinyint(1)

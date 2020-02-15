@@ -1,11 +1,11 @@
 package com.tutorial.booking.system.Controller;
 
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import com.tutorial.booking.system.Service.EventService;
 import com.tutorial.booking.system.Service.UserService;
-import com.tutorial.booking.system.dao.EventDao;
-import com.tutorial.booking.system.dao.UserDao;
+import com.tutorial.booking.system.dto.EventDto;
+import com.tutorial.booking.system.dto.UserDto;
 import com.tutorial.booking.system.model.Event;
+import com.tutorial.booking.system.model.Password;
 import com.tutorial.booking.system.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -14,13 +14,14 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.text.ParseException;
 import java.util.List;
 
 @Controller
 public class FrontController {
 
-    private UserDao user;
+    private UserDto user;
 
     @Autowired
     UserService userService;
@@ -51,17 +52,45 @@ public class FrontController {
         return "home";
     }
 
+    @GetMapping("/register")
+    public String register(Model model){
+
+        UserDto userDto = new UserDto();
+
+        model.addAttribute("user", userDto);
+
+        return "register";
+    }
+
+    @PostMapping("/register")
+    public String register(@ModelAttribute("user") @Valid UserDto userDto, BindingResult bindingResult){
+
+        User existing = userService.getUserByEmail(userDto.getEmail());
+        if(existing != null){
+            bindingResult.rejectValue("email", null,
+                    "There is already an account registered to that email address!");
+        }
+
+        if(bindingResult.hasErrors()){
+            return "register";
+        }
+
+        userService.save(userDto);
+
+        return "index";
+    }
+
     @GetMapping("/event/add")
     public String addEvent(Authentication authentication, Model model){
         makeUserDao(authentication);
         model.addAttribute("user", user);
         System.out.println(user.getUserId());
-        model.addAttribute("event", new EventDao());
+        model.addAttribute("event", new EventDto());
         return "addEvent";
     }
 
     @PostMapping("/event/add")
-    public String addEvent(@ModelAttribute EventDao event, BindingResult bindingResult, Model model) throws ParseException {
+    public String addEvent(@ModelAttribute EventDto event, BindingResult bindingResult, Model model) throws ParseException {
         //Save the event
         eventService.add(event);
         //Redirect to the homepage
@@ -87,21 +116,21 @@ public class FrontController {
 
         Event event = eventService.getByEventId(id);
 
-        EventDao eventDao = new EventDao(event);
+        EventDto eventDto = new EventDto(event);
 
-        eventDao.setEventStart(eventService.changeTimestapToString(event.getEventStart()));
+        eventDto.setEventStart(eventService.changeTimestapToString(event.getEventStart()));
 
-        eventDao.setEventEnd(eventService.changeTimestapToString(event.getEventEnd()));
+        eventDto.setEventEnd(eventService.changeTimestapToString(event.getEventEnd()));
 
-        System.out.println(eventDao.toString());
+        System.out.println(eventDto.toString());
 
-        model.addAttribute("event", eventDao);
+        model.addAttribute("event", eventDto);
 
         return "editEvent";
     }
 
     @PostMapping("/event/edit")
-    public String editEvent(@ModelAttribute EventDao event, BindingResult bindingResult, Model model){
+    public String editEvent(@ModelAttribute EventDto event, BindingResult bindingResult, Model model){
         System.out.println(event.toString());
         eventService.updateEvent(event);
 

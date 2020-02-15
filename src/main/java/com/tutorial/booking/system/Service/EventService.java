@@ -1,18 +1,13 @@
 package com.tutorial.booking.system.Service;
 
 import com.tutorial.booking.system.Repository.EventRepository;
-import com.tutorial.booking.system.dao.EventDao;
-import com.tutorial.booking.system.dao.UserDao;
+import com.tutorial.booking.system.dto.EventDto;
 import com.tutorial.booking.system.model.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Time;
 import java.sql.Timestamp;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,14 +20,14 @@ public class EventService {
     @Autowired
     UserService userService;
 
-    public void add(EventDao eventDao) throws ParseException {
+    public void add(EventDto eventDto) throws ParseException {
 
-        Timestamp eventStart = Timestamp.valueOf((eventDao.getEventStart() + ":00").replace("T", " "));
+        Timestamp eventStart = Timestamp.valueOf((eventDto.getEventStart() + ":00").replace("T", " "));
 
-        Timestamp eventEnd = Timestamp.valueOf((eventDao.getEventEnd() + ":00").replace("T", " "));
+        Timestamp eventEnd = Timestamp.valueOf((eventDto.getEventEnd() + ":00").replace("T", " "));
 
-        Event event = new Event(eventDao.getEventId(), eventStart, eventEnd, eventDao.getTitle(),
-                eventDao.getDescription(), eventDao.getCreatorUserId(), eventDao.getRecipientUserId());
+        Event event = new Event(eventDto.getEventId(), eventStart, eventEnd, eventDto.getTitle(),
+                eventDto.getDescription(), eventDto.getCreatorUserId(), eventDto.getRecipientUserId());
 
         this.eventRepository.save(event);
     }
@@ -63,23 +58,23 @@ public class EventService {
         return returnTime;
     }
 
-    public void updateEvent(EventDao eventDao){
+    public void updateEvent(EventDto eventDto){
 
-        System.out.println(eventDao.toString());
+        System.out.println(eventDto.toString());
 
-        Timestamp eventStart = Timestamp.valueOf((eventDao.getEventStart() + ":00").replace("T", " "));
+        Timestamp eventStart = Timestamp.valueOf((eventDto.getEventStart() + ":00").replace("T", " "));
 
-        Timestamp eventEnd = Timestamp.valueOf((eventDao.getEventEnd() + ":00").replace("T", " "));
+        Timestamp eventEnd = Timestamp.valueOf((eventDto.getEventEnd() + ":00").replace("T", " "));
 
-        Event event = getByEventId(eventDao.getEventId());
+        Event event = getByEventId(eventDto.getEventId());
 
         System.out.println(event.toString());
 
 
-        event.setDescription(eventDao.getDescription());
+        event.setDescription(eventDto.getDescription());
         event.setEventEnd(eventEnd);
         event.setEventStart(eventStart);
-        event.setTitle(eventDao.getTitle());
+        event.setTitle(eventDto.getTitle());
 
         //Update to the database
         //eventRepository.updateEvent(eventDao.getEventId(), eventDao.getTitle(), eventDao.getDescription(), eventStart,

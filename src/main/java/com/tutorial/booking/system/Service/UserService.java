@@ -1,9 +1,12 @@
 package com.tutorial.booking.system.Service;
 
 import com.tutorial.booking.system.Repository.UserRepository;
-import com.tutorial.booking.system.dao.UserDao;
+import com.tutorial.booking.system.dto.UserDto;
+import com.tutorial.booking.system.model.Password;
+import com.tutorial.booking.system.model.Roles;
 import com.tutorial.booking.system.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -14,10 +17,17 @@ public class UserService {
     @Autowired
     UserRepository userRepository;
 
-    public UserDao getUserByUserName(String email){
+    public UserDto getUserByUserName(String email){
         Optional<User> user = userRepository.findByEmail(email);
 
-        return user.map(UserDao::new).get();
+        return user.map(UserDto::new).get();
+    }
+
+    public User getUserByEmail(String email){
+
+        Optional<User> user = userRepository.findByEmail(email);
+
+        return user.orElse(null);
     }
 
     public User getUserById(int id){
@@ -26,5 +36,24 @@ public class UserService {
 
         return user.orElse(null);
 
+    }
+
+    public void save(UserDto userDto){
+        User user = new User();
+        user.setEmail(userDto.getEmail());
+        user.setFirstName(userDto.getFirstName());
+        user.setLastName(userDto.getLastName());
+        user.setActive(true);
+
+        Password password = new Password();
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        password.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        user.setPassword(password);
+
+        Roles roles = new Roles();
+        roles.setStudent(true);
+        user.setRoleId(roles);
+        
+        userRepository.save(user);
     }
 }

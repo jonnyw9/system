@@ -1,9 +1,9 @@
-package com.tutorial.booking.system.dao;
+package com.tutorial.booking.system.dto;
 
 import com.tutorial.booking.system.model.Event;
 import com.tutorial.booking.system.model.User;
 
-public class EventDao {
+public class EventDto {
 
     private int eventId;
 
@@ -19,10 +19,10 @@ public class EventDao {
     private User creatorUserId;
     private User recipientUserId;
 
-    public EventDao() {
+    public EventDto() {
     }
 
-    public EventDao(int eventId, String eventStart, String eventEnd, String title, String description, boolean accepted,
+    public EventDto(int eventId, String eventStart, String eventEnd, String title, String description, boolean accepted,
                     User creatorUserId, User recipientUserId) {
         this.eventId = eventId;
         this.eventStart = eventStart;
@@ -36,7 +36,7 @@ public class EventDao {
         this.eventEnd = eventEnd;
     }
 
-    public EventDao (Event event){
+    public EventDto(Event event){
         this.eventId = event.getEventId();
         this.title = event.getTitle();
         this.description = event.getDescription();

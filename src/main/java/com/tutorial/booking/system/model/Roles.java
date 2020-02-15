@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class Roles {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int roleId;
     private boolean staff;
     private boolean student;

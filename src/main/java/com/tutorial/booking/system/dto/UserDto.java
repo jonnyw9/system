@@ -1,16 +1,33 @@
-package com.tutorial.booking.system.dao;
+package com.tutorial.booking.system.dto;
 
 import com.tutorial.booking.system.model.User;
 
-public class UserDao {
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+public class UserDto {
 
     private int userId;
 
+    @NotNull
+    @NotEmpty
     private String firstName;
+    @NotNull
+    @NotEmpty
     private String email;
+    @NotNull
+    @NotEmpty
     private String lastName;
 
-    public UserDao(User user){
+    @NotEmpty
+    private String password;
+    @NotEmpty
+    private String confirmPassword;
+
+    public UserDto() {
+    }
+
+    public UserDto(User user){
         this.userId = user.getUserId();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
@@ -49,4 +66,19 @@ public class UserDao {
         this.lastName = lastName;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
+    }
 }
