@@ -100,4 +100,18 @@ public class UserDto {
     public void setStaff(boolean staff) {
         this.staff = staff;
     }
+
+    @Override
+    public String toString() {
+        return "UserDto{" +
+                "userId=" + userId +
+                ", firstName='" + firstName + '\'' +
+                ", email='" + email + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", password='" + password + '\'' +
+                ", confirmPassword='" + confirmPassword + '\'' +
+                ", student=" + student +
+                ", staff=" + staff +
+                '}';
+    }
 }

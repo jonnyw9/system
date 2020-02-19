@@ -7,7 +7,7 @@
 <body>
 <h1 th:text="'Welcome ' + ${user.getFirstName()} + '!'"></h1>
 <ul>
-    <li><a href="/event/add">Add Event</a></li>
+    <li><a href="/user/view">Account Details</a></li>
     <!-- Here logout and go home -->
     <li><a href="/logout">Logout</a></li>
 </ul>
@@ -16,6 +16,9 @@
     <!-- Here do thymeleaf listing -->
     <ul th:each="event : ${events}">
         <li><a th:href="@{'/event/view/' + ${event.eventId}}" th:text="${event.title}"></a></li>
+    </ul>
+    <ul>
+        <li><a href="/event/add">Add Event</a></li>
     </ul>
 </section>
 

@@ -41,15 +41,15 @@ public class FrontController {
         return "admin";
     }
 
-    @GetMapping("home")
+    @RequestMapping(value = "home", method = {RequestMethod.GET, RequestMethod.POST})
     public String student(Authentication authentication, Model model){
         user = userService.makeUserDto(authentication);
 
         int userId = user.getUserId();
-
         List<Event> events = eventService.getEventsForUser(userId);
 
         model.addAttribute("events", events);
+
         model.addAttribute("user", user);
 
         return "home";
@@ -78,7 +78,7 @@ public class FrontController {
             return "register";
         }
 
-        userService.save(userDto);
+        userService.saveNewUser(userDto);
 
         return "redirect:/login?registered";
     }

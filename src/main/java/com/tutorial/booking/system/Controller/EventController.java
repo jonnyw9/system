@@ -41,7 +41,7 @@ public class EventController {
         //Save the event
         eventService.add(event);
         //Redirect to the homepage
-        return "home";
+        return "redirect:/home";
     }
 
     @GetMapping("view/{id}")
@@ -75,8 +75,7 @@ public class EventController {
     public String editEvent(@ModelAttribute EventDto event, BindingResult bindingResult, Model model){
         System.out.println(event.toString());
         eventService.updateEvent(event);
-
-        return "home";
+        return "redirect:/home";
     }
 
     @GetMapping("cancel/{id}")
@@ -84,7 +83,7 @@ public class EventController {
 
         eventService.cancelEvent(id);
 
-        return "home";
+        return "redirect:/home";
     }
 
 }

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>View Account</title>
+</head>
+<body>
+    <h1>View Account</h1>
+
+    <section id="userDetails">
+        <h2>Account Details</h2>
+        <table id="userAccount">
+            <tr th:if="${param.size() > 0}">
+                <td th:if="${param.badEditRequest}">Bad Edit Request.</td>
+                <td th:if="${param.updated}">Successfully Updated.</td>
+            </tr>
+            <tr>
+                <td>Name: </td>
+                <td th:text="${user.getFirstName()} + ' ' + ${user.getLastName()}"></td>
+                <td><button><a href="/user/edit/name">Edit Name</a></button></td>
+            </tr>
+            <tr>
+                <td>Email: </td>
+                <td th:text="${user.getEmail()}"></td>
+                <td><button><a href="/user/edit/email">Edit Email</a></button></td>
+            </tr>
+            <tr>
+                <td><button><a href="/user/edit/password">Edit Password</a></button></td>
+            </tr>
+            <tr id="delete">
+                <td><button><a href="">Delete Account</a></button></td>
+            </tr>
+        </table>
+    </section>
+</body>
+</html>

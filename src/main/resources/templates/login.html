@@ -17,6 +17,9 @@
             <tr th:if="${param.registered}">
                 <td>Account has been registered!</td>
             </tr>
+            <tr th:if="${param.success}">
+                <td>Email or password successfully changed! Please login again with your new details.</td>
+            </tr>
             <tr>
                 <td>Email: </td>
                 <td><input type="text" id="username" name="username" /></td>
