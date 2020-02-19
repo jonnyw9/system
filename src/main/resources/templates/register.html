@@ -30,8 +30,7 @@
         <input type="checkbox" name="student" th:checked="*{student}">
         <label>Staff: </label>
         <input type="checkbox" name="staff" th:checked="*{staff}">
-        <p th:each="error : ${#fields.errors('staffOrStudent')}"
-           th:text="${error}">Validation error</p>
+
     </div>
     <div>
         <label>Password: </label>

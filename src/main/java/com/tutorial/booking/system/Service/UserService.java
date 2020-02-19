@@ -6,6 +6,7 @@ import com.tutorial.booking.system.model.Password;
 import com.tutorial.booking.system.model.Roles;
 import com.tutorial.booking.system.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -57,5 +58,11 @@ public class UserService {
         user.setRoleId(roles);
 
         userRepository.save(user);
+    }
+
+    public UserDto makeUserDto(Authentication authentication){
+        System.out.println(authentication.getName());
+        UserDto user = getUserByUserName(authentication.getName());
+        return user;
     }
 }
