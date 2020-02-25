@@ -6,8 +6,11 @@ import com.tutorial.booking.system.model.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Array;
 import java.sql.Timestamp;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,11 +25,9 @@ public class EventService {
 
     public void add(EventDto eventDto) throws ParseException {
 
-        Timestamp eventStart = Timestamp.valueOf((eventDto.getEventStart() + ":00").replace("T", " "));
+        ArrayList<Timestamp> timestamps = convertStringToTimeStamp(eventDto);
 
-        Timestamp eventEnd = Timestamp.valueOf((eventDto.getEventEnd() + ":00").replace("T", " "));
-
-        Event event = new Event(eventDto.getEventId(), eventStart, eventEnd, eventDto.getTitle(),
+        Event event = new Event(eventDto.getEventId(), timestamps.get(0), timestamps.get(1), eventDto.getTitle(),
                 eventDto.getDescription(), eventDto.getCreatorUserId(), eventDto.getRecipientUserId());
 
         this.eventRepository.save(event);
@@ -62,18 +63,23 @@ public class EventService {
 
         System.out.println(eventDto.toString());
 
+
+        /**
+         * Made this a function
         Timestamp eventStart = Timestamp.valueOf((eventDto.getEventStart() + ":00").replace("T", " "));
 
         Timestamp eventEnd = Timestamp.valueOf((eventDto.getEventEnd() + ":00").replace("T", " "));
 
+         **/
         Event event = getByEventId(eventDto.getEventId());
 
         System.out.println(event.toString());
 
+        ArrayList<Timestamp> timestamps = convertStringToTimeStamp(eventDto);
 
         event.setDescription(eventDto.getDescription());
-        event.setEventEnd(eventEnd);
-        event.setEventStart(eventStart);
+        event.setEventEnd(timestamps.get(1));
+        event.setEventStart(timestamps.get(0));
         event.setTitle(eventDto.getTitle());
 
         //Update to the database
@@ -93,6 +99,19 @@ public class EventService {
         eventRepository.save(event);
 
         eventRepository.delete(event);
+    }
+
+    public ArrayList<Timestamp> convertStringToTimeStamp(EventDto eventDto){
+        ArrayList<Timestamp> returnTimeStamp = new ArrayList<>();
+
+        Timestamp eventStart = Timestamp.valueOf((eventDto.getEventStart() + ":00").replace("T", " "));
+
+        Timestamp eventEnd = Timestamp.valueOf((eventDto.getEventEnd() + ":00").replace("T", " "));
+
+        returnTimeStamp.add(eventStart);
+        returnTimeStamp.add(eventEnd);
+
+        return returnTimeStamp;
     }
 
 }

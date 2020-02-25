@@ -21,6 +21,8 @@ public class EventController {
 
     private UserDto user;
 
+    private final String userTemplatePrefix = "event/";
+
     @Autowired
     UserService userService;
 
@@ -33,7 +35,7 @@ public class EventController {
         model.addAttribute("user", user);
         System.out.println(user.getUserId());
         model.addAttribute("event", new EventDto());
-        return "addEvent";
+        return userTemplatePrefix + "addEvent";
     }
 
     @PostMapping("add")
@@ -49,7 +51,7 @@ public class EventController {
 
         model.addAttribute("event", eventService.getByEventId(id));
 
-        return "viewEvent";
+        return userTemplatePrefix + "viewEvent";
     }
 
 
@@ -68,7 +70,7 @@ public class EventController {
 
         model.addAttribute("event", eventDto);
 
-        return "editEvent";
+        return userTemplatePrefix + "editEvent";
     }
 
     @PostMapping("edit")

@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface PasswordRepository extends JpaRepository<Password, Integer> {
     //Optional<Password> findByUserPassId(int userPassId);
+
+
 }

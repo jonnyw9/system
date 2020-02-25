@@ -25,6 +25,14 @@ public class User {
     @JoinColumn(name = "roleId", referencedColumnName = "roleId")
     private Roles roleId;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "staffId", referencedColumnName = "staffId")
+    private Staff staffId;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "studentId", referencedColumnName = "studentId")
+    private Student studentId;
+
     public User() {
     }
 
@@ -94,5 +102,21 @@ public class User {
 
     public void setRoleId(Roles roleId) {
         this.roleId = roleId;
+    }
+
+    public Staff getStaffId() {
+        return staffId;
+    }
+
+    public void setStaffId(Staff staffId) {
+        this.staffId = staffId;
+    }
+
+    public Student getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(Student studentId) {
+        this.studentId = studentId;
     }
 }

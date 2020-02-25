@@ -2,6 +2,8 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/register.css}"/>
+    <script type="text/javascript" th:src="@{/js/form.js}"></script>
     <title>Booking System</title>
 </head>
 <body>
@@ -27,10 +29,13 @@
     </div>
     <div>
         <label>Student: </label>
-        <input type="checkbox" name="student" th:checked="*{student}">
+        <input type="checkbox" name="student" id="student" th:checked="*{student}" onclick="onCheck()">
+        <label for="studentNumber" id="studentNumberLabel" style="display:none">Student Number: </label>
+        <input type="text" name="studentNumber" id="studentNumber" class="studentNumber" th:field="*{studentNumber}" style="display:none"/>
         <label>Staff: </label>
-        <input type="checkbox" name="staff" th:checked="*{staff}">
-
+        <input type="checkbox" name="staff" id="staff" th:checked="*{staff}" onclick="onCheck()">
+        <label for="room" id="roomLabel"style="display:none">Room: </label>
+        <input type="text" name="room" id="room" class="room" th:field="*{room}" style="display:none"/>
     </div>
     <div>
         <label>Password: </label>

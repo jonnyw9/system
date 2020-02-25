@@ -46,7 +46,10 @@ public class UserController {
 
     @GetMapping(editPrefix + "delete")
     public String deleteAccount(){
-        return "";
+
+        userService.deleteUserAccount(user.getUserId());
+
+        return "redirect:/?deleted";
     }
 
     @GetMapping("edit/{editRequest}")

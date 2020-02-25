@@ -15,6 +15,8 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
 
     List<Event> findByCreatorUserId(User user);
 
+    List<Event> findByRecipientUserId(User user);
+
     Optional<Event> findEventByEventId(int id);
 
     @Modifying

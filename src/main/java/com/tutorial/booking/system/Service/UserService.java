@@ -1,16 +1,18 @@
 package com.tutorial.booking.system.Service;
 
+import com.tutorial.booking.system.Repository.EventRepository;
 import com.tutorial.booking.system.Repository.PasswordRepository;
+import com.tutorial.booking.system.Repository.RolesRepository;
 import com.tutorial.booking.system.Repository.UserRepository;
 import com.tutorial.booking.system.dto.UserDto;
-import com.tutorial.booking.system.model.Password;
-import com.tutorial.booking.system.model.Roles;
-import com.tutorial.booking.system.model.User;
+import com.tutorial.booking.system.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.management.relation.Role;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,7 +22,16 @@ public class UserService {
     UserRepository userRepository;
 
     @Autowired
+    EventRepository eventRepository;
+
+    @Autowired
+    EventService eventService;
+
+    @Autowired
     PasswordRepository passwordRepository;
+
+    @Autowired
+    RolesRepository rolesRepository;
 
     public UserDto getUserByUserName(String email){
         Optional<User> user = userRepository.findByEmail(email);
@@ -59,6 +70,18 @@ public class UserService {
         roles.setStaff(userDto.isStaff());
         roles.setAdmin(false);
         user.setRoleId(roles);
+
+        if(userDto.isStaff()){
+            Staff staff = new Staff();
+            staff.setRoom(userDto.getRoom());
+            user.setStaffId(staff);
+        }
+
+        if(userDto.isStudent()){
+            Student student = new Student();
+            student.setStudentNumber(userDto.getStudentNumber());
+            user.setStudentId(student);
+        }
 
         userRepository.save(user);
     }
@@ -127,6 +150,42 @@ public class UserService {
         }
 
         userRepository.save(user);
+    }
+
+    public void deleteUserAccount(int id){
+
+        User user = userRepository.getOne(id);
+
+        //Cancel event pertaining to the user
+
+        List<Event> createdEvents = eventRepository.findByCreatorUserId(user);
+
+        if(!createdEvents.isEmpty()){
+            for(Event event : createdEvents){
+                eventService.cancelEvent(event.getEventId());
+                //Send a notification to other affected users
+            }
+        }
+
+        List<Event> recievedEvents = eventRepository.findByRecipientUserId(user);
+
+        if(!recievedEvents.isEmpty()){
+            for (Event event: recievedEvents) {
+                eventService.cancelEvent(event.getEventId());
+                //Send a notification to other affected users
+            }
+        }
+
+        //Delete the password linked to the account
+        Password password = passwordRepository.getOne(user.getPassword().getPasswordId());
+        passwordRepository.delete(password);
+
+        //Delete the roles linked to the account
+        Roles roles = rolesRepository.getOne(user.getRoleId().getRoleId());
+        rolesRepository.delete(roles);
+
+        //Finally delete the user
+        userRepository.delete(user);
     }
 
     public UserDto makeUserDto(Authentication authentication){

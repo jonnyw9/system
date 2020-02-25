@@ -27,6 +27,9 @@ public class UserDto {
     private boolean student;
     private boolean staff;
 
+    private String room;
+    private String studentNumber;
+
     public UserDto() {
     }
 
@@ -101,6 +104,22 @@ public class UserDto {
         this.staff = staff;
     }
 
+    public String getRoom() {
+        return room;
+    }
+
+    public void setRoom(String room) {
+        this.room = room;
+    }
+
+    public String getStudentNumber() {
+        return studentNumber;
+    }
+
+    public void setStudentNumber(String studentNumber) {
+        this.studentNumber = studentNumber;
+    }
+
     @Override
     public String toString() {
         return "UserDto{" +
@@ -112,6 +131,8 @@ public class UserDto {
                 ", confirmPassword='" + confirmPassword + '\'' +
                 ", student=" + student +
                 ", staff=" + staff +
+                ", room='" + room + '\'' +
+                ", studentNumber='" + studentNumber + '\'' +
                 '}';
     }
 }
