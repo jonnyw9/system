@@ -36,6 +36,10 @@
         <input type="checkbox" name="staff" id="staff" th:checked="*{staff}" onclick="onCheck()">
         <label for="room" id="roomLabel"style="display:none">Room: </label>
         <input type="text" name="room" id="room" class="room" th:field="*{room}" style="display:none"/>
+        <label for="startTime" id="startTimeLabel" style="display: none">Day Start Time: </label>
+        <input type="time" name="startTime" id="startTime" class="startTime" th:field="*{startTime}" style="display: none" />
+        <label for="endTime" id="endTimeLabel" style="display: none">Day End Time: </label>
+        <input type="time" name="endTime" id="endTime" class="endTime" th:field="*{endTime}" style="display: none" />
     </div>
     <div>
         <label>Password: </label>

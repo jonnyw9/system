@@ -33,6 +33,10 @@ public class User {
     @JoinColumn(name = "studentId", referencedColumnName = "studentId")
     private Student studentId;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "calendarId", referencedColumnName = "calendarId")
+    private Calendar calendarId;
+
     public User() {
     }
 
@@ -118,5 +122,13 @@ public class User {
 
     public void setStudentId(Student studentId) {
         this.studentId = studentId;
+    }
+
+    public Calendar getCalendarId() {
+        return calendarId;
+    }
+
+    public void setCalendarId(Calendar calendarId) {
+        this.calendarId = calendarId;
     }
 }

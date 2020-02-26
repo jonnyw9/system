@@ -6,9 +6,7 @@ USE bookingSystem;
 
 DROP TABLE IF EXISTS staff;
 DROP TABLE IF EXISTS student;
-DROP TABLE IF EXISTS calendarUser;
 DROP TABLE IF EXISTS bs_event;
-DROP TABLE IF EXISTS eventUser;
 DROP TABLE IF EXISTS calendar;
 DROP TABLE IF EXISTS password;
 DROP TABLE IF EXISTS bs_user;
@@ -46,7 +44,7 @@ CREATE TABLE student(
 );
 
 CREATE TABLE calendar(
-	calendar_id int(150) primary key NOT NULL,
+	calendar_id int(150) auto_increment primary key NOT NULL,
 	day_start_time TIME,
 	day_end_time TIME
 );

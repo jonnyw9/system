@@ -2,13 +2,18 @@ package com.tutorial.booking.system.Service;
 
 import com.tutorial.booking.system.Repository.EventRepository;
 import com.tutorial.booking.system.dto.EventDto;
+import com.tutorial.booking.system.model.Calendar;
 import com.tutorial.booking.system.model.Event;
+import com.tutorial.booking.system.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Array;
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -112,6 +117,54 @@ public class EventService {
         returnTimeStamp.add(eventEnd);
 
         return returnTimeStamp;
+    }
+
+    public ArrayList<Timestamp> calulateFreeTimeForTheWeek(Calendar calendar){
+
+        LocalDateTime localDateTime = LocalDateTime.now();
+
+        LocalDateTime start = LocalDateTime.of(localDateTime.getYear(), localDateTime.getMonth(),
+                localDateTime.getDayOfMonth(), calendar.getDayStartTime().toLocalTime().getHour(),
+                calendar.getDayStartTime().toLocalTime().getMinute());
+
+        LocalDateTime end = LocalDateTime.of(localDateTime.getYear(), localDateTime.getMonth(),
+                localDateTime.getDayOfMonth(), calendar.getDayEndTime().toLocalTime().getHour(),
+                calendar.getDayEndTime().toLocalTime().getMinute());
+
+        LocalDate day = localDateTime.toLocalDate();
+        final long plusDay = 1;
+        final long plusMinutes = 30;
+        ArrayList<Timestamp> availableEvents = new ArrayList<>();
+
+        while(day.getDayOfWeek().getValue() != 5){
+
+            LocalDateTime current = start;
+            //Get Events for that day
+            Timestamp currentTimeStamp = Timestamp.valueOf(start);
+            Timestamp currentTimeStampEnd = Timestamp.valueOf(end);
+            List<Event> eventsForDay = eventRepository.findEventByEventStartBeforeAndEventStartAfter(
+                    currentTimeStampEnd, currentTimeStamp);
+            while(!current.equals(end)){
+                //For loop of all the events for that day
+                for(Event event : eventsForDay){
+                    //Compare event times
+                    //If they dont equal
+                    if(!event.getEventStart().toLocalDateTime().isEqual(current)){
+                        //Add the time to the list
+                        Timestamp freeTime = Timestamp.valueOf(current);
+                        availableEvents.add(freeTime);
+                        break;
+                    }
+                }
+                //Add half an hour to current
+                current = current.plusMinutes(plusMinutes);
+            }
+            end = end.plusDays(plusDay);
+            start = start.plusDays(plusDay);
+            day = day.plusDays(plusDay);
+        }
+
+        return availableEvents;
     }
 
 }

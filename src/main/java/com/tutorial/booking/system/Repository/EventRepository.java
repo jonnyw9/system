@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +19,8 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
     List<Event> findByRecipientUserId(User user);
 
     Optional<Event> findEventByEventId(int id);
+
+    List<Event> findEventByEventStartBeforeAndEventStartAfter(Timestamp before, Timestamp after);
 
     @Modifying
     @Query("UPDATE Event e SET e.title = :title, e.description = :description, e.eventStart = :eventStart," +

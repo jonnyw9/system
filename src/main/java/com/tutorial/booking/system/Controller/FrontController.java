@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.sql.Timestamp;
 import java.util.List;
 
 @Controller
@@ -114,6 +115,18 @@ public class FrontController {
     @GetMapping("error")
     public String error(){
         return "login";
+    }
+
+    @GetMapping("staff/times/{id}")
+    public String getStaffTime(@PathVariable("id") int id, Model model){
+
+        User user = userService.getUserById(id);
+
+        List<Timestamp> availableTimes = eventService.calulateFreeTimeForTheWeek(user.getCalendarId());
+
+        model.addAttribute("times", availableTimes);
+
+        return "displayAvailableTimes";
     }
 
 

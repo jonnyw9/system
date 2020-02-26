@@ -16,13 +16,13 @@
             <td th:text="${staff.firstName}"></td>
             <td th:text="${staff.lastName}"></td>
             <td th:text="${staff.getStaffId().room}"></td>
-            <td><button><a th:href="@{'/event/add/' + ${staff.getUserId()}}">Book</a></button></td>
+            <td><button><a th:href="@{'/staff/times/' + ${staff.getUserId()}}">Book</a></button></td>
         </tr>
     </table>
-    <div th:if="${#lists.isEmpty(searchResults)}">
-        <h2 >No results matched your search. Click below to go back home.</h2>
-        <button><a href="/home"></a></button>
-    </div>
 </section>
+<div th:if="${#lists.isEmpty(searchResults)}">
+    <h2>No results matched your search.</h2>
+    <button><a href="/home">Home</a></button>
+</div>
 </body>
 </html>

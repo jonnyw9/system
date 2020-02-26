@@ -30,6 +30,9 @@ public class UserDto {
     private String room;
     private String studentNumber;
 
+    private String startTime;
+    private String endTime;
+
     public UserDto() {
     }
 
@@ -122,6 +125,22 @@ public class UserDto {
         this.studentNumber = studentNumber;
     }
 
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
     @Override
     public String toString() {
         return "UserDto{" +
@@ -135,6 +154,8 @@ public class UserDto {
                 ", staff=" + staff +
                 ", room='" + room + '\'' +
                 ", studentNumber='" + studentNumber + '\'' +
+                ", startTime='" + startTime + '\'' +
+                ", endTime='" + endTime + '\'' +
                 '}';
     }
 }

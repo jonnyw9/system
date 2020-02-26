@@ -9,6 +9,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.management.relation.Role;
+import java.sql.Time;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,6 +37,9 @@ public class UserService {
 
     @Autowired
     RolesRepository rolesRepository;
+
+    @Autowired
+    CalendarRepository calendarRepository;
 
     public UserDto getUserByUserName(String email){
         Optional<User> user = userRepository.findByEmail(email);
@@ -73,6 +78,12 @@ public class UserService {
         roles.setStaff(userDto.isStaff());
         roles.setAdmin(false);
         user.setRoleId(roles);
+
+        Calendar calendar = new Calendar();
+        calendar.setDayStartTime(parseFormTime(userDto.getStartTime()));
+        calendar.setDayEndTime(parseFormTime(userDto.getEndTime()));
+        user.setCalendarId(calendar);
+
 
         if(userDto.isStaff()){
             Staff staff = new Staff();
@@ -169,12 +180,27 @@ public class UserService {
             studentRepository.delete(user.getStudentId());
         }
 
+        Calendar calendar = calendarRepository.getOne(user.getCalendarId().getCalendarId());
+        calendarRepository.delete(calendar);
+
         //Finally delete the user
         userRepository.delete(user);
     }
 
     public Iterable<User> listUserByLastName(String lastname){
         return userRepository.findByLastName(lastname);
+    }
+
+    public Time parseFormTime(String time){
+        System.out.println(time);
+        Time time1 = null;
+        try{
+            time1 = Time.valueOf(time + ":00");
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        return time1;
     }
 
     public UserDto makeUserDto(Authentication authentication){

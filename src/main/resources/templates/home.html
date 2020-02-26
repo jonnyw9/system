@@ -25,7 +25,7 @@
     </div>
 
     <ul>
-        <li><a href="/event/add">Add Event for Yourself</a></li>
+        <li><a th:href="@{'/event/add/' + ${user.getUserId()}}">Add Event with yourself</a></li>
     </ul>
 
     <!-- Here do thymeleaf listing -->
