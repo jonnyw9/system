@@ -14,6 +14,7 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.chrono.ChronoLocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -136,28 +137,46 @@ public class EventService {
         final long plusMinutes = 30;
         ArrayList<Timestamp> availableEvents = new ArrayList<>();
 
-        while(day.getDayOfWeek().getValue() != 5){
+        //TODO Maybe use string here instead of value
+        while(day.getDayOfWeek().getValue() != 6){
 
             LocalDateTime current = start;
+
+            System.out.println(current.toString());
+
             //Get Events for that day
             Timestamp currentTimeStamp = Timestamp.valueOf(start);
             Timestamp currentTimeStampEnd = Timestamp.valueOf(end);
             List<Event> eventsForDay = eventRepository.findEventByEventStartBeforeAndEventStartAfter(
                     currentTimeStampEnd, currentTimeStamp);
             while(!current.equals(end)){
-                //For loop of all the events for that day
-                for(Event event : eventsForDay){
-                    //Compare event times
-                    //If they dont equal
-                    if(!event.getEventStart().toLocalDateTime().isEqual(current)){
-                        //Add the time to the list
+
+                if(LocalDate.now().isBefore(ChronoLocalDate.from(end))){
+                    if(!eventsForDay.isEmpty()){
+                        //For loop of all the events for that day
+                        for(Event event : eventsForDay){
+                            //Compare event times
+                            //If they dont equal
+                            if(!event.getEventStart().toLocalDateTime().isEqual(current)){
+                                //Add the time to the list
+                                Timestamp freeTime = Timestamp.valueOf(current);
+                                System.out.println(freeTime.toString());
+                                availableEvents.add(freeTime);
+                                break;
+                            }
+                        }
+                    }else{
                         Timestamp freeTime = Timestamp.valueOf(current);
+                        System.out.println(freeTime.toString());
                         availableEvents.add(freeTime);
-                        break;
                     }
+                    //Add half an hour to current
+                    current = current.plusMinutes(plusMinutes);
+                }else{
+                    break;
                 }
-                //Add half an hour to current
-                current = current.plusMinutes(plusMinutes);
+
+
             }
             end = end.plusDays(plusDay);
             start = start.plusDays(plusDay);
