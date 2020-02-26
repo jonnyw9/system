@@ -32,7 +32,7 @@ public class FrontController {
     EventService eventService;
 
     @GetMapping("/")
-    public String home(Model model){
+    public String index(Model model){
         return "index";
     }
 
@@ -42,7 +42,7 @@ public class FrontController {
     }
 
     @RequestMapping(value = "home", method = {RequestMethod.GET, RequestMethod.POST})
-    public String student(Authentication authentication, Model model){
+    public String home(Authentication authentication, Model model){
         user = userService.makeUserDto(authentication);
 
         int userId = user.getUserId();
@@ -52,7 +52,19 @@ public class FrontController {
 
         model.addAttribute("user", user);
 
+        String lastname = "";
+
+        model.addAttribute("lastname", lastname);
+
         return "home";
+    }
+
+    @GetMapping("search")
+    public String searchStaff(@RequestParam (value = "lastname", required = false) String lastname, Model model){
+
+        model.addAttribute("searchResults", userService.listUserByLastName(lastname));
+
+        return "searchStaff";
     }
 
     @GetMapping("register")

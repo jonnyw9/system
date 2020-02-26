@@ -34,6 +34,8 @@ public class UserDto {
     }
 
     public UserDto(User user){
+        this.student = user.getRoleId().isStudent();
+        this.staff = user.getRoleId().isStaff();
         this.userId = user.getUserId();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();

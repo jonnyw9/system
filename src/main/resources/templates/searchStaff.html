@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Staff</title>
+</head>
+<body>
+<section id="searchResults" th:if="${not #lists.isEmpty(searchResults)}">
+    <table>
+        <tr>
+            <th>Firstname</th>
+            <th>Lastname</th>
+            <th>Room No.</th>
+        </tr>
+        <tr th:each="staff: ${searchResults}" th:if="${staff.getStaffId()}">
+            <td th:text="${staff.firstName}"></td>
+            <td th:text="${staff.lastName}"></td>
+            <td th:text="${staff.getStaffId().room}"></td>
+            <td><button><a th:href="@{'/event/add/' + ${staff.getUserId()}}">Book</a></button></td>
+        </tr>
+    </table>
+    <div th:if="${#lists.isEmpty(searchResults)}">
+        <h2 >No results matched your search. Click below to go back home.</h2>
+        <button><a href="/home"></a></button>
+    </div>
+</section>
+</body>
+</html>

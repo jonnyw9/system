@@ -1,9 +1,6 @@
 package com.tutorial.booking.system.Service;
 
-import com.tutorial.booking.system.Repository.EventRepository;
-import com.tutorial.booking.system.Repository.PasswordRepository;
-import com.tutorial.booking.system.Repository.RolesRepository;
-import com.tutorial.booking.system.Repository.UserRepository;
+import com.tutorial.booking.system.Repository.*;
 import com.tutorial.booking.system.dto.UserDto;
 import com.tutorial.booking.system.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +26,12 @@ public class UserService {
 
     @Autowired
     PasswordRepository passwordRepository;
+
+    @Autowired
+    StaffRepository staffRepository;
+
+    @Autowired
+    StudentRepository studentRepository;
 
     @Autowired
     RolesRepository rolesRepository;
@@ -82,32 +85,6 @@ public class UserService {
             student.setStudentNumber(userDto.getStudentNumber());
             user.setStudentId(student);
         }
-
-        userRepository.save(user);
-    }
-    
-    public void updateName(UserDto userDto){
-        User user = getUserById(userDto.getUserId());
-
-        user.setFirstName(userDto.getFirstName());
-        user.setLastName(userDto.getLastName());
-
-        userRepository.save(user);
-    }
-
-    public void updateEmail(UserDto userDto){
-        User user = getUserById(userDto.getUserId());
-
-        user.setEmail(userDto.getEmail());
-
-        userRepository.save(user);
-    }
-
-    public void updatePassword(UserDto userDto){
-        User user = getUserById(userDto.getUserId());
-
-        user.setFirstName(userDto.getFirstName());
-        user.setLastName(userDto.getLastName());
 
         userRepository.save(user);
     }
@@ -184,8 +161,20 @@ public class UserService {
         Roles roles = rolesRepository.getOne(user.getRoleId().getRoleId());
         rolesRepository.delete(roles);
 
+        //Delete staff and student entities
+        if(user.getStaffId() != null){
+            staffRepository.delete(user.getStaffId());
+        }
+        if(user.getStudentId() != null){
+            studentRepository.delete(user.getStudentId());
+        }
+
         //Finally delete the user
         userRepository.delete(user);
+    }
+
+    public Iterable<User> listUserByLastName(String lastname){
+        return userRepository.findByLastName(lastname);
     }
 
     public UserDto makeUserDto(Authentication authentication){

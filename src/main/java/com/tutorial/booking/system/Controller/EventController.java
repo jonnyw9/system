@@ -6,6 +6,7 @@ import com.tutorial.booking.system.Service.UserService;
 import com.tutorial.booking.system.dto.EventDto;
 import com.tutorial.booking.system.dto.UserDto;
 import com.tutorial.booking.system.model.Event;
+import com.tutorial.booking.system.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -29,14 +30,21 @@ public class EventController {
     @Autowired
     EventService eventService;
 
-    @GetMapping("add")
-    public String addEvent(Authentication authentication, Model model){
+    @GetMapping("add/{id}")
+    public String addEvent(@PathVariable("id") int id,Authentication authentication, Model model){
         user =  userService.makeUserDto(authentication);
         model.addAttribute("user", user);
+
+        User recipient =  userService.getUserById(id);
+
+        model.addAttribute("recipient", recipient);
+
         System.out.println(user.getUserId());
         model.addAttribute("event", new EventDto());
         return userTemplatePrefix + "addEvent";
     }
+
+
 
     @PostMapping("add")
     public String addEvent(@ModelAttribute EventDto event, BindingResult bindingResult, Model model) throws ParseException {

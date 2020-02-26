@@ -12,13 +12,25 @@
     <li><a href="/logout">Logout</a></li>
 </ul>
 
+
+
 <section id="events">
+
+    <div th:if="${user.student}" class="search">
+        <h2>Search for the lastname of the staff member you wish to book!</h2>
+        <form th:object="${lastname}" th:action="@{/search}" method="get">
+            <input type="text" name="lastname" id="lastname" th:value="${lastname}" />
+            <input type="submit" value="Search" />
+        </form>
+    </div>
+
+    <ul>
+        <li><a href="/event/add">Add Event for Yourself</a></li>
+    </ul>
+
     <!-- Here do thymeleaf listing -->
     <ul th:each="event : ${events}">
         <li><a th:href="@{'/event/view/' + ${event.eventId}}" th:text="${event.title}"></a></li>
-    </ul>
-    <ul>
-        <li><a href="/event/add">Add Event</a></li>
     </ul>
 </section>
 
