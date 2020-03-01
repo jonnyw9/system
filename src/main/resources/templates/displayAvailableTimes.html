@@ -5,23 +5,21 @@
     <title>Available Times</title>
 </head>
 <body>
-<div th:if="${not events.isEmpty()}">
+<div th:if="${not dates.isEmpty()}">
     <h1>Available times</h1>
     <table>
         <tr>
             <th>Date</th>
         </tr>
-        <tr th:each="event: ${events}">
-            <td th:text="${event.getEventStartTimeStamp().toGMTString()}"></td>
+        <tr th:each="date: ${dates}">
+            <td th:text="${date.toString()}"></td>
             <td>
-                <form name="f" th:action="@{'/event/add/' + ${staff.getUserId()}}" th:object="${event}" method="post">
-                    <input type="submit" value="Book" />
-                </form>
+                <button><a th:href="@{'/event/add/' + ${staff.getUserId()} + '?time=' + ${date.toString()}}">Book</a></button>
             </td>
         </tr>
     </table>
 </div>
-<div th:if="${events.isEmpty()}">
+<div th:if="${dates.isEmpty()}">
     <h1>No available times found</h1>
     <button><a href="/home">Home</a></button>
 </div>

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -33,15 +34,24 @@ public class EventController {
     EventService eventService;
 
     @RequestMapping(value = "add/{id}", method = {RequestMethod.GET, RequestMethod.POST})
-    public String addEvent(@PathVariable("id") int id , @ModelAttribute EventDto eventDto, Authentication authentication, Model model){
-
+    public String addEvent(@PathVariable("id") int id , @RequestParam(name = "time", required = false) String time, Authentication authentication, Model model){
         user =  userService.makeUserDto(authentication);
         model.addAttribute("user", user);
 
 
+
         User recipient =  userService.getUserById(id);
 
-        System.out.println("here");
+        EventDto eventDto = new EventDto();
+        eventDto.setEventStart(time);
+
+        System.out.println(eventDto.getEventStart());
+
+        LocalDateTime localDateTime = LocalDateTime.parse(time);
+
+        localDateTime = localDateTime.plusMinutes(30);
+
+        eventDto.setEventEnd(localDateTime.toString());
 
         model.addAttribute("recipient", recipient);
 

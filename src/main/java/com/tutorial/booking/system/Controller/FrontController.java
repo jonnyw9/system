@@ -19,6 +19,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Controller
@@ -127,17 +129,16 @@ public class FrontController {
 
         List<Timestamp> availableTimes = eventService.calulateFreeTimeForTheWeek(user.getCalendarId());
 
-        List<EventDto> eventDtos = new ArrayList<>();
+        List<LocalDateTime> availableDates = new ArrayList<>();
 
 
         for(Timestamp timestamp: availableTimes){
-            EventDto eventDto = new EventDto();
-            eventDto.setEventStartTimeStamp(timestamp);
-            eventDtos.add(eventDto);
+            LocalDateTime localDateTime = timestamp.toLocalDateTime();
+            availableDates.add(localDateTime);
         }
 
 
-        model.addAttribute("events", eventDtos);
+        model.addAttribute("dates", availableDates);
 
         return "displayAvailableTimes";
     }
