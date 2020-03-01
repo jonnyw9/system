@@ -3,12 +3,16 @@ package com.tutorial.booking.system.dto;
 import com.tutorial.booking.system.model.Event;
 import com.tutorial.booking.system.model.User;
 
+import java.sql.Timestamp;
+
 public class EventDto {
 
     private int eventId;
 
     private String eventStart;
     private String eventEnd;
+
+    private Timestamp eventStartTimeStamp;
 
     private String title;
 
@@ -110,12 +114,21 @@ public class EventDto {
         this.recipientUserId = recipientUserId;
     }
 
+    public Timestamp getEventStartTimeStamp() {
+        return eventStartTimeStamp;
+    }
+
+    public void setEventStartTimeStamp(Timestamp eventStartTimeStamp) {
+        this.eventStartTimeStamp = eventStartTimeStamp;
+    }
+
     @Override
     public String toString() {
-        return "EventDao{" +
+        return "EventDto{" +
                 "eventId=" + eventId +
                 ", eventStart='" + eventStart + '\'' +
                 ", eventEnd='" + eventEnd + '\'' +
+                ", eventStartTimeStamp=" + eventStartTimeStamp +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", accepted=" + accepted +

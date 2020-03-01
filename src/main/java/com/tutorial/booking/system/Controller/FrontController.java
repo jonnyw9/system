@@ -2,6 +2,7 @@ package com.tutorial.booking.system.Controller;
 
 import com.tutorial.booking.system.Service.EventService;
 import com.tutorial.booking.system.Service.UserService;
+import com.tutorial.booking.system.dto.EventDto;
 import com.tutorial.booking.system.dto.UserDto;
 import com.tutorial.booking.system.model.Event;
 import com.tutorial.booking.system.model.User;
@@ -18,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.sql.Timestamp;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping("/")
@@ -122,9 +123,21 @@ public class FrontController {
 
         User user = userService.getUserById(id);
 
+        model.addAttribute("staff", user);
+
         List<Timestamp> availableTimes = eventService.calulateFreeTimeForTheWeek(user.getCalendarId());
 
-        model.addAttribute("times", availableTimes);
+        List<EventDto> eventDtos = new ArrayList<>();
+
+
+        for(Timestamp timestamp: availableTimes){
+            EventDto eventDto = new EventDto();
+            eventDto.setEventStartTimeStamp(timestamp);
+            eventDtos.add(eventDto);
+        }
+
+
+        model.addAttribute("events", eventDtos);
 
         return "displayAvailableTimes";
     }

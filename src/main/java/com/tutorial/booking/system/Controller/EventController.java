@@ -14,7 +14,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
 import java.text.ParseException;
+import java.util.List;
 
 @Controller
 @RequestMapping("/event/")
@@ -30,17 +32,21 @@ public class EventController {
     @Autowired
     EventService eventService;
 
-    @GetMapping("add/{id}")
-    public String addEvent(@PathVariable("id") int id,Authentication authentication, Model model){
+    @RequestMapping(value = "add/{id}", method = {RequestMethod.GET, RequestMethod.POST})
+    public String addEvent(@PathVariable("id") int id , @ModelAttribute EventDto eventDto, Authentication authentication, Model model){
+
         user =  userService.makeUserDto(authentication);
         model.addAttribute("user", user);
 
+
         User recipient =  userService.getUserById(id);
+
+        System.out.println("here");
 
         model.addAttribute("recipient", recipient);
 
         System.out.println(user.getUserId());
-        model.addAttribute("event", new EventDto());
+        model.addAttribute("event", eventDto);
         return userTemplatePrefix + "addEvent";
     }
 

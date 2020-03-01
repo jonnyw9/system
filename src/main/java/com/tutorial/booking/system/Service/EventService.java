@@ -138,7 +138,7 @@ public class EventService {
         ArrayList<Timestamp> availableEvents = new ArrayList<>();
 
         //TODO Maybe use string here instead of value
-        while(day.getDayOfWeek().getValue() != 6){
+        for(int i = 0; i <= 4; i++){
 
             LocalDateTime current = start;
 
@@ -149,6 +149,22 @@ public class EventService {
             Timestamp currentTimeStampEnd = Timestamp.valueOf(end);
             List<Event> eventsForDay = eventRepository.findEventByEventStartBeforeAndEventStartAfter(
                     currentTimeStampEnd, currentTimeStamp);
+
+            if(current.toLocalDate().isBefore(LocalDate.now().plusDays(1))){
+                i--;
+                end = end.plusDays(plusDay);
+                start = start.plusDays(plusDay);
+                day = day.plusDays(plusDay);
+                continue;
+            }
+            if(day.getDayOfWeek().getValue() == 6 || day.getDayOfWeek().getValue() == 7){
+                i--;
+                end = end.plusDays(plusDay);
+                start = start.plusDays(plusDay);
+                day = day.plusDays(plusDay);
+                continue;
+            }
+
             while(!current.equals(end)){
 
                 if(LocalDate.now().isBefore(ChronoLocalDate.from(end))){

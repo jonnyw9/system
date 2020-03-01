@@ -9,7 +9,7 @@
     <form action="#" th:action="@{/event/add}" th:object="${event}" method="post">
         <input type="hidden" id="creatorUserId" name="creatorUserId" th:attr="value = ${user.userId}"/>
         <input type="hidden" id="recipientUserId" name="recipientUserId" th:attr="value = ${recipient.userId}" />
-        <p><input type="datetime-local" id="eventStart" name="eventStart" th:value="*{eventStart}"/></p>
+        <p><input type="text" id="eventStart" name="eventStart" th:value="*{eventStartTimestamp.toString()}"/></p>
         <p><input type="datetime-local" id="eventEnd" name="eventEnd" th:value="*{eventEnd}"></p>
         <p><input type="text" id="title" name="title" th:value="*{title}"></p>
         <p><input type="text" id="description" name="description" th:value="*{description}"></p>
