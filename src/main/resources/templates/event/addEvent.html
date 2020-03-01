@@ -11,6 +11,7 @@
         <input type="hidden" id="recipientUserId" name="recipientUserId" th:attr="value = ${recipient.userId}" />
         <input type="hidden" id="eventStart" name="eventStart" th:value="*{eventStart}"/>
         <input type="hidden" id="eventEnd" name="eventEnd" th:value="*{eventEnd}"/>
+        <p th:text="'Event with: ' + ${recipient.getFirstName()} + ${recipient.getLastName()}"></p>
         <p><input type="datetime-local" th:value="${event.eventStart}" readonly/></p>
         <p><input type="datetime-local" th:value="${event.eventEnd}" readonly></p>
         <p><input type="text" id="title" name="title" th:value="*{title}"></p>
