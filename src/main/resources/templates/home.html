@@ -2,6 +2,17 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+
+    <link href='fullcalendar/core/main.css' rel='stylesheet' />
+    <link href='fullcalendar/daygrid/main.css' rel='stylesheet' />
+    <link href='fullcalendar/timegrid/main.css' rel='stylesheet' />
+    <link href="css/home.css" rel="stylesheet"/>
+
+    <script src='fullcalendar/core/main.js'></script>
+    <script src='fullcalendar/daygrid/main.js'></script>
+    <script src='fullcalendar/timegrid/main.js'></script>
+    <script src="js/calendarInit.js"></script>
+
     <title>Booking System</title>
 </head>
 <body>
@@ -27,6 +38,8 @@
     <ul>
         <li><a th:href="@{'/event/add/' + ${user.getUserId()}}">Add Event with yourself</a></li>
     </ul>
+
+    <div id="calendar"></div>
 
     <!-- Here do thymeleaf listing -->
     <ul th:each="event : ${events}">
