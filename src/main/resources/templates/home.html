@@ -39,7 +39,11 @@
         <li><a th:href="@{'/event/add/' + ${user.getUserId()}}">Add Event with yourself</a></li>
     </ul>
 
-    <div id="calendar"></div>
+    <section>
+        <h2>Your Calendar</h2>
+        <div id="calendar"></div>
+    </section>
+
 
     <!-- Here do thymeleaf listing -->
     <ul th:each="event : ${events}">
