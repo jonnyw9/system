@@ -1,9 +1,11 @@
 package com.tutorial.booking.system.Controller;
 
+import com.tutorial.booking.system.Repository.CalendarRepository;
 import com.tutorial.booking.system.Service.EventService;
 import com.tutorial.booking.system.Service.UserService;
 import com.tutorial.booking.system.dto.EventDto;
 import com.tutorial.booking.system.dto.UserDto;
+import com.tutorial.booking.system.model.Calendar;
 import com.tutorial.booking.system.model.Event;
 import com.tutorial.booking.system.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +37,9 @@ public class FrontController {
     @Autowired
     EventService eventService;
 
+    @Autowired
+    CalendarRepository calendarRepository;
+
     @GetMapping("/")
     public String index(Model model){
         return "index";
@@ -57,6 +62,19 @@ public class FrontController {
         model.addAttribute("user", user);
 
         String url = "http://localhost:8080/api/event/getall/" + String.valueOf(userId);
+
+        User userById = userService.getUserById(userId);
+
+        String dayStart =
+                Objects.requireNonNull(calendarRepository.findById(userById.getCalendarId().
+                        getCalendarId()).orElse(null)).getDayStartTime().toLocalTime().toString();
+        model.addAttribute("dayStart", dayStart);
+
+        String dayEnd =
+                Objects.requireNonNull(calendarRepository.findById(userById.getCalendarId()
+                        .getCalendarId()).orElse(null)).getDayEndTime().toLocalTime().toString();
+        model.addAttribute("dayEnd", dayEnd);
+        model.addAttribute("staff", user);
 
         model.addAttribute("url", url);
 
@@ -153,7 +171,15 @@ public class FrontController {
     @GetMapping("staff/times/{id}")
     private String getStaffTime(@PathVariable("id") int id, Model model){
         User user = userService.getUserById(id);
+        String dayStart =
+                Objects.requireNonNull(calendarRepository.findById(user.getCalendarId().
+                        getCalendarId()).orElse(null)).getDayStartTime().toLocalTime().toString();
+        model.addAttribute("dayStart", dayStart);
 
+        String dayEnd =
+                Objects.requireNonNull(calendarRepository.findById(user.getCalendarId()
+                        .getCalendarId()).orElse(null)).getDayEndTime().toLocalTime().toString();
+        model.addAttribute("dayEnd", dayEnd);
         model.addAttribute("staff", user);
         String url = "http://localhost:8080/api/event/times/" + String.valueOf(id);
         model.addAttribute("url", url);

@@ -16,7 +16,12 @@
     <title>Free Staff Time</title>
 </head>
 <body>
-<script th:inline="javascript">let eventUrl = /*[[${url}]]*/ ""</script>
+<script th:inline="javascript">
+    let eventUrl = /*[[${url}]]*/ "";
+    let dayStart = /*[[${dayStart}]]*/ "";
+    let dayEnd = /*[[${dayEnd}]]*/ "";
+    let allDay = false;
+</script>
 <div id="calendar"></div>
 </body>
 </html>

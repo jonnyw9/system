@@ -11,11 +11,18 @@
     <script src='fullcalendar/core/main.js'></script>
     <script src='fullcalendar/daygrid/main.js'></script>
     <script src='fullcalendar/timegrid/main.js'></script>
+    <script src='fullcalendar/interaction/main.js'></script>
     <script src="js/calendarInit.js"></script>
 
     <title>Booking System</title>
 </head>
-<script th:inline="javascript">let eventUrl = /*[[${url}]]*/ ""</script>
+<script th:inline="javascript">
+    let eventUrl = /*[[${url}]]*/ "";
+    let dayStart = /*[[${dayStart}]]*/ "";
+    let dayEnd = /*[[${dayEnd}]]*/ "";
+    let userId = /*[[${user.getUserId()}]]*/ "";
+    let allDay = true;
+</script>
 <h1 th:text="'Welcome ' + ${user.getFirstName()} + '!'"></h1>
 <ul>
     <li><a href="/user/view">Account Details</a></li>
