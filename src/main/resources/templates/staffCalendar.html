@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+
+    <link type="text/css" href='/fullcalendar/core/main.css' rel='stylesheet' />
+    <link type="text/css" href='/fullcalendar/daygrid/main.css' rel='stylesheet' />
+    <link type="text/css" href='/fullcalendar/timegrid/main.css' rel='stylesheet' />
+    <link type="text/css" href="/css/home.css" rel="stylesheet"/>
+
+    <script src='/fullcalendar/core/main.js'></script>
+    <script src='/fullcalendar/daygrid/main.js'></script>
+    <script src='/fullcalendar/timegrid/main.js'></script>
+    <script src="/js/calendarInit.js"></script>
+
+    <title>Free Staff Time</title>
+</head>
+<body>
+<script th:inline="javascript">let eventUrl = /*[[${url}]]*/ ""</script>
+<div id="calendar"></div>
+</body>
+</html>

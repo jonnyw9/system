@@ -38,8 +38,6 @@ public class EventController {
         user =  userService.makeUserDto(authentication);
         model.addAttribute("user", user);
 
-
-
         User recipient =  userService.getUserById(id);
 
         EventDto eventDto = new EventDto();

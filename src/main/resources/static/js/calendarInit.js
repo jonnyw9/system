@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function(){
-   var calendarE1 = document.getElementById('calendar');
+    var calendarE1 = document.getElementById('calendar');
 
     var calendar = new FullCalendar.Calendar(calendarE1, {
         plugins: [ 'timeGrid' ],
@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function(){
         selectable: true,
         selectMirror: true,
         selectOverlap: false,
-        events: 'http://localhost:8080/api/event/getall/1'
+        events: eventUrl
     });
 
    calendar.render();

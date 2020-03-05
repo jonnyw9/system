@@ -15,16 +15,13 @@
 
     <title>Booking System</title>
 </head>
-<body>
+<script th:inline="javascript">let eventUrl = /*[[${url}]]*/ ""</script>
 <h1 th:text="'Welcome ' + ${user.getFirstName()} + '!'"></h1>
 <ul>
     <li><a href="/user/view">Account Details</a></li>
     <!-- Here logout and go home -->
     <li><a href="/logout">Logout</a></li>
 </ul>
-
-
-
 <section id="events">
 
     <div th:if="${user.student}" class="search">

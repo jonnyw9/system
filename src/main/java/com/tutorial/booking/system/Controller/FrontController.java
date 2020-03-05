@@ -56,6 +56,10 @@ public class FrontController {
 
         model.addAttribute("user", user);
 
+        String url = "http://localhost:8080/api/event/getall/" + String.valueOf(userId);
+
+        model.addAttribute("url", url);
+
         String lastname = "";
 
         model.addAttribute("lastname", lastname);
@@ -120,6 +124,8 @@ public class FrontController {
         return "login";
     }
 
+
+    /*
     @GetMapping("staff/times/{id}")
     public String getStaffTime(@PathVariable("id") int id, Model model){
 
@@ -141,6 +147,18 @@ public class FrontController {
         model.addAttribute("dates", availableDates);
 
         return "displayAvailableTimes";
+    }
+    */
+
+    @GetMapping("staff/times/{id}")
+    private String getStaffTime(@PathVariable("id") int id, Model model){
+        User user = userService.getUserById(id);
+
+        model.addAttribute("staff", user);
+        String url = "http://localhost:8080/api/event/times/" + String.valueOf(id);
+        model.addAttribute("url", url);
+
+        return "staffCalendar";
     }
 
 
