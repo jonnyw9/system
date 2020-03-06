@@ -79,16 +79,18 @@ public class UserService {
         roles.setAdmin(false);
         user.setRoleId(roles);
 
-        Calendar calendar = new Calendar();
-        calendar.setDayStartTime(parseFormTime(userDto.getStartTime()));
-        calendar.setDayEndTime(parseFormTime(userDto.getEndTime()));
-        user.setCalendarId(calendar);
+
 
 
         if(userDto.isStaff()){
             Staff staff = new Staff();
             staff.setRoom(userDto.getRoom());
             user.setStaffId(staff);
+
+            Calendar calendar = new Calendar();
+            calendar.setDayStartTime(parseFormTime(userDto.getStartTime()));
+            calendar.setDayEndTime(parseFormTime(userDto.getEndTime()));
+            user.setCalendarId(calendar);
         }
 
         if(userDto.isStudent()){
@@ -144,6 +146,8 @@ public class UserService {
 
         User user = userRepository.getOne(id);
 
+        UserDto userDto = new UserDto(user);
+
         //Cancel event pertaining to the user
 
         List<Event> createdEvents = eventRepository.findByCreatorUserId(user);
@@ -175,13 +179,14 @@ public class UserService {
         //Delete staff and student entities
         if(user.getStaffId() != null){
             staffRepository.delete(user.getStaffId());
+            Calendar calendar = calendarRepository.getOne(user.getCalendarId().getCalendarId());
+            calendarRepository.delete(calendar);
         }
         if(user.getStudentId() != null){
             studentRepository.delete(user.getStudentId());
         }
 
-        Calendar calendar = calendarRepository.getOne(user.getCalendarId().getCalendarId());
-        calendarRepository.delete(calendar);
+
 
         //Finally delete the user
         userRepository.delete(user);

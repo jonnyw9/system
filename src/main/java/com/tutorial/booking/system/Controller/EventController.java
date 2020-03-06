@@ -78,6 +78,11 @@ public class EventController {
     @GetMapping("view/{id}")
     public String viewEvent(@PathVariable("id") int id, Model model, Authentication authentication){
         user =  userService.makeUserDto(authentication);
+        Event event = eventService.getByEventId(id);
+        if(event.getCreatorUserId().getUserId() != user.getUserId()
+                && event.getRecipientUserId().getUserId() != user.getUserId()){
+            return "redirect:/home?notYourEvent";
+        }
         model.addAttribute("event", eventService.getByEventId(id));
 
         return userTemplatePrefix + "viewEvent";
@@ -89,8 +94,10 @@ public class EventController {
         user =  userService.makeUserDto(authentication);
         Event event = eventService.getByEventId(id);
 
+        System.out.println(user.getUserId());
+
         if(event.getCreatorUserId().getUserId() != user.getUserId()
-                || event.getRecipientUserId().getUserId() != user.getUserId()){
+                && event.getRecipientUserId().getUserId() != user.getUserId()){
             return "redirect:/home?notYourEvent";
         }
 
@@ -119,7 +126,7 @@ public class EventController {
         user =  userService.makeUserDto(authentication);
         Event event = eventService.getByEventId(id);
         if(event.getCreatorUserId().getUserId() != user.getUserId()
-                || event.getRecipientUserId().getUserId() != user.getUserId()){
+                && event.getRecipientUserId().getUserId() != user.getUserId()){
             return "redirect:/home?notYourEvent";
         }
         eventService.cancelEvent(id);

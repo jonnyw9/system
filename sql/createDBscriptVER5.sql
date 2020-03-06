@@ -72,6 +72,16 @@ CREATE TABLE roles(
 );
 
 
+CREATE TABLE notification(
+	notification_id int(150) auto_increment primary key NOT NULL,
+    user_id int(150),
+    title varchar(50),
+    description varchar(250),
+    action_link varchar(300),
+    foreign key (user_id) references bs_user(user_id)
+);
+
+
 ALTER TABLE bs_user ADD FOREIGN KEY (calendar_id) REFERENCES calendar(calendar_id);
 ALTER TABLE bs_user ADD FOREIGN KEY (role_id) REFERENCES roles(role_id);
 ALTER TABLE bs_user ADD FOREIGN KEY (staff_id) REFERENCES staff(staff_id);

@@ -31,6 +31,8 @@
 </ul>
 <section id="events">
 
+    <h2 th:if="${param.notYourEvent}">The event is non of you business!</h2>
+
     <div th:if="${user.student}" class="search">
         <h2>Search for the lastname of the staff member you wish to book!</h2>
         <form th:object="${lastname}" th:action="@{/search}" method="get">

@@ -2,6 +2,7 @@ package com.tutorial.booking.system.Service;
 
 import com.tutorial.booking.system.Repository.EventRepository;
 import com.tutorial.booking.system.dto.EventDto;
+import com.tutorial.booking.system.dto.UserDto;
 import com.tutorial.booking.system.model.Calendar;
 import com.tutorial.booking.system.model.Event;
 import com.tutorial.booking.system.model.User;
@@ -28,6 +29,9 @@ public class EventService {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    NotificationService notificationService;
 
     public void add(EventDto eventDto) throws ParseException {
 
@@ -78,6 +82,7 @@ public class EventService {
 
          **/
         Event event = getByEventId(eventDto.getEventId());
+        Event beforeChange = event;
 
         System.out.println(event.toString());
 
@@ -97,14 +102,15 @@ public class EventService {
     public void cancelEvent(int eventId){
 
         Event event = getByEventId(eventId);
-
-
+        notificationService.eventCancelled(event);
         //Can't delete with these columns containing data so have to nullify them
         event.setCreatorUserId(null);
         event.setRecipientUserId(null);
         eventRepository.save(event);
 
         eventRepository.delete(event);
+
+
     }
 
     public ArrayList<Timestamp> convertStringToTimeStamp(EventDto eventDto){
