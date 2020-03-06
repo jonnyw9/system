@@ -65,14 +65,23 @@ public class FrontController {
 
         User userById = userService.getUserById(userId);
 
-        String dayStart =
-                Objects.requireNonNull(calendarRepository.findById(userById.getCalendarId().
-                        getCalendarId()).orElse(null)).getDayStartTime().toLocalTime().toString();
+        String dayStart = "";
+        String dayEnd = "";
+
+        if(user.isStudent()){
+            dayStart = "06:00";
+            dayEnd = "20:00";
+        }else if(user.isStaff()){
+            dayStart = Objects.requireNonNull(calendarRepository.findById(userById.getCalendarId()
+                    .getCalendarId()).orElse(null)).getDayStartTime().toLocalTime().toString();
+            dayEnd = Objects.requireNonNull(calendarRepository.findById(userById.getCalendarId()
+                    .getCalendarId()).orElse(null)).getDayEndTime().toLocalTime().toString();
+        }
+
+
         model.addAttribute("dayStart", dayStart);
 
-        String dayEnd =
-                Objects.requireNonNull(calendarRepository.findById(userById.getCalendarId()
-                        .getCalendarId()).orElse(null)).getDayEndTime().toLocalTime().toString();
+
         model.addAttribute("dayEnd", dayEnd);
         model.addAttribute("staff", user);
 

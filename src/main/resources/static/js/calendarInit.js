@@ -15,10 +15,11 @@ document.addEventListener('DOMContentLoaded', function(){
         selectMirror: true,
         selectOverlap: false,
         events: eventUrl,
-        select: function (start, end) {
-            console.log(start);
-            let startString = start.startStr.substring(0,16)
-            window.location.href = "http://localhost:8080/event/add/" + userId + "?time=" + startString;
+        select: function (info) {
+            console.log(info);
+            let startString = info.startStr.substring(0,16);
+            let endString = info.endStr.substring(0,16);
+            window.location.href = "http://localhost:8080/event/add/" + userId + "?time=" + startString + "&end=" + endString;
         }
     });
 

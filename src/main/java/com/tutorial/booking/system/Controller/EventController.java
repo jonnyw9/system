@@ -34,7 +34,9 @@ public class EventController {
     EventService eventService;
 
     @RequestMapping(value = "add/{id}", method = {RequestMethod.GET, RequestMethod.POST})
-    public String addEvent(@PathVariable("id") int id , @RequestParam(name = "time", required = false) String time, Authentication authentication, Model model){
+    public String addEvent(@PathVariable("id") int id , @RequestParam(name = "time", required = false) String time,
+                           @RequestParam(name = "end", required = false) String end,
+                           Authentication authentication, Model model){
         user =  userService.makeUserDto(authentication);
         model.addAttribute("user", user);
 
@@ -47,7 +49,12 @@ public class EventController {
 
         LocalDateTime localDateTime = LocalDateTime.parse(time);
 
-        localDateTime = localDateTime.plusMinutes(30);
+        if(!end.isEmpty()){
+            localDateTime = LocalDateTime.parse(end);
+        }else{
+            localDateTime = localDateTime.plusMinutes(30);
+        }
+
 
         eventDto.setEventEnd(localDateTime.toString());
 
