@@ -201,5 +201,4 @@ public class EventService {
 
         return availableEvents;
     }
-
 }

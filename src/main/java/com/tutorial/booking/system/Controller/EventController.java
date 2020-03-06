@@ -49,7 +49,7 @@ public class EventController {
 
         LocalDateTime localDateTime = LocalDateTime.parse(time);
 
-        if(!end.isEmpty()){
+        if(end != null){
             localDateTime = LocalDateTime.parse(end);
         }else{
             localDateTime = localDateTime.plusMinutes(30);
@@ -76,8 +76,8 @@ public class EventController {
     }
 
     @GetMapping("view/{id}")
-    public String viewEvent(@PathVariable("id") int id, Model model){
-
+    public String viewEvent(@PathVariable("id") int id, Model model, Authentication authentication){
+        user =  userService.makeUserDto(authentication);
         model.addAttribute("event", eventService.getByEventId(id));
 
         return userTemplatePrefix + "viewEvent";
@@ -85,9 +85,14 @@ public class EventController {
 
 
     @GetMapping("edit/{id}")
-    public String editEvent(@PathVariable("id") int id, Model model){
-
+    public String editEvent(@PathVariable("id") int id, Model model, Authentication authentication){
+        user =  userService.makeUserDto(authentication);
         Event event = eventService.getByEventId(id);
+
+        if(event.getCreatorUserId().getUserId() != user.getUserId()
+                || event.getRecipientUserId().getUserId() != user.getUserId()){
+            return "redirect:/home?notYourEvent";
+        }
 
         EventDto eventDto = new EventDto(event);
 
@@ -110,8 +115,13 @@ public class EventController {
     }
 
     @GetMapping("cancel/{id}")
-    public String deleteEvent(@PathVariable("id") int id, Model model){
-
+    public String deleteEvent(@PathVariable("id") int id, Model model, Authentication authentication){
+        user =  userService.makeUserDto(authentication);
+        Event event = eventService.getByEventId(id);
+        if(event.getCreatorUserId().getUserId() != user.getUserId()
+                || event.getRecipientUserId().getUserId() != user.getUserId()){
+            return "redirect:/home?notYourEvent";
+        }
         eventService.cancelEvent(id);
 
         return "redirect:/home";

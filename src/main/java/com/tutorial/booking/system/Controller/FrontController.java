@@ -68,7 +68,7 @@ public class FrontController {
         String dayStart = "";
         String dayEnd = "";
 
-        if(user.isStudent()){
+        if(user.isStudent() && !user.isStaff()){
             dayStart = "06:00";
             dayEnd = "20:00";
         }else if(user.isStaff()){
@@ -190,7 +190,7 @@ public class FrontController {
                         .getCalendarId()).orElse(null)).getDayEndTime().toLocalTime().toString();
         model.addAttribute("dayEnd", dayEnd);
         model.addAttribute("staff", user);
-        String url = "http://localhost:8080/api/event/times/" + String.valueOf(id);
+        String url = "http://localhost:8080/api/event/getall/" + String.valueOf(id);
         model.addAttribute("url", url);
 
         return "staffCalendar";

@@ -91,7 +91,6 @@ public class EventApiController {
                 eventApiEntity.setStart(event.toString());
                 LocalDateTime end = event.plusMinutes(30);
                 eventApiEntity.setEnd(end.toString());
-
                 eventApiEntity.setUrl(urlBase + String.valueOf(id) + "?time=" + event.toString());
                 eventApiReturn.add(eventApiEntity);
             }
