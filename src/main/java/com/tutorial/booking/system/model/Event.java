@@ -22,6 +22,8 @@ public class Event {
 
     private boolean accepted;
 
+    private String location;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "creatorUserId", referencedColumnName = "userId")
     private User creatorUserId;
@@ -34,7 +36,7 @@ public class Event {
 
     //Add date stuff
     public Event(int eventId, Timestamp eventStart, Timestamp eventEnd, String title, String description,
-                 User creatorUserId, User recipientUserId){
+                 User creatorUserId, User recipientUserId, String location){
 
         this.eventId = eventId;
         this.title = title;
@@ -44,6 +46,7 @@ public class Event {
         this.recipientUserId = recipientUserId;
         this.eventStart = eventStart;
         this.eventEnd = eventEnd;
+        this.location = location;
     }
 
     public int getEventId() {
@@ -108,6 +111,14 @@ public class Event {
 
     public void setRecipientUserId(User recipientUserId) {
         this.recipientUserId = recipientUserId;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     @Override

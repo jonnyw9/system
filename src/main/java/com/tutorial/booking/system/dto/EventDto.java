@@ -23,6 +23,8 @@ public class EventDto {
     private User creatorUserId;
     private User recipientUserId;
 
+    private String location;
+
     public EventDto() {
     }
 
@@ -120,6 +122,14 @@ public class EventDto {
 
     public void setEventStartTimeStamp(Timestamp eventStartTimeStamp) {
         this.eventStartTimeStamp = eventStartTimeStamp;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     @Override

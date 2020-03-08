@@ -6,6 +6,7 @@
 </head>
 <body>
 <h1>Add Event</h1>
+<p>*The default location is the office of the lecturer.</p>
     <form action="#" th:action="@{/event/add}" th:object="${event}" method="post">
         <input type="hidden" id="creatorUserId" name="creatorUserId" th:attr="value = ${user.userId}"/>
         <input type="hidden" id="recipientUserId" name="recipientUserId" th:attr="value = ${recipient.userId}" />
@@ -16,6 +17,7 @@
         <p><input type="datetime-local" th:value="${event.eventEnd}" readonly></p>
         <p><input type="text" id="title" name="title" th:value="*{title}"></p>
         <p><input type="text" id="description" name="description" th:value="*{description}"></p>
+        <p><input type="text" id="location" name="location" th:value="*{location}">*</p>
         <p><input type="submit" value="Submit"></p>
     </form>
 <button><a href="/home">Home</a> </button>

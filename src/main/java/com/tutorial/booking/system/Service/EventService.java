@@ -38,7 +38,8 @@ public class EventService {
         ArrayList<Timestamp> timestamps = convertStringToTimeStamp(eventDto);
 
         Event event = new Event(eventDto.getEventId(), timestamps.get(0), timestamps.get(1), eventDto.getTitle(),
-                eventDto.getDescription(), eventDto.getCreatorUserId(), eventDto.getRecipientUserId());
+                eventDto.getDescription(), eventDto.getCreatorUserId(), eventDto.getRecipientUserId(),
+                eventDto.getLocation());
 
         this.eventRepository.save(event);
     }
@@ -92,6 +93,7 @@ public class EventService {
         event.setEventEnd(timestamps.get(1));
         event.setEventStart(timestamps.get(0));
         event.setTitle(eventDto.getTitle());
+        event.setLocation(eventDto.getLocation());
 
         //Update to the database
         //eventRepository.updateEvent(eventDao.getEventId(), eventDao.getTitle(), eventDao.getDescription(), eventStart,

@@ -19,9 +19,9 @@ CREATE TABLE password(
 
 CREATE TABLE bs_user(
 	user_id int(150) auto_increment primary key NOT NULL,
-	email varchar(100),
-	first_name varchar(100),
-	last_name varchar(100),
+	email varchar(100) NOT NULL,
+	first_name varchar(100) NOT NULL,
+	last_name varchar(100) NOT NULL,
 	calendar_id int(150),
 	active tinyint(1),
 	role_id int(150),
@@ -60,6 +60,7 @@ CREATE TABLE bs_event(
     creator_user_id int(150),
     recipient_user_id int(150),
     active tinyint(1),
+    location varchar(250),
     foreign key (creator_user_id) references bs_user(user_id),
     foreign key (recipient_user_id) references bs_user(user_id)
 );
@@ -78,6 +79,7 @@ CREATE TABLE notification(
     title varchar(50),
     description varchar(250),
     action_link varchar(300),
+    seen tinyint(1),
     foreign key (user_id) references bs_user(user_id)
 );
 

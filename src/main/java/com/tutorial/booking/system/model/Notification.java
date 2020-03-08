@@ -17,6 +17,7 @@ public class Notification {
     private String title;
     private String description;
     private String actionLink;
+    private boolean seen;
 
     public Notification() {
     }
@@ -59,5 +60,13 @@ public class Notification {
 
     public void setActionLink(String actionLink) {
         this.actionLink = actionLink;
+    }
+
+    public boolean isSeen() {
+        return seen;
+    }
+
+    public void setSeen(boolean seen) {
+        this.seen = seen;
     }
 }

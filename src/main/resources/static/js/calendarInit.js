@@ -25,7 +25,14 @@ document.addEventListener('DOMContentLoaded', function(){
             }else{
                 var duration = info.end.getTime() - info.start.getTime();
                 console.log(duration);
-                return duration <= 1800000;
+                if(duration > 1800000){
+                    return false;
+                }else{
+                    const HOURS = 1000*60*60*24;
+                    var dayBefore = info.start.getTime() - HOURS;
+                    var now = new Date();
+                    return dayBefore >= now ;
+                }
             }
         },
         select: function (info) {

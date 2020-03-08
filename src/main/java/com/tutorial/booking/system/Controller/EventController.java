@@ -44,6 +44,9 @@ public class EventController {
 
         EventDto eventDto = new EventDto();
         eventDto.setEventStart(time);
+        if(recipient.getStaffId() != null){
+            eventDto.setLocation(recipient.getStaffId().getRoom());
+        }
 
         System.out.println(eventDto.getEventStart());
 
