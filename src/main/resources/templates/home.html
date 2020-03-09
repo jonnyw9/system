@@ -30,13 +30,11 @@
     <li><a href="/logout">Logout</a></li>
 </ul>
 
-<h3 th:if="${unreadNotifications != 0}" th:text="${'You have ' + unreadNotifications + ' unread notifications'}"></h3>
-<button><a th:href="@{'/notifications/' + ${user.getUserId()}}">View Notifications</a></button>
-<section id="events">
+<section id="user">
+    <p th:if="${param.notYourNotif}">Not your notification(s)</p>
 
-
-
-    <h2 th:if="${param.notYourEvent}">The event is non of you business!</h2>
+    <h3 th:if="${unreadNotifications != 0}" th:text="${'You have ' + unreadNotifications + ' unread notifications'}"></h3>
+    <button><a th:href="@{'/notifications/' + ${user.getUserId()}}">View Notifications</a></button>
 
     <div th:if="${user.student}" class="search">
         <h2>Search for the lastname of the staff member you wish to book!</h2>
@@ -45,17 +43,13 @@
             <input type="submit" value="Search" />
         </form>
     </div>
-
+</section>
+<section id="events">
+    <h2 th:if="${param.notYourEvent}">The event is non of you business!</h2>
     <section>
         <h2>Your Calendar</h2>
         <div id="calendar"></div>
     </section>
-
-
-    <!-- Here do thymeleaf listing -->
-    <ul th:each="event : ${events}">
-        <li><a th:href="@{'/event/view/' + ${event.eventId}}" th:text="${event.title}"></a></li>
-    </ul>
 </section>
 
 </body>

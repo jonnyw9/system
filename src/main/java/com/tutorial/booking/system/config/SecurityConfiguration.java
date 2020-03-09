@@ -36,6 +36,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/event/**").hasAnyRole( "STAFF", "STUDENT")
                 .antMatchers("/user/**").hasAnyRole("STAFF", "STUDENT")
                 .antMatchers("/staff/**").hasAnyRole("STAFF", "STUDENT")
+                .antMatchers("/notifications/**").hasAnyRole("STAFF", "STUDENT")
                 .antMatchers("/", "/registration", "/login").permitAll()
                 .and().httpBasic()
                 .and().formLogin().loginPage("/login")//.loginProcessingUrl("/login_process")

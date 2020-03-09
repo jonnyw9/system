@@ -1,10 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Notifications</title>
 </head>
 <body>
+<h1>Your notifications</h1>
 
+<table>
+    <tr>
+        <th>Title</th>
+        <th>Link</th>
+    </tr>
+    <tr th:each="notification: ${notifications}">
+        <td th:text="${notification.getTitle()}"></td>
+        <td><a th:href="@{'/notifications/view/' + ${notification.getNotificationId()}}">View</a></td>
+    </tr>
+</table>
 </body>
 </html>

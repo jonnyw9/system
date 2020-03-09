@@ -24,12 +24,31 @@ public class NotificationService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private EventService eventService;
+
 
     public void saveNotification(Notification notification){
         notificationRepository.save(notification);
     }
 
-    public void eventAdded(Event event){
+    public void eventAddedCreator(Event event){
+        Notification notification = new Notification();
+
+        String title = "Event Added";
+        String description = "Your event "+ event.getTitle() + " at: " +
+                event.getEventStart().toLocalDateTime().toString() + " has been successfully added";
+        String actionLink = "/event/view/" + event.getEventId();
+
+        notification.setUserId(event.getCreatorUserId());
+        notification.setTitle(title);
+        notification.setDescription(description);
+        notification.setActionLink(actionLink);
+
+        saveNotification(notification);
+    }
+
+    public void eventAddedRecipient(Event event){
 
     }
 
@@ -73,5 +92,9 @@ public class NotificationService {
 
     public List<Notification> getUserNotifications(int id){
         return notificationRepository.findAllByUserId(userService.getUserById(id));
+    }
+
+    public Notification getNotificationById(int id){
+        return notificationRepository.getOne(id);
     }
 }

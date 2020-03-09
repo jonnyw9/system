@@ -63,6 +63,7 @@ public class EventController {
 
         model.addAttribute("recipient", recipient);
 
+        eventDto.setRecurringLengthString(null);
         System.out.println(user.getUserId());
         model.addAttribute("event", eventDto);
         return userTemplatePrefix + "addEvent";
@@ -73,8 +74,7 @@ public class EventController {
     @PostMapping("add")
     public String addEvent(@ModelAttribute EventDto event, BindingResult bindingResult, Model model) throws ParseException {
         //Save the event
-
-        if(event.getRecurringLengthString() != null){
+        if(!event.getRecurringLengthString().isEmpty()){
             event.setRecurringLength(Integer.parseInt(event.getRecurringLengthString()));
             eventService.addRecurring(event, user);
         }else{

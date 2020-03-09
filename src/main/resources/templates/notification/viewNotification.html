@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>View Notification</title>
+</head>
+<body>
+<h1>View Notification</h1>
+<table>
+    <tr>
+        <th>Title</th>
+        <th>Description</th>
+        <th th:if="${notification.getActionLink()}">Link</th>
+    </tr>
+    <tr>
+        <td th:text="${notification.getTitle()}"></td>
+        <td th:text="${notification.getDescription()}"></td>
+        <td th:if="${notification.getActionLink()}">
+            <button><a th:href="@{${notification.getActionLink()}}">View</a></button>
+        </td>
+    </tr>
+</table>
+
+<button><a href="/home">Home</a></button>
+</body>
+</html>

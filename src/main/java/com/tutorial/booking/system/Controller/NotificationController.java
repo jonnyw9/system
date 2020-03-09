@@ -3,6 +3,7 @@ package com.tutorial.booking.system.Controller;
 import com.tutorial.booking.system.Service.NotificationService;
 import com.tutorial.booking.system.Service.UserService;
 import com.tutorial.booking.system.dto.UserDto;
+import com.tutorial.booking.system.model.Notification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -30,8 +31,31 @@ public class NotificationController {
 
         user = userService.makeUserDto(authentication);
 
-        notificationService.getUserNotifications(id);
+        if(user.getUserId() != id){
+            return "redirect:/home?notYourNotif";
+        }
+
+        model.addAttribute("notifications", notificationService.getUserNotifications(id));
 
         return returnPrefix + "viewNotifications";
+    }
+
+    @GetMapping("view/{id}")
+    public String viewNotification(@PathVariable(name = "id") int id, Model model, Authentication authentication){
+        user = userService.makeUserDto(authentication);
+
+        Notification notification = notificationService.getNotificationById(id);
+
+        if(notification.getUserId().getUserId() != user.getUserId()){
+            return "redirect:/home?notYourNotif";
+        }
+
+        notification.setSeen(true);
+
+        notificationService.saveNotification(notification);
+
+        model.addAttribute("notification", notification);
+
+        return returnPrefix + "viewNotification";
     }
 }
