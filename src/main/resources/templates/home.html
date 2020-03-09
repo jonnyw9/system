@@ -29,7 +29,12 @@
     <!-- Here logout and go home -->
     <li><a href="/logout">Logout</a></li>
 </ul>
+
+<h3 th:if="${unreadNotifications != 0}" th:text="${'You have ' + unreadNotifications + ' unread notifications'}"></h3>
+<button><a th:href="@{'/notifications/' + ${user.getUserId()}}">View Notifications</a></button>
 <section id="events">
+
+
 
     <h2 th:if="${param.notYourEvent}">The event is non of you business!</h2>
 

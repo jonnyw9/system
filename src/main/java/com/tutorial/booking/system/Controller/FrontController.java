@@ -2,11 +2,13 @@ package com.tutorial.booking.system.Controller;
 
 import com.tutorial.booking.system.Repository.CalendarRepository;
 import com.tutorial.booking.system.Service.EventService;
+import com.tutorial.booking.system.Service.NotificationService;
 import com.tutorial.booking.system.Service.UserService;
 import com.tutorial.booking.system.dto.EventDto;
 import com.tutorial.booking.system.dto.UserDto;
 import com.tutorial.booking.system.model.Calendar;
 import com.tutorial.booking.system.model.Event;
+import com.tutorial.booking.system.model.Notification;
 import com.tutorial.booking.system.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -39,6 +41,9 @@ public class FrontController {
 
     @Autowired
     CalendarRepository calendarRepository;
+
+    @Autowired
+    NotificationService notificationService;
 
     @GetMapping("/")
     public String index(Model model){
@@ -90,6 +95,18 @@ public class FrontController {
         String lastname = "";
 
         model.addAttribute("lastname", lastname);
+
+        List<Notification> notifications = notificationService.getUserNotifications(userId);
+
+        int unreadNotifications = 0;
+
+        for (int i = 0; i < notifications.size() ; i++) {
+            if(!notifications.get(i).isSeen()){
+                unreadNotifications++;
+            }
+        }
+
+        model.addAttribute("unreadNotifications", unreadNotifications);
 
         return "home";
     }

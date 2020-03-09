@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class NotificationService {
 
@@ -67,5 +69,9 @@ public class NotificationService {
 
     public void userDetailsChanged(User user, User before){
 
+    }
+
+    public List<Notification> getUserNotifications(int id){
+        return notificationRepository.findAllByUserId(userService.getUserById(id));
     }
 }
