@@ -49,6 +49,20 @@ public class EventService {
         this.eventRepository.save(event);
     }
 
+    public void addRecurring(EventDto eventDto, UserDto userDto) throws ParseException{
+        for (int i = 0; i < eventDto.getRecurringLength(); i++) {
+            this.add(eventDto, userDto);
+            LocalDateTime start = LocalDateTime.parse(eventDto.getEventStart());
+            LocalDateTime end = LocalDateTime.parse(eventDto.getEventEnd());
+
+            start = start.plusDays(7);
+            end = end.plusDays(7);
+
+            eventDto.setEventStart(start.toString());
+            eventDto.setEventEnd(end.toString());
+        }
+    }
+
     public List<Event> getEventsForUser(int userId){
 
         //Get List

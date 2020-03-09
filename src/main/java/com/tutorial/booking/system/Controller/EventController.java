@@ -73,7 +73,13 @@ public class EventController {
     @PostMapping("add")
     public String addEvent(@ModelAttribute EventDto event, BindingResult bindingResult, Model model) throws ParseException {
         //Save the event
-        eventService.add(event, user);
+        if(!event.getRecurringLengthString().isEmpty()){
+            event.setRecurringLength(Integer.parseInt(event.getRecurringLengthString()));
+            eventService.addRecurring(event, user);
+        }else{
+            eventService.add(event, user);
+        }
+
         //Redirect to the homepage
         return "redirect:/home";
     }

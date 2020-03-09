@@ -25,6 +25,9 @@ public class EventDto {
 
     private String location;
 
+    private int recurringLength;
+    private String recurringLengthString;
+
     public EventDto() {
     }
 
@@ -130,6 +133,22 @@ public class EventDto {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public int getRecurringLength() {
+        return recurringLength;
+    }
+
+    public void setRecurringLength(int recurringLength) {
+        this.recurringLength = recurringLength;
+    }
+
+    public String getRecurringLengthString() {
+        return recurringLengthString;
+    }
+
+    public void setRecurringLengthString(String recurringLengthString) {
+        this.recurringLengthString = recurringLengthString;
     }
 
     @Override
