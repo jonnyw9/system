@@ -73,7 +73,8 @@ public class EventController {
     @PostMapping("add")
     public String addEvent(@ModelAttribute EventDto event, BindingResult bindingResult, Model model) throws ParseException {
         //Save the event
-        if(!event.getRecurringLengthString().isEmpty()){
+        
+        if(event.getRecurringLengthString() != null){
             event.setRecurringLength(Integer.parseInt(event.getRecurringLengthString()));
             eventService.addRecurring(event, user);
         }else{
