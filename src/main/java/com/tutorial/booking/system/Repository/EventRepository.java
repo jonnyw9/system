@@ -18,6 +18,9 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
 
     List<Event> findByRecipientUserId(User user);
 
+    //List<Event> findByCreatorUserIdAndRecipientUserId(User user);
+
+
     Optional<Event> findEventByEventId(int id);
 
     List<Event> findEventByEventStartBeforeAndEventStartAfter(Timestamp before, Timestamp after);

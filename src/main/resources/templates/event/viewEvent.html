@@ -7,6 +7,7 @@
 <body>
 <h1>View Event</h1>
 <section id="eventDetails">
+    <p th:if="${param.accepted}">Event Accepted!</p>
     <h2 th:text="${'Title: ' + event.title}"></h2>
     <div id="eventStart"><p th:text="${'Start: ' + event.eventStart}"></p></div>
     <div id="eventEnd"><p th:text="${'End: ' + event.eventEnd}"></p></div>
@@ -17,7 +18,10 @@
     <div id="accepted"><p th:text="${'Has been accepted: ' + event.accepted}"></p></div>
 
     <button><a th:href="@{'/event/edit/' + ${event.eventId}}">Edit Event</a></button>
-    <button><a th:href="@{'/event/cancel/' + ${event.eventId}}">Cancel Event</a></button>
+    <button><a th:href="@{'/event/cancel/' + ${event.eventId}}">Cancel or Decline Event</a></button>
+
+    <button th:if="${receive and !event.accepted}"><a th:href="@{'/event/accept/' + ${event.eventId}}">Accept</a></button>
+
     <button><a th:href="@{'/home'}">Home</a></button>
 </section>
 </body>

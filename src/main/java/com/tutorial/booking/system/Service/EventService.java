@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class EventService {
@@ -33,13 +34,17 @@ public class EventService {
     @Autowired
     NotificationService notificationService;
 
-    public void add(EventDto eventDto) throws ParseException {
+    public void add(EventDto eventDto, UserDto userDto) throws ParseException {
 
         ArrayList<Timestamp> timestamps = convertStringToTimeStamp(eventDto);
 
         Event event = new Event(eventDto.getEventId(), timestamps.get(0), timestamps.get(1), eventDto.getTitle(),
                 eventDto.getDescription(), eventDto.getCreatorUserId(), eventDto.getRecipientUserId(),
                 eventDto.getLocation());
+
+        if(userDto.getUserId() == event.getRecipientUserId().getUserId()){
+            event.setAccepted(true);
+        }
 
         this.eventRepository.save(event);
     }
@@ -48,6 +53,45 @@ public class EventService {
 
         //Get List
         List<Event> events = eventRepository.findByCreatorUserId(userService.getUserById(userId));
+
+        for (int i = 0; i < events.size() ; i++) {
+            System.out.println("CREATED:   " + events.get(i).toString());
+        }
+
+
+
+        List<Event> eventsReceived = eventRepository.findByRecipientUserId(userService.getUserById(userId));
+
+        for (int i = 0; i < eventsReceived.size() ; i++) {
+            System.out.println(eventsReceived.get(i).toString());
+        }
+
+
+
+        if(!eventsReceived.isEmpty()){
+            for(int i = 0; i < eventsReceived.size(); i++){
+                if(!events.isEmpty()){
+                    boolean addable = true;
+                    for (int j = 0; j < events.size() ; j++) {
+                        if(events.get(j).getEventId() == eventsReceived.get(i).getEventId()){
+                            System.out.println(events.get(j).getEventId() + " " + eventsReceived.get(i).getEventId());
+                            addable = false;
+                        }
+                    }
+                    if(addable){
+                        events.add(eventsReceived.get(i));
+                    }
+                }else{
+                    return eventsReceived;
+                }
+
+            }
+        }
+
+        for (int i = 0; i < events.size(); i++) {
+            System.out.println("FULL LIST:   " + events.get(i).toString());
+        }
+       // events.
 
         //This will return a List of events
         return events;
@@ -208,5 +252,13 @@ public class EventService {
         }
 
         return availableEvents;
+    }
+
+    public void acceptEvent(int id){
+        Event event = eventRepository.getOne(id);
+
+        event.setAccepted(true);
+
+        eventRepository.save(event);
     }
 }

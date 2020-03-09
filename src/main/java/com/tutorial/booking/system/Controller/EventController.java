@@ -73,7 +73,7 @@ public class EventController {
     @PostMapping("add")
     public String addEvent(@ModelAttribute EventDto event, BindingResult bindingResult, Model model) throws ParseException {
         //Save the event
-        eventService.add(event);
+        eventService.add(event, user);
         //Redirect to the homepage
         return "redirect:/home";
     }
@@ -81,10 +81,17 @@ public class EventController {
     @GetMapping("view/{id}")
     public String viewEvent(@PathVariable("id") int id, Model model, Authentication authentication){
         user =  userService.makeUserDto(authentication);
+
         Event event = eventService.getByEventId(id);
         if(event.getCreatorUserId().getUserId() != user.getUserId()
                 && event.getRecipientUserId().getUserId() != user.getUserId()){
             return "redirect:/home?notYourEvent";
+        }
+
+        if(user.getUserId() == event.getRecipientUserId().getUserId()){
+            model.addAttribute("receive", true);
+        }else{
+            model.addAttribute("receive", false);
         }
         model.addAttribute("event", eventService.getByEventId(id));
 
@@ -135,6 +142,14 @@ public class EventController {
         eventService.cancelEvent(id);
 
         return "redirect:/home";
+    }
+
+    @GetMapping("/accept/{id}")
+    public String acceptEvent(@PathVariable("id") int id, Model model, Authentication authentication){
+
+        eventService.acceptEvent(id);
+
+        return "redirect:/event/view/" + id + "?accepted";
     }
 
 }
