@@ -34,7 +34,7 @@
     <p th:if="${param.notYourNotif}">Not your notification(s)</p>
 
     <h3 th:if="${unreadNotifications != 0}" th:text="${'You have ' + unreadNotifications + ' unread notifications'}"></h3>
-    <button><a th:href="@{'/notifications/' + ${user.getUserId()}}">View Notifications</a></button>
+    <button><a th:href="@{'/notifications/'}">View Notifications</a></button>
 
     <div th:if="${user.student}" class="search">
         <h2>Search for the lastname of the staff member you wish to book!</h2>

@@ -8,11 +8,13 @@
 <h1>View Notification</h1>
 <table>
     <tr>
+        <th>Received</th>
         <th>Title</th>
         <th>Description</th>
         <th th:if="${notification.getActionLink()}">Link</th>
     </tr>
     <tr>
+        <td th:text="${notification.getCreatedOn().toLocaleString()}"></td>
         <td th:text="${notification.getTitle()}"></td>
         <td th:text="${notification.getDescription()}"></td>
         <td th:if="${notification.getActionLink()}">

@@ -11,9 +11,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
-@RequestMapping("/notifications/")
+@RequestMapping("/notifications")
 public class NotificationController {
 
     private UserDto user;
@@ -26,21 +27,17 @@ public class NotificationController {
     @Autowired
     NotificationService notificationService;
 
-    @GetMapping("{id}")
-    public String viewUserNotifications(@PathVariable(name = "id") int id, Model model, Authentication authentication){
+    @RequestMapping(value={"", "/"}, method = RequestMethod.GET)
+    public String viewUserNotifications(Model model, Authentication authentication){
 
         user = userService.makeUserDto(authentication);
 
-        if(user.getUserId() != id){
-            return "redirect:/home?notYourNotif";
-        }
-
-        model.addAttribute("notifications", notificationService.getUserNotifications(id));
+        model.addAttribute("notifications", notificationService.getUserNotifications(user.getUserId()));
 
         return returnPrefix + "viewNotifications";
     }
 
-    @GetMapping("view/{id}")
+    @GetMapping("/view/{id}")
     public String viewNotification(@PathVariable(name = "id") int id, Model model, Authentication authentication){
         user = userService.makeUserDto(authentication);
 

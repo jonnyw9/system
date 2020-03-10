@@ -137,16 +137,8 @@ public class EventService {
 
         System.out.println(eventDto.toString());
 
-
-        /**
-         * Made this a function
-        Timestamp eventStart = Timestamp.valueOf((eventDto.getEventStart() + ":00").replace("T", " "));
-
-        Timestamp eventEnd = Timestamp.valueOf((eventDto.getEventEnd() + ":00").replace("T", " "));
-
-         **/
         Event event = getByEventId(eventDto.getEventId());
-        Event beforeChange = event;
+
 
         System.out.println(event.toString());
 
@@ -158,10 +150,9 @@ public class EventService {
         event.setTitle(eventDto.getTitle());
         event.setLocation(eventDto.getLocation());
 
-        //Update to the database
-        //eventRepository.updateEvent(eventDao.getEventId(), eventDao.getTitle(), eventDao.getDescription(), eventStart,
-            //eventEnd);
         eventRepository.save(event);
+
+        notificationService.eventUpdated(event);
     }
 
     public void cancelEvent(int eventId){

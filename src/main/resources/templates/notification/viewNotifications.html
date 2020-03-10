@@ -8,14 +8,21 @@
 <h1>Your notifications</h1>
 
 <table>
-    <tr>
-        <th>Title</th>
-        <th>Link</th>
-    </tr>
-    <tr th:each="notification: ${notifications}">
-        <td th:text="${notification.getTitle()}"></td>
-        <td><a th:href="@{'/notifications/view/' + ${notification.getNotificationId()}}">View</a></td>
-    </tr>
+    <thead>
+        <tr>
+            <th>Received</th>
+            <th>Title</th>
+            <th>Link</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="notification: ${notifications}">
+            <td th:text="${notification.getCreatedOn().toLocaleString()}"></td>
+            <td th:text="${notification.getTitle()}"></td>
+            <td><a th:href="@{'/notifications/view/' + ${notification.getNotificationId()}}">View</a></td>
+        </tr>
+    </tbody>
 </table>
+<button><a href="/home">Home</a></button>
 </body>
 </html>

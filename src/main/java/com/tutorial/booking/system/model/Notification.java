@@ -1,6 +1,7 @@
 package com.tutorial.booking.system.model;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "notification")
@@ -18,6 +19,7 @@ public class Notification {
     private String description;
     private String actionLink;
     private boolean seen;
+    private Timestamp createdOn;
 
     public Notification() {
     }
@@ -68,5 +70,13 @@ public class Notification {
 
     public void setSeen(boolean seen) {
         this.seen = seen;
+    }
+
+    public Timestamp getCreatedOn() {
+        return createdOn;
+    }
+
+    public void setCreatedOn(Timestamp createdOn) {
+        this.createdOn = createdOn;
     }
 }

@@ -32,7 +32,7 @@ public class EventDto {
     }
 
     public EventDto(int eventId, String eventStart, String eventEnd, String title, String description, boolean accepted,
-                    User creatorUserId, User recipientUserId) {
+                    User creatorUserId, User recipientUserId, String location) {
         this.eventId = eventId;
         this.eventStart = eventStart;
         this.eventEnd = eventEnd;
@@ -43,6 +43,7 @@ public class EventDto {
         this.recipientUserId = recipientUserId;
         this.eventStart = eventStart;
         this.eventEnd = eventEnd;
+        this.location = location;
     }
 
     public EventDto(Event event){
@@ -52,7 +53,7 @@ public class EventDto {
         this.accepted = event.isAccepted();
         this.creatorUserId = event.getCreatorUserId();
         this.recipientUserId = event.getRecipientUserId();
-
+        this.location = event.getLocation();
     }
 
     public int getEventId() {
