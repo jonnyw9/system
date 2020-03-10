@@ -49,7 +49,9 @@ public class EventService {
         this.eventRepository.save(event);
 
         notificationService.eventAddedCreator(event);
-        notificationService.eventAddedRecipient(event);
+        if(event.getCreatorUserId().getUserId() != event.getCreatorUserId().getUserId()){
+            notificationService.eventAddedRecipient(event);
+        }
     }
 
     public void addRecurring(EventDto eventDto, UserDto userDto) throws ParseException{

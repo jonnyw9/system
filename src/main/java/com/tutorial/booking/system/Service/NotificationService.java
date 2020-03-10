@@ -49,7 +49,20 @@ public class NotificationService {
     }
 
     public void eventAddedRecipient(Event event){
+        Notification notification = new Notification();
 
+        String title = "Event Requested";
+        String description = event.getCreatorUserId().getFirstName() + " " + event.getCreatorUserId().getLastName() +
+                " requested an event with you on: " + event.getEventStart().toLocalDateTime().toString() +
+                ". Please follow the link to accept or decline the event.";
+        String actionLink = "/event/view/" + event.getEventId();
+
+        notification.setUserId(event.getRecipientUserId());
+        notification.setTitle(title);
+        notification.setDescription(description);
+        notification.setActionLink(actionLink);
+
+        saveNotification(notification);
     }
 
     public void eventCancelled(Event event){
@@ -60,7 +73,8 @@ public class NotificationService {
         String title = "Event Cancelled";
         notification.setTitle(title);
         String description = "Your event "+ event.getTitle() + " at: " +
-                event.getEventStart().toLocalDateTime().toString() + " has been cancelled";
+                event.getEventStart().toLocalDateTime().toString() + " has been cancelled.";
+
 
         notification.setDescription(description);
 
