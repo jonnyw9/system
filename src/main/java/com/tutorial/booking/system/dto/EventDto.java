@@ -3,6 +3,9 @@ package com.tutorial.booking.system.dto;
 import com.tutorial.booking.system.model.Event;
 import com.tutorial.booking.system.model.User;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 
 public class EventDto {
@@ -14,19 +17,27 @@ public class EventDto {
 
     private Timestamp eventStartTimeStamp;
 
+    @NotNull
+    @NotEmpty
     private String title;
 
+    @NotNull
+    @NotEmpty
     private String description;
 
     private boolean accepted;
 
     private User creatorUserId;
+
     private User recipientUserId;
 
+    @NotNull
+    @NotEmpty
     private String location;
 
-    private int recurringLength;
-    private String recurringLengthString;
+    @Min(2)
+    private Integer recurringLength;
+
 
     public EventDto() {
     }
@@ -136,21 +147,14 @@ public class EventDto {
         this.location = location;
     }
 
-    public int getRecurringLength() {
+    public Integer getRecurringLength() {
         return recurringLength;
     }
 
-    public void setRecurringLength(int recurringLength) {
+    public void setRecurringLength(Integer recurringLength) {
         this.recurringLength = recurringLength;
     }
 
-    public String getRecurringLengthString() {
-        return recurringLengthString;
-    }
-
-    public void setRecurringLengthString(String recurringLengthString) {
-        this.recurringLengthString = recurringLengthString;
-    }
 
     @Override
     public String toString() {

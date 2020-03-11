@@ -23,7 +23,7 @@
             <input type="checkbox" id="recurring" name="recurring" onclick="onCheck()">
         </p>
         <p th:if="${user.userId == recipient.userId}">
-            <input type="text" id="recurringLengthString" name="recurringLengthString" th:value="*{recurringLengthString}" style="display: none">
+            <input type="text" id="recurringLength" name="recurringLength" th:value="*{recurringLength}" style="display: none">
         </p>
         <p><input type="submit" value="Submit"></p>
     </form>

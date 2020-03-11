@@ -6,9 +6,9 @@
 </head>
 <body>
 
-<h2>Search for the lastname of the staff member you wish to book!</h2>
-<form th:object="${lastname}" th:action="@{/search}" method="get">
-    <input type="text" name="lastname" id="lastname" th:value="${lastname}" />
+<h2>Search for the name of the staff member you wish to book!</h2>
+<form th:object="${name}" th:action="@{/search}" method="get">
+    <input type="text" name="name" id="name" th:value="${name}" />
     <input type="submit" value="Search" />
 </form>
 

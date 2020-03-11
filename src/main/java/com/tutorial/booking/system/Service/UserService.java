@@ -4,6 +4,8 @@ import com.tutorial.booking.system.Repository.*;
 import com.tutorial.booking.system.dto.UserDto;
 import com.tutorial.booking.system.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -192,8 +194,8 @@ public class UserService {
         userRepository.delete(user);
     }
 
-    public Iterable<User> listUserByLastName(String lastname){
-        return userRepository.findByLastName(lastname);
+    public List<User> listUserByName(String name){
+        return userRepository.findStaffByName(name);
     }
 
     public Time parseFormTime(String time){
@@ -211,9 +213,5 @@ public class UserService {
     public UserDto makeUserDto(Authentication authentication){
         System.out.println(authentication.getName());
         return getUserByUserName(authentication.getName());
-    }
-
-    public List<User> listAllStaff(){
-        return userRepository.findAllByStaffIdIsNotNull();
     }
 }

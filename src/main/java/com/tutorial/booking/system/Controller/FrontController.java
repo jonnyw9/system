@@ -92,9 +92,9 @@ public class FrontController {
 
         model.addAttribute("url", url);
 
-        String lastname = "";
+        String name = "";
 
-        model.addAttribute("lastname", lastname);
+        model.addAttribute("name", name);
 
         List<Notification> notifications = notificationService.getUserNotifications(userId);
 
@@ -112,15 +112,25 @@ public class FrontController {
     }
 
     @GetMapping("search")
-    public String searchStaff(@RequestParam (value = "lastname", required = false) String lastname, Model model,
+    public String searchStaff(@RequestParam(value = "name") Optional<String> name,
+                              //@RequestParam(value = "page") Optional<Integer> page,
+                              Model model,
                               Authentication authentication){
 
         UserDto user = userService.makeUserDto(authentication);
+        model.addAttribute("name", "");
+        try{
+            String nameReplace;
 
-        model.addAttribute("lastname", "");
+            nameReplace = name.orElse("_").replace("+", "");
 
-        model.addAttribute("searchResults", userService.listUserByLastName(lastname));
+            model.addAttribute("searchResults",
+                    userService.listUserByName(nameReplace));
 
+        }catch (Exception e){
+            model.addAttribute("searchResults",
+                    userService.listUserByName(name.orElse("_")));
+        }
         return "searchStaff";
     }
 

@@ -13,7 +13,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.time.LocalDateTime;
@@ -63,7 +65,6 @@ public class EventController {
 
         model.addAttribute("recipient", recipient);
 
-        eventDto.setRecurringLengthString(null);
         System.out.println(user.getUserId());
         model.addAttribute("event", eventDto);
         return userTemplatePrefix + "addEvent";
@@ -72,17 +73,21 @@ public class EventController {
 
 
     @PostMapping("add")
-    public String addEvent(@ModelAttribute EventDto event, BindingResult bindingResult, Model model) throws ParseException {
+    public String addEvent(@ModelAttribute @Valid EventDto event, BindingResult bindingResult,
+                           RedirectAttributes redirectAttributes) throws ParseException {
+
+        
         //Save the event
-        if(event.getRecurringLengthString() != null){
-            if(!event.getRecurringLengthString().isEmpty()){
-                event.setRecurringLength(Integer.parseInt(event.getRecurringLengthString()));
-                eventService.addRecurring(event, user);
-            }
+        if(bindingResult.hasErrors()){
+            redirectAttributes.addAttribute("time", event.getEventStart());
+            redirectAttributes.addAttribute("end", event.getEventEnd());
+            return "redirect:/event/add/" + event.getRecipientUserId().getUserId();
+        }
+        if(event.getRecurringLength() != null){
+            eventService.addRecurring(event, user);
         } else{
             eventService.add(event, user);
         }
-
         //Redirect to the homepage
         return "redirect:/home";
     }
@@ -134,8 +139,10 @@ public class EventController {
     }
 
     @PostMapping("edit")
-    public String editEvent(@ModelAttribute EventDto event, BindingResult bindingResult, Model model){
-        System.out.println(event.toString());
+    public String editEvent(@ModelAttribute @Valid EventDto event, BindingResult bindingResult, Model model){
+        if(bindingResult.hasErrors()){
+            return userTemplatePrefix + "editEvent";
+        }
         eventService.updateEvent(event);
         return "redirect:/event/view/" + event.getEventId() + "?updated";
     }
