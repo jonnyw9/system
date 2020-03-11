@@ -8,6 +8,7 @@
 <h1>View Event</h1>
 <section id="eventDetails">
     <p th:if="${param.accepted}">Event Accepted!</p>
+    <p th:if="${param.updated}">Event Updated!</p>
     <h2 th:text="${'Title: ' + event.title}"></h2>
     <div id="eventStart"><p th:text="${'Start: ' + event.eventStart}"></p></div>
     <div id="eventEnd"><p th:text="${'End: ' + event.eventEnd}"></p></div>

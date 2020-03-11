@@ -109,4 +109,14 @@ public class UserController {
 
         return "redirect:/login?success";
     }
+
+    @GetMapping("/view/all")
+    public String viewAllStaff(Model model){
+
+        model.addAttribute("lastname", "");
+
+        model.addAttribute("searchResults", userService.listAllStaff());
+
+        return "searchStaff";
+    }
 }

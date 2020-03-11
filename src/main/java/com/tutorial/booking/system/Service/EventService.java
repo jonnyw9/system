@@ -49,7 +49,7 @@ public class EventService {
         this.eventRepository.save(event);
 
         notificationService.eventAddedCreator(event);
-        if(event.getCreatorUserId().getUserId() != event.getCreatorUserId().getUserId()){
+        if(event.getCreatorUserId().getUserId() != event.getRecipientUserId().getUserId()){
             notificationService.eventAddedRecipient(event);
         }
     }
@@ -139,6 +139,7 @@ public class EventService {
 
         Event event = getByEventId(eventDto.getEventId());
 
+        String locationBefore = event.getLocation();
 
         System.out.println(event.toString());
 
@@ -152,7 +153,7 @@ public class EventService {
 
         eventRepository.save(event);
 
-        notificationService.eventUpdated(event);
+        notificationService.eventUpdated(event, locationBefore);
     }
 
     public void cancelEvent(int eventId){
@@ -270,5 +271,7 @@ public class EventService {
         event.setAccepted(true);
 
         eventRepository.save(event);
+
+        notificationService.eventAccepted(event);
     }
 }

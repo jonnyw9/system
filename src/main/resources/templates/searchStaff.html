@@ -5,6 +5,13 @@
     <title>Search Staff</title>
 </head>
 <body>
+
+<h2>Search for the lastname of the staff member you wish to book!</h2>
+<form th:object="${lastname}" th:action="@{/search}" method="get">
+    <input type="text" name="lastname" id="lastname" th:value="${lastname}" />
+    <input type="submit" value="Search" />
+</form>
+
 <section id="searchResults" th:if="${not #lists.isEmpty(searchResults)}">
     <table>
         <tr>
@@ -22,7 +29,7 @@
 </section>
 <div th:if="${#lists.isEmpty(searchResults)}">
     <h2>No results matched your search.</h2>
-    <button><a href="/home">Home</a></button>
 </div>
+<button><a href="/home">Home</a></button>
 </body>
 </html>

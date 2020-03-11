@@ -112,7 +112,12 @@ public class FrontController {
     }
 
     @GetMapping("search")
-    public String searchStaff(@RequestParam (value = "lastname", required = false) String lastname, Model model){
+    public String searchStaff(@RequestParam (value = "lastname", required = false) String lastname, Model model,
+                              Authentication authentication){
+
+        UserDto user = userService.makeUserDto(authentication);
+
+        model.addAttribute("lastname", "");
 
         model.addAttribute("searchResults", userService.listUserByLastName(lastname));
 

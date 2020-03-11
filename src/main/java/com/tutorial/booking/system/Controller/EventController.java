@@ -74,10 +74,12 @@ public class EventController {
     @PostMapping("add")
     public String addEvent(@ModelAttribute EventDto event, BindingResult bindingResult, Model model) throws ParseException {
         //Save the event
-        if(!event.getRecurringLengthString().isEmpty()){
-            event.setRecurringLength(Integer.parseInt(event.getRecurringLengthString()));
-            eventService.addRecurring(event, user);
-        }else{
+        if(event.getRecurringLengthString() != null){
+            if(!event.getRecurringLengthString().isEmpty()){
+                event.setRecurringLength(Integer.parseInt(event.getRecurringLengthString()));
+                eventService.addRecurring(event, user);
+            }
+        } else{
             eventService.add(event, user);
         }
 
@@ -135,7 +137,7 @@ public class EventController {
     public String editEvent(@ModelAttribute EventDto event, BindingResult bindingResult, Model model){
         System.out.println(event.toString());
         eventService.updateEvent(event);
-        return "redirect:/home";
+        return "redirect:/event/view/" + event.getEventId() + "?updated";
     }
 
     @GetMapping("cancel/{id}")
@@ -148,7 +150,7 @@ public class EventController {
         }
         eventService.cancelEvent(id);
 
-        return "redirect:/home";
+        return "redirect:/home?cancel";
     }
 
     @GetMapping("/accept/{id}")

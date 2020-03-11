@@ -42,10 +42,12 @@
             <input type="text" name="lastname" id="lastname" th:value="${lastname}" />
             <input type="submit" value="Search" />
         </form>
+        <button><a href="/user/view/all">View all staff</a></button>
     </div>
 </section>
 <section id="events">
     <h2 th:if="${param.notYourEvent}">The event is non of you business!</h2>
+    <h2 th:if="${param.cancel}">Event Successfully Cancelled/Declined!</h2>
     <section>
         <h2>Your Calendar</h2>
         <div id="calendar"></div>

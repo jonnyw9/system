@@ -55,4 +55,14 @@ public class NotificationController {
 
         return returnPrefix + "viewNotification";
     }
+
+    @GetMapping("/read/all")
+    public String readAllNotifications(Authentication authentication){
+
+        userService.makeUserDto(authentication);
+
+        notificationService.readAllUnreadNotifications(user);
+
+        return "redirect:/home";
+    }
 }

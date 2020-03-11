@@ -212,4 +212,8 @@ public class UserService {
         System.out.println(authentication.getName());
         return getUserByUserName(authentication.getName());
     }
+
+    public List<User> listAllStaff(){
+        return userRepository.findAllByStaffIdIsNotNull();
+    }
 }
