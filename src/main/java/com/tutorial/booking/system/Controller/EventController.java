@@ -76,7 +76,7 @@ public class EventController {
     public String addEvent(@ModelAttribute @Valid EventDto event, BindingResult bindingResult,
                            RedirectAttributes redirectAttributes) throws ParseException {
 
-        
+
         //Save the event
         if(bindingResult.hasErrors()){
             redirectAttributes.addAttribute("time", event.getEventStart());

@@ -9,23 +9,52 @@
 <h1>Add Event</h1>
 <p th:if="${user.userId != recipient.userId}">The default location is the office of the lecturer.</p>
     <form action="#" th:action="@{/event/add}" th:object="${event}" method="post">
+        <table>
+            <tr>
+                <td><p th:text="'Event with: ' + ${recipient.getFirstName()} + ' ' + ${recipient.getLastName()}"></p></td>
+            </tr>
+            <tr>
+                <td><label for="eventStartDummy">Event Start: </label></td>
+                <td><input type="datetime-local" id="eventStartDummy" th:value="${event.eventStart}" readonly/></td>
+                <td th:if="${#fields.hasErrors('eventStart')}" th:errors="*{eventStart}">Error with event start.</td>
+            </tr>
+            <tr>
+                <td><label for="eventEndDummy">Event End: </label></td>
+                <td><input type="datetime-local" id="eventEndDummy"th:value="${event.eventEnd}" readonly></td>
+                <td th:if="${#fields.hasErrors('eventEnd')}" th:errors="*{eventEnd}">Error with event end.</td>
+            </tr>
+            <tr>
+                <td><label for="title">Title: </label></td>
+                <td><input type="text" id="title" name="title" th:value="*{title}" th:required="true"></td>
+                <td th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Title Error.</td>
+            </tr>
+            <tr>
+
+                <td><label for="description">Description: </label></td>
+                <td><input type="text" id="description" name="description" th:value="*{description}" th:required="true"></td>
+                <td th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Description Error.</td>
+            </tr>
+            <tr>
+                <td><label for="location">Location: </label></td>
+                <td><input type="text" id="location" name="location" th:value="*{location}"></td>
+                <td th:if="${#fields.hasErrors('location')}" th:errors="*{location}">Location Error.</td>
+            </tr>
+            <tr th:if="${user.userId == recipient.userId}">
+                <td><label for="recurring">Recurring Event: </label></td>
+                <td><input type="checkbox" id="recurring" name="recurring" onclick="onCheck()"></td>
+                <td><label for="recurringLength" id="recurringLengthLabel" style="display: none">Recurring Event Length (weeks): </label></td>
+                <td><input type="text" id="recurringLength" name="recurringLength" th:value="*{recurringLength}" style="display: none"></td>
+                <td th:if="${#fields.hasErrors('recurringLength')}" th:errors="*{recurringLength}">Recurring Length Error.</td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="Submit"></td>
+            </tr>
+
+        </table>
         <input type="hidden" id="creatorUserId" name="creatorUserId" th:attr="value = ${user.userId}"/>
         <input type="hidden" id="recipientUserId" name="recipientUserId" th:attr="value = ${recipient.userId}" />
         <input type="hidden" id="eventStart" name="eventStart" th:value="*{eventStart}"/>
         <input type="hidden" id="eventEnd" name="eventEnd" th:value="*{eventEnd}"/>
-        <p th:text="'Event with: ' + ${recipient.getFirstName()} + ' ' + ${recipient.getLastName()}"></p>
-        <p><input type="datetime-local" th:value="${event.eventStart}" readonly/></p>
-        <p><input type="datetime-local" th:value="${event.eventEnd}" readonly></p>
-        <p><input type="text" id="title" name="title" th:value="*{title}"></p>
-        <p><input type="text" id="description" name="description" th:value="*{description}"></p>
-        <p><input type="text" id="location" name="location" th:value="*{location}"></p>
-        <p th:if="${user.userId == recipient.userId}">
-            <input type="checkbox" id="recurring" name="recurring" onclick="onCheck()">
-        </p>
-        <p th:if="${user.userId == recipient.userId}">
-            <input type="text" id="recurringLength" name="recurringLength" th:value="*{recurringLength}" style="display: none">
-        </p>
-        <p><input type="submit" value="Submit"></p>
     </form>
 <button><a href="/home">Home</a> </button>
 </body>
