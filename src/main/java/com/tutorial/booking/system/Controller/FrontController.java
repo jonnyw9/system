@@ -1,6 +1,7 @@
 package com.tutorial.booking.system.Controller;
 
 import com.tutorial.booking.system.Repository.CalendarRepository;
+import com.tutorial.booking.system.Service.EmailSender;
 import com.tutorial.booking.system.Service.EventService;
 import com.tutorial.booking.system.Service.NotificationService;
 import com.tutorial.booking.system.Service.UserService;
@@ -44,6 +45,9 @@ public class FrontController {
 
     @Autowired
     NotificationService notificationService;
+
+    @Autowired
+    EmailSender emailSender;
 
     @GetMapping("/")
     public String index(Model model){

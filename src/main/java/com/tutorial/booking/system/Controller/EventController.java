@@ -1,6 +1,7 @@
 package com.tutorial.booking.system.Controller;
 
 
+import com.tutorial.booking.system.Constraint.EventValidation;
 import com.tutorial.booking.system.Service.EventService;
 import com.tutorial.booking.system.Service.UserService;
 import com.tutorial.booking.system.dto.EventDto;
@@ -12,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -35,6 +37,9 @@ public class EventController {
     @Autowired
     EventService eventService;
 
+    @Autowired
+    EventValidation eventValidation;
+
     @RequestMapping(value = "add/{id}", method = {RequestMethod.GET, RequestMethod.POST})
     public String addEvent(@PathVariable("id") int id , @RequestParam(name = "time", required = false) String time,
                            @RequestParam(name = "end", required = false) String end,
@@ -44,43 +49,54 @@ public class EventController {
 
         User recipient =  userService.getUserById(id);
 
-        EventDto eventDto = new EventDto();
-        eventDto.setEventStart(time);
-        if(recipient.getStaffId() != null){
-            eventDto.setLocation(recipient.getStaffId().getRoom());
+        if(!model.containsAttribute("event")){
+            EventDto eventDto = new EventDto();
+            eventDto.setEventStart(time);
+            if(recipient.getStaffId() != null){
+                eventDto.setLocation(recipient.getStaffId().getRoom());
+            }
+
+            System.out.println(eventDto.getEventStart());
+
+            LocalDateTime localDateTime = LocalDateTime.parse(time);
+
+            if(end != null){
+                localDateTime = LocalDateTime.parse(end);
+            }else{
+                localDateTime = localDateTime.plusMinutes(30);
+            }
+
+            eventDto.setEventEnd(localDateTime.toString());
+            model.addAttribute("event", eventDto);
         }
 
-        System.out.println(eventDto.getEventStart());
-
-        LocalDateTime localDateTime = LocalDateTime.parse(time);
-
-        if(end != null){
-            localDateTime = LocalDateTime.parse(end);
-        }else{
-            localDateTime = localDateTime.plusMinutes(30);
-        }
-
-
-        eventDto.setEventEnd(localDateTime.toString());
 
         model.addAttribute("recipient", recipient);
 
         System.out.println(user.getUserId());
-        model.addAttribute("event", eventDto);
+
         return userTemplatePrefix + "addEvent";
     }
 
 
 
     @PostMapping("add")
-    public String addEvent(@ModelAttribute @Valid EventDto event, BindingResult bindingResult,
+    public String addEvent(@ModelAttribute("event") @Valid EventDto event, BindingResult bindingResult,
                            RedirectAttributes redirectAttributes) throws ParseException {
 
+        if(!eventValidation.timeValidation(event.getEventStart())){
+            bindingResult.reject("eventStart","Error with time");
+        }
+        if(!eventValidation.timeValidation(event.getEventEnd())){
+            bindingResult.reject("eventEnd","Error with time");
+        }
 
         //Save the event
         if(bindingResult.hasErrors()){
             redirectAttributes.addAttribute("time", event.getEventStart());
             redirectAttributes.addAttribute("end", event.getEventEnd());
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.event", bindingResult);
+            redirectAttributes.addFlashAttribute("event", event);
             return "redirect:/event/add/" + event.getRecipientUserId().getUserId();
         }
         if(event.getRecurringLength() != null){

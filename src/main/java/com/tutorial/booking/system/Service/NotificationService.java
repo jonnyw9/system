@@ -32,6 +32,9 @@ public class NotificationService {
     @Autowired
     private EventService eventService;
 
+    @Autowired
+    private EmailSender emailSender;
+
 
     public void saveNotification(Notification notification){
         notificationRepository.save(notification);
@@ -50,6 +53,8 @@ public class NotificationService {
         notification.setCreatedOn(Timestamp.valueOf(LocalDateTime.now()));
 
         saveNotification(notification);
+
+        emailSender.sendMail(notification, event.getCreatorUserId());
     }
 
     public void eventAddedRecipient(Event event){
@@ -66,6 +71,7 @@ public class NotificationService {
         notification.setCreatedOn(Timestamp.valueOf(LocalDateTime.now()));
 
         saveNotification(notification);
+        emailSender.sendMail(notification, event.getRecipientUserId());
     }
 
     public void eventCancelled(Event event){
@@ -83,11 +89,13 @@ public class NotificationService {
             notification.setUserId(user);
             notification.setCreatedOn(Timestamp.valueOf(LocalDateTime.now()));
             saveNotification(notification);
+            emailSender.sendMail(notification, event.getRecipientUserId());
         }else{
             User user = userService.getUserById(event.getCreatorUserId().getUserId());
             notification.setUserId(user);
             notification.setCreatedOn(Timestamp.valueOf(LocalDateTime.now()));
             saveNotification(notification);
+            emailSender.sendMail(notification, user);
 
             Notification notification1 = new Notification();
             User user1 = userService.getUserById(event.getRecipientUserId().getUserId());
@@ -96,6 +104,7 @@ public class NotificationService {
             notification1.setUserId(user1);
             notification1.setCreatedOn(Timestamp.valueOf(LocalDateTime.now()));
             saveNotification(notification1);
+            emailSender.sendMail(notification, event.getRecipientUserId());
         }
     }
 
@@ -116,9 +125,11 @@ public class NotificationService {
             if(event.getCreatorUserId().getUserId() == event.getRecipientUserId().getUserId()){
                 notification.setUserId(event.getCreatorUserId());
                 saveNotification(notification);
+                emailSender.sendMail(notification, event.getCreatorUserId());
             }else{
                 notification.setUserId(event.getCreatorUserId());
                 saveNotification(notification);
+                emailSender.sendMail(notification, event.getCreatorUserId());
 
                 Notification notification1 = new Notification();
                 notification1.setTitle(notification.getTitle());
@@ -128,6 +139,7 @@ public class NotificationService {
 
                 notification1.setUserId(event.getRecipientUserId());
                 saveNotification(notification1);
+                emailSender.sendMail(notification1, event.getRecipientUserId());
             }
         }
 
@@ -150,6 +162,7 @@ public class NotificationService {
 
         if(event.getRecipientUserId().getUserId() == event.getCreatorUserId().getUserId()){
             saveNotification(notification);
+            emailSender.sendMail(notification, event.getCreatorUserId());
         }else{
             Notification notification1 = new Notification();
             notification1.setTitle(notification.getTitle());
@@ -159,7 +172,9 @@ public class NotificationService {
             notification1.setUserId(event.getRecipientUserId());
 
             saveNotification(notification);
+            emailSender.sendMail(notification, event.getCreatorUserId());
             saveNotification(notification1);
+            emailSender.sendMail(notification, event.getRecipientUserId());
         }
     }
 
@@ -177,6 +192,15 @@ public class NotificationService {
         notification.setDescription(description);
 
         saveNotification(notification);
+        emailSender.sendMail(notification, event.getCreatorUserId());
+    }
+
+    public void accountCreated(){
+
+    }
+
+    public void passwordChanged(){
+
     }
 
     public List<Notification> getUserNotifications(int id){
