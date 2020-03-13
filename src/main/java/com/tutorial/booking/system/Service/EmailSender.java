@@ -24,7 +24,7 @@ public class EmailSender {
 
         if(notification.getActionLink() != null){
             if(!notification.getActionLink().isEmpty()){
-                body += " Click here to view: http://localhost:8080" + notification.getActionLink();
+                body += " Click here to view: https://jwbookingsystem.herokuapp.com" + notification.getActionLink();
             }
         }
 

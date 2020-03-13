@@ -36,6 +36,7 @@ public class NotificationService {
     private EmailSender emailSender;
 
 
+
     public void saveNotification(Notification notification){
         notificationRepository.save(notification);
     }
