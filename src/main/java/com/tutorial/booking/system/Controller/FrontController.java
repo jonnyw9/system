@@ -151,19 +151,19 @@ public class FrontController {
     }
 
     @PostMapping("register")
-    public String register(@ModelAttribute("user") @Valid UserDto userDto, BindingResult bindingResult,
+    public String register(@ModelAttribute("user") @Valid UserDto user, BindingResult bindingResult,
                            RedirectAttributes redirectAttributes){
 
-        bindingResult = userValidation.validate(userDto, bindingResult);
+        bindingResult = userValidation.validate(user, bindingResult);
 
         if(bindingResult.hasErrors()){
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.event",
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.user",
                     bindingResult);
-            redirectAttributes.addFlashAttribute("user", userDto);
+            redirectAttributes.addFlashAttribute("user", user);
             return "redirect:/register";
         }
 
-        userService.saveNewUser(userDto);
+        userService.saveNewUser(user);
 
         return "redirect:/login?registered";
     }

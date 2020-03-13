@@ -33,33 +33,33 @@ public class UserValidationImpl implements UserValidation {
         }
 
         if(!userDto.isStaff() && !userDto.isStudent()){
-            bindingResult.rejectValue("student", "You must select student or staff or both.");
+            bindingResult.rejectValue("student","" ,"You must select student or staff or both.");
         }
 
         if(userDto.isStaff()){
             if(userDto.getRoom().isEmpty()){
-                bindingResult.rejectValue("room", "You must enter your room.");
+                bindingResult.rejectValue("room","" ,"You must enter your room.");
             }
             if(userDto.getStartTime().isEmpty()){
-                bindingResult.rejectValue("startTime", "Please enter a start time.");
+                bindingResult.rejectValue("startTime", "" ,"Please enter a start time.");
             }
             if(userDto.getEndTime().isEmpty()){
-                bindingResult.rejectValue("endTime", "Please enter a start time.");
+                bindingResult.rejectValue("endTime", "" ,"Please enter a start time.");
             }
             try{
                 Time time = Time.valueOf(userDto.getStartTime() + ":00");
             }catch (Exception e){
-                bindingResult.rejectValue("startTime", "Invalid Start Time.");
+                bindingResult.rejectValue("startTime", "" ,"Invalid Start Time.");
             }
             try{
                 Time time = Time.valueOf(userDto.getEndTime() + ":00");
             }catch (Exception e){
-                bindingResult.rejectValue("endTime", "Invalid End Time.");
+                bindingResult.rejectValue("endTime", "" ,"Invalid End Time.");
             }
         }
         if(userDto.isStudent()){
             if(userDto.getStudentNumber().isEmpty()){
-                bindingResult.rejectValue("studentNumber", "Please enter a student number.");
+                bindingResult.rejectValue("studentNumber", "" ,"Please enter a student number.");
             }
         }
         return bindingResult;
