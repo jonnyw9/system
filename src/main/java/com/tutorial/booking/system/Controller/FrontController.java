@@ -72,7 +72,7 @@ public class FrontController {
 
         model.addAttribute("user", user);
 
-        String url = "http://localhost:8080/api/event/getall/" + String.valueOf(userId);
+        String url = "https://jwbookingsystem.herokuapp.com/api/event/getall/" + String.valueOf(userId);
 
         User userById = userService.getUserById(userId);
 
