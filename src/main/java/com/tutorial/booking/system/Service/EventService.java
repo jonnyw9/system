@@ -1,6 +1,11 @@
+/*
+ * Copyright (c) 2020. To JWIndustries
+ */
+
 package com.tutorial.booking.system.Service;
 
 import com.tutorial.booking.system.Repository.EventRepository;
+import com.tutorial.booking.system.dto.EventApiEntity;
 import com.tutorial.booking.system.dto.EventDto;
 import com.tutorial.booking.system.dto.UserDto;
 import com.tutorial.booking.system.model.Calendar;
@@ -273,5 +278,33 @@ public class EventService {
         eventRepository.save(event);
 
         notificationService.eventAccepted(event);
+    }
+
+    public List<Event> listEventsNearTimeEventUsers(EventDto eventDto){
+        List<Timestamp> timestamps = convertStringToTimeStamp(eventDto);
+
+        List<Event> eventsCreator = getEventsForUser(eventDto.getCreatorUserId().getUserId());
+        List<Event> eventsRecipient = getEventsForUser(eventDto.getRecipientUserId().getUserId());
+
+        List<Event> events = new ArrayList<>();
+
+        events.addAll(eventsCreator);
+        events.addAll(eventsRecipient);
+
+        List<Event> eventsReturned = new ArrayList<>();
+
+        for (int i = 0; i < events.size(); i++) {
+            Event event = events.get(i);
+            LocalDateTime startA = event.getEventStart().toLocalDateTime();
+            LocalDateTime endA = event.getEventEnd().toLocalDateTime();
+
+            LocalDateTime startB = timestamps.get(0).toLocalDateTime();
+            LocalDateTime endB = timestamps.get(1).toLocalDateTime();
+            if(startA.isBefore(endB) && startB.isBefore(endA)){
+                eventsReturned.add(event);
+            }
+        }
+
+        return eventsReturned;
     }
 }

@@ -85,10 +85,13 @@ public class EventController {
                            RedirectAttributes redirectAttributes) throws ParseException {
 
         if(!eventValidation.timeValidation(event.getEventStart())){
-            bindingResult.reject("eventStart","Error with time");
+            bindingResult.rejectValue("eventStart","time.error","Time not allowed!");
         }
         if(!eventValidation.timeValidation(event.getEventEnd())){
-            bindingResult.reject("eventEnd","Error with time");
+            bindingResult.rejectValue("eventEnd","time.error", "Time not allowed!");
+        }
+        if(!eventValidation.timeConflictCheck(event)){
+            bindingResult.reject("time.conflict", "You have a conflict with the times suggested.");
         }
 
         //Save the event
