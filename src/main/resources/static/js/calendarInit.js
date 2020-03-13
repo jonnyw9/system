@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function(){
             let startString = info.startStr.substring(0,16);
             let endString = info.endStr.substring(0,16);
 
-            window.location.href = "https://jwbookingsystem.herokuapp.com" + userId + "?time=" + startString + "&end=" + endString;
+            window.location.href = "https://jwbookingsystem.herokuapp.com/" + userId + "?time=" + startString + "&end=" + endString;
         }
     });
 
