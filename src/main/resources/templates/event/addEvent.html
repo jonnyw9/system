@@ -17,35 +17,35 @@
             <tr>
                 <td><label for="eventStartDummy">Event Start: </label></td>
                 <td><input type="datetime-local" id="eventStartDummy" th:value="${event.eventStart}" readonly/></td>
-                <td th:if="${#fields.hasErrors('eventStart')}" th:errors="*{eventStart}">Error with event start.</td>
+                <td th:if="${#fields.hasErrors('eventStart')}" th:errors="*{eventStart}">Validation error</td>
             </tr>
             <tr>
                 <td><label for="eventEndDummy">Event End: </label></td>
                 <td><input type="datetime-local" id="eventEndDummy"th:value="${event.eventEnd}" readonly></td>
-                <td th:if="${#fields.hasErrors('eventEnd')}" th:errors="*{eventEnd}">Error with event end.</td>
+                <td th:if="${#fields.hasErrors('eventEnd')}" th:errors="*{eventEnd}">Validation error</td>
             </tr>
             <tr>
                 <td><label for="title">Title: </label></td>
                 <td><input type="text" id="title" name="title" th:value="*{title}" th:required="true"></td>
-                <td th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Title Error.</td>
+                <td th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Validation error</td>
             </tr>
             <tr>
 
                 <td><label for="description">Description: </label></td>
                 <td><input type="text" id="description" name="description" th:value="*{description}" th:required="true"></td>
-                <td th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Description Error.</td>
+                <td th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Validation error</td>
             </tr>
             <tr>
                 <td><label for="location">Location: </label></td>
                 <td><input type="text" id="location" name="location" th:value="*{location}"></td>
-                <td th:if="${#fields.hasErrors('location')}" th:errors="*{location}">Location Error.</td>
+                <td th:if="${#fields.hasErrors('location')}" th:errors="*{location}">Validation error</td>
             </tr>
             <tr th:if="${user.userId == recipient.userId}">
                 <td><label for="recurring">Recurring Event: </label></td>
                 <td><input type="checkbox" id="recurring" name="recurring" onclick="onCheck()"></td>
                 <td><label for="recurringLength" id="recurringLengthLabel" style="display: none">Recurring Event Length (weeks): </label></td>
                 <td><input type="text" id="recurringLength" name="recurringLength" th:value="*{recurringLength}" style="display: none"></td>
-                <td th:if="${#fields.hasErrors('recurringLength')}" th:errors="*{recurringLength}">Recurring Length Error.</td>
+                <td th:if="${#fields.hasErrors('recurringLength')}" th:errors="*{recurringLength}">Validation error</td>
             </tr>
             <tr>
                 <td><input type="submit" value="Submit"></td>
