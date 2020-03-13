@@ -9,6 +9,7 @@
 <h1>Add Event</h1>
 <p th:if="${user.userId != recipient.userId}">The default location is the office of the lecturer.</p>
     <form action="#" th:action="@{/event/add}" th:object="${event}" method="post">
+        <p th:if="${#fields.hasGlobalErrors()}">Time clash.</p>
         <table>
             <tr>
                 <td><p th:text="'Event with: ' + ${recipient.getFirstName()} + ' ' + ${recipient.getLastName()}"></p></td>

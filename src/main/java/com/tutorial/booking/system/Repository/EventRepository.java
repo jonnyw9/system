@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.List;
@@ -25,10 +26,14 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
 
     List<Event> findEventByEventStartBeforeAndEventStartAfter(Timestamp before, Timestamp after);
 
-    @Modifying
-    @Query("UPDATE Event e SET e.title = :title, e.description = :description, e.eventStart = :eventStart," +
-          " e.eventEnd = :eventEnd WHERE e.eventId = :eventId")
-    void updateEvent(@Param("eventId") int eventId, @Param("title") String title,
-                     @Param("description") String description, @Param("eventStart")Timestamp eventStart,
-                     @Param("eventEnd")Timestamp eventEnd);
+    @Query("select e from Event e where e.eventStart = ?1 and e.creatorUserId = ?2 or e.eventStart = ?1 and e.recipientUserId = ?3 ")
+    List<Event> findFirstByEventStartEqualsAndCreatorUserIdOrRecipientUserId(Timestamp eventStart, User creatorUserId, User RecipientUserId);
+
+
+    @Query("select e from Event e where e.eventStart > ?1 AND e.eventEnd < ?2 AND e.creatorUserId = ?3 OR " +
+            "e.eventStart > ?1 AND e.eventEnd < ?2 AND e.recipientUserId = ?4")
+    List<Event> findFirstByEventStartBeforeAndEventEndAfterAndCreatorUserIdOrRecipientUserId(Timestamp eventStart, Timestamp eventEnd, User creatorUserId, User recipientUserId);
+
+    @Query("select e from Event e where e.creatorUserId = ?1 or e.recipientUserId = ?2")
+    List<Event> findAllByCreatorUserIdAndRecipientUserId(User creatorUserId, User recipientUserId);
 }
