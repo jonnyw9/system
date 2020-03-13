@@ -2,27 +2,34 @@ package com.tutorial.booking.system.dto;
 
 import com.tutorial.booking.system.model.User;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 
 public class UserDto {
 
     private int userId;
 
     @NotNull
-    @NotEmpty
+    @NotEmpty(message = "Please give you first name.")
+    @Size(min = 1, message = "Your first name is too small!")
     private String firstName;
+
     @NotNull
-    @NotEmpty
-    private String email;
-    @NotNull
-    @NotEmpty
+    @NotEmpty(message = "Please give you last name.")
+    @Size(min = 1, message = "Your last name is too small!")
     private String lastName;
 
+    @NotNull
     @NotEmpty
+    @Email(message = "Please provide a valid email address")
+    private String email;
+
+
+    @NotEmpty(message = "Please type in a password.")
+    @Size(min = 8, message = "You password must be 8 characters or more.")
     private String password;
-    @NotEmpty
+    @NotEmpty(message = "Please type in a confirm password.")
     private String confirmPassword;
+
 
     private boolean student;
     private boolean staff;

@@ -1,5 +1,6 @@
 package com.tutorial.booking.system.Controller;
 
+import com.tutorial.booking.system.Constraint.UserValidation;
 import com.tutorial.booking.system.Repository.CalendarRepository;
 import com.tutorial.booking.system.Service.EmailSender;
 import com.tutorial.booking.system.Service.EventService;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -47,7 +49,7 @@ public class FrontController {
     NotificationService notificationService;
 
     @Autowired
-    EmailSender emailSender;
+    UserValidation userValidation;
 
     @GetMapping("/")
     public String index(Model model){
@@ -141,24 +143,24 @@ public class FrontController {
     @GetMapping("register")
     public String register(Model model){
 
-        UserDto userDto = new UserDto();
-
-        model.addAttribute("user", userDto);
-
+        if(!model.containsAttribute("user")){
+            UserDto userDto = new UserDto();
+            model.addAttribute("user", userDto);
+        }
         return "register";
     }
 
     @PostMapping("register")
-    public String register(@ModelAttribute("user") @Valid UserDto userDto, BindingResult bindingResult){
+    public String register(@ModelAttribute("user") @Valid UserDto userDto, BindingResult bindingResult,
+                           RedirectAttributes redirectAttributes){
 
-        User existing = userService.getUserByEmail(userDto.getEmail());
-        if(existing != null){
-            bindingResult.rejectValue("email", null,
-                    "There is already an account registered to that email address!");
-        }
+        bindingResult = userValidation.validate(userDto, bindingResult);
 
         if(bindingResult.hasErrors()){
-            return "register";
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.event",
+                    bindingResult);
+            redirectAttributes.addFlashAttribute("user", userDto);
+            return "redirect:/register";
         }
 
         userService.saveNewUser(userDto);

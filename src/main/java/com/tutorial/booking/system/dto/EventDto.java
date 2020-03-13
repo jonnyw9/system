@@ -6,36 +6,42 @@ import com.tutorial.booking.system.model.User;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.sql.Timestamp;
 
 public class EventDto {
 
     private int eventId;
 
+    @NotEmpty
     private String eventStart;
+    @NotEmpty
     private String eventEnd;
 
     private Timestamp eventStartTimeStamp;
 
     @NotNull
-    @NotEmpty
+    @NotEmpty(message = "Please provide a title.")
     private String title;
 
     @NotNull
-    @NotEmpty
+    @NotEmpty(message = "Please provide a description.")
     private String description;
 
     private boolean accepted;
 
+    @NotNull
     private User creatorUserId;
 
+    @NotNull
     private User recipientUserId;
 
     @NotNull
-    @NotEmpty
+    @NotEmpty(message = "A location must be provided.")
     private String location;
 
-    @Min(2)
+    @Min(value = 2, message = "The recurring length must be a minimum of two weeks.")
+    @Positive(message = "The recurring length must be positive.")
     private Integer recurringLength;
 
 
