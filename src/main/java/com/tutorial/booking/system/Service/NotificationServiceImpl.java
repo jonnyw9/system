@@ -1,24 +1,20 @@
 package com.tutorial.booking.system.Service;
 
-import com.sun.jmx.defaults.JmxProperties;
 import com.tutorial.booking.system.Repository.EventRepository;
 import com.tutorial.booking.system.Repository.NotificationRepository;
 import com.tutorial.booking.system.dto.UserDto;
 import com.tutorial.booking.system.model.Event;
 import com.tutorial.booking.system.model.Notification;
 import com.tutorial.booking.system.model.User;
-import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-public class NotificationService {
+public class NotificationServiceImpl {
 
     @Autowired
     private NotificationRepository notificationRepository;
@@ -27,10 +23,10 @@ public class NotificationService {
     private EventRepository eventRepository;
 
     @Autowired
-    private UserService userService;
+    private UserServiceImpl userService;
 
     @Autowired
-    private EventService eventService;
+    private EventServiceImpl eventService;
 
     @Autowired
     private EmailSender emailSender;

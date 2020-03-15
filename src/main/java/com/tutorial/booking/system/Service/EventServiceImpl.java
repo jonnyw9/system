@@ -5,40 +5,34 @@
 package com.tutorial.booking.system.Service;
 
 import com.tutorial.booking.system.Repository.EventRepository;
-import com.tutorial.booking.system.dto.EventApiEntity;
 import com.tutorial.booking.system.dto.EventDto;
 import com.tutorial.booking.system.dto.UserDto;
 import com.tutorial.booking.system.model.Calendar;
 import com.tutorial.booking.system.model.Event;
-import com.tutorial.booking.system.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.sql.Array;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.chrono.ChronoLocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
-public class EventService {
+public class EventServiceImpl {
 
     @Autowired
     EventRepository eventRepository;
 
     @Autowired
-    UserService userService;
+    UserServiceImpl userService;
 
     @Autowired
-    NotificationService notificationService;
+    NotificationServiceImpl notificationService;
 
     public void add(EventDto eventDto, UserDto userDto, Boolean recurring) throws ParseException {
 

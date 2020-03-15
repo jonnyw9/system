@@ -1,18 +1,13 @@
 package com.tutorial.booking.system.Controller;
 
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import com.tutorial.booking.system.Constraint.PasswordValidation;
 import com.tutorial.booking.system.Constraint.UserValidation;
 import com.tutorial.booking.system.Repository.PasswordRepository;
-import com.tutorial.booking.system.Service.UserService;
-import com.tutorial.booking.system.dto.EventDto;
+import com.tutorial.booking.system.Service.UserServiceImpl;
 import com.tutorial.booking.system.dto.PasswordDto;
 import com.tutorial.booking.system.dto.UserDto;
-import com.tutorial.booking.system.model.Password;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -36,7 +31,7 @@ public class UserController {
     PasswordRepository passwordRepository;
 
     @Autowired
-    UserService userService;
+    UserServiceImpl userService;
 
     @Autowired
     UserValidation userValidation;

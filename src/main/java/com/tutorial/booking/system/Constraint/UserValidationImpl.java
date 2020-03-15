@@ -4,7 +4,7 @@
 
 package com.tutorial.booking.system.Constraint;
 
-import com.tutorial.booking.system.Service.UserService;
+import com.tutorial.booking.system.Service.UserServiceImpl;
 import com.tutorial.booking.system.dto.UserDto;
 import com.tutorial.booking.system.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ import java.sql.Time;
 public class UserValidationImpl implements UserValidation {
 
     @Autowired
-    UserService userService;
+    UserServiceImpl userService;
 
     @Override
     public BindingResult validate(UserDto userDto, BindingResult bindingResult){

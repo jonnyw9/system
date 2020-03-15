@@ -1,221 +1,72 @@
+/*
+ * Copyright (c) 2020. To JWIndustries
+ */
+
 package com.tutorial.booking.system.Service;
 
-import com.tutorial.booking.system.Repository.*;
 import com.tutorial.booking.system.dto.UserDto;
-import com.tutorial.booking.system.model.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import com.tutorial.booking.system.model.User;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.management.relation.Role;
 import java.sql.Time;
-import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Optional;
 
+
+/**
+ * <p>Handles request for the user entity, such as getting certain users, updating their details, and deleting them.
+ * Some methods return a Data Transfer Object (DTO), intended for use during the runtime of the system, See the UserDTO
+ * class {@link com.tutorial.booking.system.dto.UserDto} for more details.
+ * This class also acts as a buffer between the repository and the controllers so that certain pieces of logic can be
+ * performed.</p>
+ *
+ * @Author Jonathan Watt
+ * @Version 1.0.0
+ */
 @Service
-public class UserService {
+public interface UserService {
 
-    @Autowired
-    UserRepository userRepository;
+    /**
+     * <p>Simple method which creates a UserDto {@link com.tutorial.booking.system.dto.UserDto} from an email provided.
+     * It gets the user from the database via the UserRepository {@Link com.tutorial.booking.system.repository.UserRepository}</p>
+     * @param email the email of the user to get from the repository
+     * @return a userDto created from the user return from the repository
+     */
+    UserDto getUserByUserName(String email);
 
-    @Autowired
-    EventRepository eventRepository;
+    /**
+     * <p>Simple method which returns a user from the repository from an email provided, if a user is present.</p>
+     * @param email the email of the user to get from the repository
+     * @return null if there is no user found. The User entity if there is one found.
+     */
+    User getUserByEmail(String email);
 
-    @Autowired
-    EventService eventService;
+    /**
+     * <p>Simple method to get a user from the repository from a userId provided.</p>
+     * @param id of the you wished to be found.
+     * @return null if there is no user found. The User entity if there is one found.
+     */
+    User getUserById(int id);
 
-    @Autowired
-    PasswordRepository passwordRepository;
-
-    @Autowired
-    StaffRepository staffRepository;
-
-    @Autowired
-    StudentRepository studentRepository;
-
-    @Autowired
-    RolesRepository rolesRepository;
-
-    @Autowired
-    CalendarRepository calendarRepository;
-
-    @Autowired
-    NotificationService notificationService;
-
-    public UserDto getUserByUserName(String email){
-        Optional<User> user = userRepository.findByEmail(email);
-
-        return user.map(UserDto::new).get();
-    }
-
-    public User getUserByEmail(String email){
-
-        Optional<User> user = userRepository.findByEmail(email);
-
-        return user.orElse(null);
-    }
-
-    public User getUserById(int id){
-
-        Optional<User> user = userRepository.findByUserId(id);
-
-        return user.orElse(null);
-    }
-
-    public void saveNewUser(UserDto userDto){
-        User user = new User();
-        user.setEmail(userDto.getEmail());
-        user.setFirstName(userDto.getFirstName());
-        user.setLastName(userDto.getLastName());
-        user.setActive(true);
-
-        Password password = new Password();
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        password.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        user.setPassword(password);
-
-        Roles roles = new Roles();
-        roles.setStudent(userDto.isStudent());
-        roles.setStaff(userDto.isStaff());
-        roles.setAdmin(false);
-        user.setRoleId(roles);
+    /**
+     * <p>A method which takes a UserDto {@link com.tutorial.booking.system.dto.UserDto} and creates a new User entity
+     * based on the details in the UserDto provided.</p>
+     * @param userDto the Validated UserDto with the details of the user which is about the be created
+     */
+    void saveNewUser(UserDto userDto);
 
 
+    void updateDetails(UserDto userDto, String edit);
 
 
-        if(userDto.isStaff()){
-            Staff staff = new Staff();
-            staff.setRoom(userDto.getRoom());
-            user.setStaffId(staff);
-
-            Calendar calendar = new Calendar();
-            calendar.setDayStartTime(parseFormTime(userDto.getStartTime()));
-            calendar.setDayEndTime(parseFormTime(userDto.getEndTime()));
-            user.setCalendarId(calendar);
-        }
-
-        if(userDto.isStudent()){
-            Student student = new Student();
-            student.setStudentNumber(userDto.getStudentNumber());
-            user.setStudentId(student);
-        }
-
-        userRepository.save(user);
-
-        notificationService.accountCreated(user);
-    }
-
-    public void updateDetails(UserDto userDto, String edit){
-        User user = getUserById(userDto.getUserId());
-
-        switch (edit) {
-            case "name":
-                if(userDto.getFirstName() != null){
-                    user.setFirstName(userDto.getFirstName());
-                }
-                if(userDto.getLastName() != null){
-                    user.setLastName(userDto.getLastName());
-                }
-
-                userRepository.save(user);
-
-                break;
-            case "email":
-                if(userDto.getEmail() != null){
-                    user.setEmail(userDto.getEmail());
-                }
-
-                userRepository.save(user);
-
-                break;
-            case "password":
-                if(userDto.getPassword() != null && userDto.getConfirmPassword() != null
-                        && userDto.getPassword().equals(userDto.getConfirmPassword())){
-                    Password password = passwordRepository.getOne(user.getPassword().getPasswordId());
-
-                    BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-                    password.setPassword(passwordEncoder.encode(userDto.getPassword()));
-
-                    passwordRepository.save(password);
-                    notificationService.passwordChanged(user);
-                }
-                break;
-        }
-
-        userRepository.save(user);
-    }
-
-    public void deleteUserAccount(int id){
-
-        User user = userRepository.getOne(id);
-
-        UserDto userDto = new UserDto(user);
-
-        //Cancel event pertaining to the user
-
-        List<Event> createdEvents = eventRepository.findByCreatorUserId(user);
-
-        if(!createdEvents.isEmpty()){
-            for(Event event : createdEvents){
-                eventService.cancelEvent(event.getEventId());
-                //Send a notification to other affected users
-            }
-        }
-
-        List<Event> recievedEvents = eventRepository.findByRecipientUserId(user);
-
-        if(!recievedEvents.isEmpty()){
-            for (Event event: recievedEvents) {
-                eventService.cancelEvent(event.getEventId());
-                //Send a notification to other affected users
-            }
-        }
-
-        //Delete the password linked to the account
-        Password password = passwordRepository.getOne(user.getPassword().getPasswordId());
-        passwordRepository.delete(password);
-
-        //Delete the roles linked to the account
-        Roles roles = rolesRepository.getOne(user.getRoleId().getRoleId());
-        rolesRepository.delete(roles);
-
-        //Delete staff and student entities
-        if(user.getStaffId() != null){
-            staffRepository.delete(user.getStaffId());
-            Calendar calendar = calendarRepository.getOne(user.getCalendarId().getCalendarId());
-            calendarRepository.delete(calendar);
-        }
-        if(user.getStudentId() != null){
-            studentRepository.delete(user.getStudentId());
-        }
+    void deleteUserAccount(int id);
 
 
+    List<User> listUserByName(String name);
 
-        //Finally delete the user
-        userRepository.delete(user);
-    }
 
-    public List<User> listUserByName(String name){
-        return userRepository.findStaffByName(name);
-    }
+    Time parseFormTime(String time);
 
-    public Time parseFormTime(String time){
-        System.out.println(time);
-        Time time1 = null;
-        try{
-            time1 = Time.valueOf(time + ":00");
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-        return time1;
-    }
 
-    public UserDto makeUserDto(Authentication authentication){
-        System.out.println(authentication.getName());
-        return getUserByUserName(authentication.getName());
-    }
+    UserDto makeUserDto(Authentication authentication);
 }

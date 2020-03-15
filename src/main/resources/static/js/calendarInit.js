@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function(){
         },
         selectAllow: function(info){
             if(isHome){
-                return true;
+                return info.start.getTime() > new Date();
             }else{
                 var duration = info.end.getTime() - info.start.getTime();
                 console.log(duration);

@@ -1,7 +1,7 @@
 package com.tutorial.booking.system.Controller;
 
-import com.tutorial.booking.system.Service.NotificationService;
-import com.tutorial.booking.system.Service.UserService;
+import com.tutorial.booking.system.Service.NotificationServiceImpl;
+import com.tutorial.booking.system.Service.UserServiceImpl;
 import com.tutorial.booking.system.dto.UserDto;
 import com.tutorial.booking.system.model.Notification;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +22,10 @@ public class NotificationController {
     private static final String returnPrefix = "notification/";
 
     @Autowired
-    UserService userService;
+    UserServiceImpl userService;
 
     @Autowired
-    NotificationService notificationService;
+    NotificationServiceImpl notificationService;
 
     @RequestMapping(value={"", "/"}, method = RequestMethod.GET)
     public String viewUserNotifications(Model model, Authentication authentication){
