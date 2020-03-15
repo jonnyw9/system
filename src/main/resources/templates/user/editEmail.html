@@ -6,16 +6,18 @@
 </head>
 <body>
     <form action="#" th:action="@{/user/edit/email}" th:object="${user}" method="post">
-        <table>
+        <table class="col-md-8 order-md-1">
             <input type="hidden" id="userId" name="userId" th:field="*{userId}" />
-            <tr>
-                <td><label for="email">Email: </label> </td>
-                <td><input type="text" id="email" name="email" th:value="*{email}" /></td>
+            <tr class="row">
+                <td class="col-md-3"><label for="email">Email: </label></td>
+                <td class="col-md-3"><input id="email" name="email" th:field="*{email}" th:required="true"/></td>
+                <td th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="col-md-3">Validation error</td>
             </tr>
-            <tr>
-                <td>
+            <tr class="row">
+                <td class="col-md-3">
                     <input type="submit" value="Submit" />
                 </td>
+                <td class="col-md-3"><button><a href="/home">Home</a></button></td>
             </tr>
         </table>
     </form>

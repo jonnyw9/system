@@ -22,15 +22,6 @@ public class UserValidationImpl implements UserValidation {
 
     @Override
     public BindingResult validate(UserDto userDto, BindingResult bindingResult){
-        User existing = userService.getUserByEmail(userDto.getEmail());
-        if(existing != null){
-            bindingResult.rejectValue("email", "exisiting.email",
-                    "There is already an account registered to that email address.");
-        }
-        if(!userDto.getPassword().equals(userDto.getConfirmPassword())){
-            bindingResult.rejectValue("password", "password.mismatch",
-                    "The passwords do not match.");
-        }
 
         if(!userDto.isStaff() && !userDto.isStudent()){
             bindingResult.rejectValue("student","" ,"You must select student or staff or both.");
@@ -62,6 +53,39 @@ public class UserValidationImpl implements UserValidation {
                 bindingResult.rejectValue("studentNumber", "" ,"Please enter a student number.");
             }
         }
+        return bindingResult;
+    }
+
+    @Override
+    public BindingResult validateEmail(String email, BindingResult bindingResult){
+        User existing = userService.getUserByEmail(email);
+        if(existing != null){
+            bindingResult.rejectValue("email", "exisiting.email",
+                    "There is already an account registered to that email address.");
+        }
+        return bindingResult;
+    }
+
+    @Override
+    public BindingResult validateName(String firstname, String lastname, BindingResult bindingResult){
+        if(firstname == null){
+            bindingResult.rejectValue("firstName", "null.name",
+                    "Please fill in your first name.");
+        }
+
+        if(lastname == null){
+            bindingResult.rejectValue("lastName", "null.name",
+                    "Please fill in your last name.");
+        }
+        if(firstname.length() < 2){
+            bindingResult.rejectValue("firstName", "name.too.small",
+                    "Your first name is too small!");
+        }
+        if(lastname.length() < 2){
+            bindingResult.rejectValue("lastName", "name.too.small",
+                    "Your last name is too small!");
+        }
+
         return bindingResult;
     }
 }

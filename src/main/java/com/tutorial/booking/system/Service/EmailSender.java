@@ -1,10 +1,13 @@
 package com.tutorial.booking.system.Service;
 
+import com.tutorial.booking.system.model.Event;
 import com.tutorial.booking.system.model.Notification;
 import com.tutorial.booking.system.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMailMessage;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component

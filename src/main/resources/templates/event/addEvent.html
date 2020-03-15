@@ -32,7 +32,7 @@
             <tr>
 
                 <td><label for="description">Description: </label></td>
-                <td><input type="text" id="description" name="description" th:value="*{description}" th:required="true"></td>
+                <td><textarea id="description" name="description" th:value="*{description}" th:required="true"></textarea></td>
                 <td th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Validation error</td>
             </tr>
             <tr>

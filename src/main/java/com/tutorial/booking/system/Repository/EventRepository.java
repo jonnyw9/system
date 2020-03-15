@@ -36,4 +36,8 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
 
     @Query("select e from Event e where e.creatorUserId = ?1 or e.recipientUserId = ?2")
     List<Event> findAllByCreatorUserIdAndRecipientUserId(User creatorUserId, User recipientUserId);
+
+    @Query("select e from Event e where e.eventStart > ?1 and e.eventStart < ?2")
+    List<Event> findAllByEventStartInXMins(Timestamp timestamp1, Timestamp timestamp2);
 }
+

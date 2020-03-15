@@ -84,15 +84,7 @@ public class EventController {
     public String addEvent(@ModelAttribute("event") @Valid EventDto event, BindingResult bindingResult,
                            RedirectAttributes redirectAttributes) throws ParseException {
 
-        if(!eventValidation.timeValidation(event.getEventStart())){
-            bindingResult.rejectValue("eventStart","time.error","Time not allowed!");
-        }
-        if(!eventValidation.timeValidation(event.getEventEnd())){
-            bindingResult.rejectValue("eventEnd","time.error", "Time not allowed!");
-        }
-        if(!eventValidation.timeConflictCheck(event)){
-            bindingResult.reject("time.conflict", "You have a conflict with the times suggested.");
-        }
+        bindingResult = eventValidation.validate(event, bindingResult);
 
         //Save the event
         if(bindingResult.hasErrors()){
@@ -105,7 +97,7 @@ public class EventController {
         if(event.getRecurringLength() != null){
             eventService.addRecurring(event, user);
         } else{
-            eventService.add(event, user);
+            eventService.add(event, user, false);
         }
         //Redirect to the homepage
         return "redirect:/home";
@@ -144,23 +136,33 @@ public class EventController {
             return "redirect:/home?notYourEvent";
         }
 
-        EventDto eventDto = new EventDto(event);
+        if(!model.containsAttribute("event")){
+            EventDto eventDto = new EventDto(event);
 
-        eventDto.setEventStart(eventService.changeTimestapToString(event.getEventStart()));
+            eventDto.setEventStart(eventService.changeTimestapToString(event.getEventStart()));
 
-        eventDto.setEventEnd(eventService.changeTimestapToString(event.getEventEnd()));
+            eventDto.setEventEnd(eventService.changeTimestapToString(event.getEventEnd()));
 
-        System.out.println(eventDto.toString());
+            System.out.println("Start: " + eventDto.getEventStart() + " || End: " + eventDto.getEventEnd());
 
-        model.addAttribute("event", eventDto);
+            model.addAttribute("event", eventDto);
+        }
 
         return userTemplatePrefix + "editEvent";
     }
 
     @PostMapping("edit")
-    public String editEvent(@ModelAttribute @Valid EventDto event, BindingResult bindingResult, Model model){
+    public String editEvent(@ModelAttribute @Valid EventDto event, BindingResult bindingResult,
+                            RedirectAttributes redirectAttributes){
+
+        System.out.println("Start: " + event.getEventStart() + " || End: " + event.getEventEnd());
+
+        bindingResult = eventValidation.validate(event, bindingResult);
+
         if(bindingResult.hasErrors()){
-            return userTemplatePrefix + "editEvent";
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.event", bindingResult);
+            redirectAttributes.addFlashAttribute("event", event);
+            return "redirect:/event/edit/" + event.getEventId();
         }
         eventService.updateEvent(event);
         return "redirect:/event/view/" + event.getEventId() + "?updated";

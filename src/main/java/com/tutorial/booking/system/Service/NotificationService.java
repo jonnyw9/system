@@ -75,6 +75,21 @@ public class NotificationService {
         emailSender.sendMail(notification, event.getRecipientUserId());
     }
 
+    public void eventRecurringAdded(User user){
+        Notification notification = new Notification();
+
+        String description = "Your recurring events have been added. Please click the events" +
+                " on your calendar for more information.";
+
+        notification.setUserId(user);
+        notification.setTitle("Events Added");
+        notification.setDescription(description);
+        notification.setCreatedOn(Timestamp.valueOf(LocalDateTime.now()));
+
+        saveNotification(notification);
+        emailSender.sendMail(notification, user);
+    }
+
     public void eventCancelled(Event event){
         Notification notification = new Notification();
 
@@ -109,7 +124,7 @@ public class NotificationService {
         }
     }
 
-    public void eventUpdated(Event event, String locationBefore){
+   public void eventUpdated(Event event, String locationBefore){
 
         if(!event.getLocation().equals(locationBefore)){
             eventLocationChanged(event);
@@ -196,12 +211,39 @@ public class NotificationService {
         emailSender.sendMail(notification, event.getCreatorUserId());
     }
 
-    public void accountCreated(){
+    public void accountCreated(User user){
+        Notification notification = new Notification();
+        notification.setTitle("Account Created!");
+        notification.setCreatedOn(Timestamp.valueOf(LocalDateTime.now()));
+        notification.setUserId(user);
 
+        String description = "Thank you for creating an account. Start by adding some events to you " +
+                "own calendar by clicking and dragging to select the times.";
+
+        if(user.getStaffId() == null){
+            description += " Try searching for some lecturers to book. You can only book them for 30 minutes " +
+                    "and 24 hours beforehand.";
+        }
+
+        notification.setDescription(description);
+
+        saveNotification(notification);
+
+        emailSender.sendMail(notification, user);
     }
 
-    public void passwordChanged(){
+    public void passwordChanged(User user){
+        Notification notification = new Notification();
 
+        notification.setTitle("Password Changed!");
+        notification.setDescription("Your password has successfully been changed. Please login again with you new password.");
+
+        notification.setActionLink("/home");
+        notification.setCreatedOn(Timestamp.valueOf(LocalDateTime.now()));
+        notification.setUserId(user);
+
+        saveNotification(notification);
+        emailSender.sendMail(notification, user);
     }
 
     public List<Notification> getUserNotifications(int id){
@@ -226,5 +268,35 @@ public class NotificationService {
             notification.setSeen(true);
             saveNotification(notification);
         }
+    }
+
+    public void eventIn30Minutes(Event event){
+        Notification notification = new Notification();
+
+        notification.setTitle("Event in 30 minutes!");
+        notification.setCreatedOn(Timestamp.valueOf(LocalDateTime.now()));
+        notification.setActionLink("/event/view/" + event.getEventId());
+
+        String description = "Your event '"+ event.getTitle() + "' at: " +
+                timeParse(event.getEventStart().toLocalDateTime().toString()) + " , at location: "
+                + event.getLocation() + " is in 30 minutes.";
+
+        notification.setUserId(event.getCreatorUserId());
+        notification.setDescription(description);
+        saveNotification(notification);
+        emailSender.sendMail(notification, event.getCreatorUserId());
+
+        if(event.getRecipientUserId().getUserId() != event.getCreatorUserId().getUserId()){
+            Notification notification1 = new Notification();
+            notification1.setTitle(notification.getTitle());
+            notification1.setDescription(notification.getDescription());
+            notification1.setUserId(event.getRecipientUserId());
+            notification1.setCreatedOn(Timestamp.valueOf(LocalDateTime.now()));
+            notification1.setActionLink(notification.getActionLink());
+
+            saveNotification(notification1);
+            emailSender.sendMail(notification1, event.getRecipientUserId());
+        }
+
     }
 }

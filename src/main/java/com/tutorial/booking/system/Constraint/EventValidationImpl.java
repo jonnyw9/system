@@ -8,6 +8,7 @@ import com.tutorial.booking.system.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -49,5 +50,21 @@ public class EventValidationImpl implements EventValidation{
             return false;
         }
         return true;
+    }
+
+    @Override
+    public BindingResult validate(EventDto eventDto, BindingResult bindingResult){
+
+        if(!timeValidation(eventDto.getEventStart())){
+            bindingResult.rejectValue("eventStart","time.error","Time not allowed!");
+        }
+        if(!timeValidation(eventDto.getEventEnd())){
+            bindingResult.rejectValue("eventEnd","time.error", "Time not allowed!");
+        }
+        if(!timeConflictCheck(eventDto)){
+            bindingResult.reject("time.conflict", "You have a conflict with the times suggested.");
+        }
+
+        return bindingResult;
     }
 }
