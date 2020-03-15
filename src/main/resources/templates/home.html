@@ -31,7 +31,7 @@
     let userId = /*[[${user.getUserId()}]]*/ "";
     let isHome = true;
 </script>
-<div class="container">
+<div class="container-fluid">
 <h1 th:text="'Welcome ' + ${user.getFirstName()} + '!'"></h1>
 <ul>
     <li><a href="/user/view">Account Details</a></li>
@@ -55,7 +55,7 @@
     </div>
 </section>
 <section id="events">
-    <h2 th:if="${param.notYourEvent}">The event is non of you business!</h2>
+    <h2 th:if="${param.notYourEvent}">The event is none of you business!</h2>
     <h2 th:if="${param.cancel}">Event Successfully Cancelled/Declined!</h2>
     <section>
         <h2>Your Calendar</h2>

@@ -155,6 +155,12 @@ public class FrontController {
                            RedirectAttributes redirectAttributes){
 
         bindingResult = userValidation.validate(user, bindingResult);
+        bindingResult = userValidation.validateEmail(user.getEmail(), bindingResult);
+
+        if(!user.getPassword().equals(user.getConfirmPassword())){
+            bindingResult.rejectValue("password", "password.mismatch",
+                    "The passwords do not match.");
+        }
 
         if(bindingResult.hasErrors()){
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.user",

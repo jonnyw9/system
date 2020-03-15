@@ -1,6 +1,8 @@
 package com.tutorial.booking.system.Controller;
 
 import com.sun.org.apache.xpath.internal.operations.Mod;
+import com.tutorial.booking.system.Constraint.PasswordValidation;
+import com.tutorial.booking.system.Constraint.UserValidation;
 import com.tutorial.booking.system.Repository.PasswordRepository;
 import com.tutorial.booking.system.Service.UserService;
 import com.tutorial.booking.system.dto.EventDto;
@@ -15,7 +17,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
 
 
 @Controller
@@ -33,6 +37,12 @@ public class UserController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    UserValidation userValidation;
+
+    @Autowired
+    PasswordValidation passwordValidation;
 
     @GetMapping("view")
     public String viewAccount(Authentication authentication, Model model){
@@ -52,9 +62,11 @@ public class UserController {
         return "redirect:/?deleted";
     }
 
-    @GetMapping("edit/{editRequest}")
+    @GetMapping(editPrefix + "{editRequest}")
     public String editDetails(@PathVariable String editRequest, Model model){
-        model.addAttribute("user", user);
+        if(!model.containsAttribute("user")){
+            model.addAttribute("user", user);
+        }
 
         if(editRequest == null){
             return "redirect:/user/view?badEditRequest";
@@ -65,7 +77,9 @@ public class UserController {
                 case "email":
                     return userTemplatePrefix + "editEmail";
                 case "password":
-                    model.addAttribute("password", new PasswordDto());
+                    if(!model.containsAttribute("passwordDto")){
+                        model.addAttribute("passwordDto", new PasswordDto());
+                    }
                     return userTemplatePrefix + "editPassword";
                 default:
                     return "redirect:/user/view?badEditRequest";
@@ -73,11 +87,27 @@ public class UserController {
         }
     }
 
-    @PostMapping("edit/{editRequest}")
-    public String editDetails(@PathVariable String editRequest, @ModelAttribute UserDto userDto, Model model,
+    @PostMapping(editPrefix + "{editRequest}")
+    public String editDetails(@PathVariable String editRequest, @ModelAttribute(name = "user") UserDto userDto,
+                              RedirectAttributes redirectAttributes,
                               BindingResult bindingResult){
-        if (editRequest == null){
-            return "redirect:/user/view?badEditRequest";
+        switch(editRequest){
+            case "name":
+                bindingResult = userValidation.validateName(userDto.getFirstName(),
+                        userDto.getLastName(), bindingResult);
+                break;
+            case "email":
+                bindingResult = userValidation.validateEmail(userDto.getEmail(), bindingResult);
+                break;
+            default:
+                return "redirect:/user/view?badEditRequest";
+        }
+
+        if(bindingResult.hasErrors()){
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.user",
+                    bindingResult);
+            redirectAttributes.addFlashAttribute("user", userDto);
+            return "redirect:/user/edit/" + editRequest;
         }
 
         userService.updateDetails(userDto, editRequest);
@@ -89,19 +119,24 @@ public class UserController {
         return "redirect:/user/view?updated";
     }
 
-    @PostMapping("edit/password")
-    public String editPassword(@ModelAttribute PasswordDto passwordDto, Model model,
-                               BindingResult bindingResult){
+    @PostMapping(editPrefix + "password")
+    public String editPassword(@ModelAttribute(name = "passwordDto") @Valid PasswordDto passwordDto,
+                               BindingResult bindingResult,
+                               RedirectAttributes redirectAttributes,
+                               Authentication authentication){
+
+        user = userService.makeUserDto(authentication);
+
+        bindingResult = passwordValidation.validate(passwordDto, bindingResult, user);
 
 
-        Password password = passwordRepository.getOne(
-                userService.getUserById(user.getUserId()).getPassword().getPasswordId());
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
-        if(!passwordEncoder.matches(passwordDto.getCurrentPassword(), password.getPassword())){
-            return "redirect:/user/edit/password?badPass";
+        if(bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("passwordDto", passwordDto);
+            redirectAttributes.addFlashAttribute("user", user);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.passwordDto",
+                    bindingResult);
+            return "redirect:/user/edit/password";
         }
-
         user.setPassword(passwordDto.getPassword());
         user.setConfirmPassword(passwordDto.getConfirmPassword());
 

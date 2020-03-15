@@ -1,10 +1,22 @@
 package com.tutorial.booking.system.dto;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public class PasswordDto {
 
+    @NotNull
+    @NotEmpty(message = "Please type in a password.")
     private String currentPassword;
 
+    @NotNull
+    @NotEmpty(message = "Please type in a password.")
+    @Size(min = 8, message = "You password must be 8 characters or more.")
     private String password;
+    
+    @NotNull
+    @NotEmpty(message = "Please type in a confirm password.")
     private String confirmPassword;
 
     public PasswordDto() {

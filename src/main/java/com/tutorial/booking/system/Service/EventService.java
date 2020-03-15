@@ -12,6 +12,7 @@ import com.tutorial.booking.system.model.Calendar;
 import com.tutorial.booking.system.model.Event;
 import com.tutorial.booking.system.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.sql.Array;
@@ -39,7 +40,7 @@ public class EventService {
     @Autowired
     NotificationService notificationService;
 
-    public void add(EventDto eventDto, UserDto userDto) throws ParseException {
+    public void add(EventDto eventDto, UserDto userDto, Boolean recurring) throws ParseException {
 
         ArrayList<Timestamp> timestamps = convertStringToTimeStamp(eventDto);
 
@@ -53,7 +54,10 @@ public class EventService {
 
         this.eventRepository.save(event);
 
-        notificationService.eventAddedCreator(event);
+        if(!recurring){
+            notificationService.eventAddedCreator(event);
+        }
+
         if(event.getCreatorUserId().getUserId() != event.getRecipientUserId().getUserId()){
             notificationService.eventAddedRecipient(event);
         }
@@ -61,7 +65,7 @@ public class EventService {
 
     public void addRecurring(EventDto eventDto, UserDto userDto) throws ParseException{
         for (int i = 0; i < eventDto.getRecurringLength(); i++) {
-            this.add(eventDto, userDto);
+            this.add(eventDto, userDto, true);
             LocalDateTime start = LocalDateTime.parse(eventDto.getEventStart());
             LocalDateTime end = LocalDateTime.parse(eventDto.getEventEnd());
 
@@ -71,6 +75,7 @@ public class EventService {
             eventDto.setEventStart(start.toString());
             eventDto.setEventEnd(end.toString());
         }
+        notificationService.eventRecurringAdded(userService.getUserById(userDto.getUserId()));
     }
 
     public List<Event> getEventsForUser(int userId){
@@ -306,5 +311,26 @@ public class EventService {
         }
 
         return eventsReturned;
+    }
+
+    @Scheduled(fixedRate = 150000)
+    public void checkEvents30Mins(){
+        //Check events that are in 30 mins
+        Timestamp timestamp1 = Timestamp.valueOf(LocalDateTime.now().plusMinutes(28));
+        Timestamp timestamp2 = Timestamp.valueOf(LocalDateTime.now().plusMinutes(32));
+        List<Event> events = eventRepository.findAllByEventStartInXMins(timestamp1, timestamp2);
+        notifyUsers(events);
+
+        //Check events that are in a hour
+        timestamp1 = Timestamp.valueOf(LocalDateTime.now().plusMinutes(58));
+        timestamp2 = Timestamp.valueOf(LocalDateTime.now().plusMinutes(62));
+        events = eventRepository.findAllByEventStartInXMins(timestamp1, timestamp2);
+        notifyUsers(events);
+    }
+
+    public void notifyUsers(List<Event> events){
+        for(Event event: events){
+            notificationService.eventIn30Minutes(event);
+        }
     }
 }

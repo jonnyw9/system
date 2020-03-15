@@ -43,6 +43,9 @@ public class UserService {
     @Autowired
     CalendarRepository calendarRepository;
 
+    @Autowired
+    NotificationService notificationService;
+
     public UserDto getUserByUserName(String email){
         Optional<User> user = userRepository.findByEmail(email);
 
@@ -102,6 +105,8 @@ public class UserService {
         }
 
         userRepository.save(user);
+
+        notificationService.accountCreated(user);
     }
 
     public void updateDetails(UserDto userDto, String edit){
@@ -136,8 +141,8 @@ public class UserService {
                     password.setPassword(passwordEncoder.encode(userDto.getPassword()));
 
                     passwordRepository.save(password);
+                    notificationService.passwordChanged(user);
                 }
-
                 break;
         }
 

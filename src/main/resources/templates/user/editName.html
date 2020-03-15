@@ -6,21 +6,25 @@
 </head>
 <body>
     <form action="#" th:action="@{/user/edit/name}" th:object="${user}" method="post">
-        <table>
+        <table class="col-md-8 order-md-1">
             <input type="hidden" id="userId" name="userId" th:field="*{userId}" />
-            <tr>
-                <td>First Name: </td>
-                <td><input type="text" id="firstName" name="firstName" th:value="*{firstName}"/></td>
+            <tr class="row">
+                <td class="col-md-3"><label for="firstName">Firstname: </label></td>
+                <td class="col-md-3"><input id="firstName" name="firstName" th:field="*{firstName}" th:required="true"/></td>
+                <td th:if="${#fields.hasErrors('firstName')}" class="col-md-3"
+                    th:errors="*{firstName}">Validation error</td>
             </tr>
-            <tr>
-                <td>Last Name: </td>
-                <td><input type="text" id="lastName" name="lastName" th:value="*{lastName}"/></td>
+            <tr class="row">
+                <td class="col-md-3"><label for="lastName">Lastname: </label></td>
+                <td class="col-md-3"><input id="lastName" name="lastName" th:field="*{lastName}" th:required="true"/></td>
+                <td th:if="${#fields.hasErrors('lastName')}" class="col-md-3"
+                    th:errors="*{lastName}">Validation error</td>
             </tr>
-            <tr>
-                <td>
-                    <input type="submit" value="Submit" />
+            <tr class="row">
+                <td class="col-md-3" >
+                    <input  type="submit" value="Submit" />
                 </td>
-                <td><button><a href="/home">Home</a></button></td>
+                <td class="col-md-3"><button><a href="/home">Home</a></button></td>
             </tr>
         </table>
     </form>
