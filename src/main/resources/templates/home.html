@@ -50,7 +50,7 @@
 
         <section id="user">
             <div th:if="${user.student}" class="search">
-                <h2>Search Staff</h2>
+                <h2 class="searchTitle">Search Staff</h2>
                 <form th:object="${name}" th:action="@{/search}" method="get" class="form-inline my-2 my-lg-0">
                     <input type="text" name="name" id="name" th:value="${name}" class="form-control mr-sm-2"/>
                     <input type="submit" value="Search" class="btn btn-secondary my-2 my-sm-0"/>
