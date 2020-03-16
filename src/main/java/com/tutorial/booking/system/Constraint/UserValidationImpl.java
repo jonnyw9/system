@@ -4,9 +4,10 @@
 
 package com.tutorial.booking.system.Constraint;
 
-import com.tutorial.booking.system.Service.UserService;
+import com.tutorial.booking.system.Service.UserServiceImpl;
 import com.tutorial.booking.system.dto.UserDto;
 import com.tutorial.booking.system.model.User;
+import org.hibernate.id.BulkInsertionCapableIdentifierGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
@@ -18,35 +19,21 @@ import java.sql.Time;
 public class UserValidationImpl implements UserValidation {
 
     @Autowired
-    UserService userService;
+    UserServiceImpl userService;
 
     @Override
     public BindingResult validate(UserDto userDto, BindingResult bindingResult){
+
+        bindingResult = validateName(userDto.getFirstName(), userDto.getLastName(), bindingResult);
+        bindingResult = validateEmail(userDto.getEmail(), bindingResult);
 
         if(!userDto.isStaff() && !userDto.isStudent()){
             bindingResult.rejectValue("student","" ,"You must select student or staff or both.");
         }
 
         if(userDto.isStaff()){
-            if(userDto.getRoom().isEmpty()){
-                bindingResult.rejectValue("room","" ,"You must enter your room.");
-            }
-            if(userDto.getStartTime().isEmpty()){
-                bindingResult.rejectValue("startTime", "" ,"Please enter a start time.");
-            }
-            if(userDto.getEndTime().isEmpty()){
-                bindingResult.rejectValue("endTime", "" ,"Please enter a start time.");
-            }
-            try{
-                Time time = Time.valueOf(userDto.getStartTime() + ":00");
-            }catch (Exception e){
-                bindingResult.rejectValue("startTime", "" ,"Invalid Start Time.");
-            }
-            try{
-                Time time = Time.valueOf(userDto.getEndTime() + ":00");
-            }catch (Exception e){
-                bindingResult.rejectValue("endTime", "" ,"Invalid End Time.");
-            }
+            bindingResult = validateRoom(userDto.getRoom(), bindingResult);
+            bindingResult = validateTimes(userDto.getStartTime(), userDto.getEndTime(), bindingResult);
         }
         if(userDto.isStudent()){
             if(userDto.getStudentNumber().isEmpty()){
@@ -86,6 +73,34 @@ public class UserValidationImpl implements UserValidation {
                     "Your last name is too small!");
         }
 
+        return bindingResult;
+    }
+
+    @Override
+    public BindingResult validateTimes(String startTime, String endTime, BindingResult bindingResult){
+        if(startTime.isEmpty()){
+            bindingResult.rejectValue("startTime", "" ,"Please enter a start time.");
+        }
+        if(endTime.isEmpty()){
+            bindingResult.rejectValue("endTime", "" ,"Please enter a start time.");
+        }
+        try{
+            Time time = Time.valueOf(startTime + ":00");
+        }catch (Exception e){
+            bindingResult.rejectValue("startTime", "" ,"Invalid Start Time.");
+        }
+        try{
+            Time time = Time.valueOf(endTime + ":00");
+        }catch (Exception e){
+            bindingResult.rejectValue("endTime", "" ,"Invalid End Time.");
+        }
+        return bindingResult;
+    }
+    @Override
+    public BindingResult validateRoom(String room, BindingResult bindingResult){
+        if(room.isEmpty()){
+            bindingResult.rejectValue("room","" ,"You must enter your room.");
+        }
         return bindingResult;
     }
 }

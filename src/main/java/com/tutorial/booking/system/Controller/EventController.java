@@ -2,8 +2,8 @@ package com.tutorial.booking.system.Controller;
 
 
 import com.tutorial.booking.system.Constraint.EventValidation;
-import com.tutorial.booking.system.Service.EventService;
-import com.tutorial.booking.system.Service.UserService;
+import com.tutorial.booking.system.Service.EventServiceImpl;
+import com.tutorial.booking.system.Service.UserServiceImpl;
 import com.tutorial.booking.system.dto.EventDto;
 import com.tutorial.booking.system.dto.UserDto;
 import com.tutorial.booking.system.model.Event;
@@ -13,15 +13,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.sql.Timestamp;
 import java.text.ParseException;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Controller
 @RequestMapping("/event/")
@@ -32,10 +29,10 @@ public class EventController {
     private final String userTemplatePrefix = "event/";
 
     @Autowired
-    UserService userService;
+    UserServiceImpl userService;
 
     @Autowired
-    EventService eventService;
+    EventServiceImpl eventService;
 
     @Autowired
     EventValidation eventValidation;

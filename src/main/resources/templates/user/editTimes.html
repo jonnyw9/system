@@ -1,0 +1,36 @@
+<!--
+  ~ Copyright (c) 2020. To JWIndustries
+  -->
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Times</title>
+</head>
+<body>
+<form action="#" th:action="@{/user/edit/times}" th:object="${user}" method="post">
+    <table class="col-md-8 order-md-1">
+        <input type="hidden" id="userId" name="userId" th:field="*{userId}" />
+        <tr class="row">
+            <td class="col-md-3"><label for="startTime">Start Time: </label></td>
+            <td class="col-md-3"><input type="time" id="startTime" name="startTime" th:field="*{startTime}" th:required="true"/></td>
+            <td th:if="${#fields.hasErrors('startTime')}" class="col-md-3"
+                th:errors="*{startTime}">Validation error</td>
+        </tr>
+        <tr class="row">
+            <td class="col-md-3"><label for="endTime">Lastname: </label></td>
+            <td class="col-md-3"><input type="time" id="endTime" name="endTime" th:field="*{endTime}" th:required="true"/></td>
+            <td th:if="${#fields.hasErrors('endTime')}" class="col-md-3"
+                th:errors="*{endTime}">Validation error</td>
+        </tr>
+        <tr class="row">
+            <td class="col-md-3" >
+                <input  type="submit" value="Submit" />
+            </td>
+            <td class="col-md-3"><button><a href="/home">Home</a></button></td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>

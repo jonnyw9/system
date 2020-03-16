@@ -1,6 +1,7 @@
 package com.tutorial.booking.system.dto;
 
 import com.tutorial.booking.system.model.User;
+import org.springframework.security.core.parameters.P;
 
 import javax.validation.constraints.*;
 
@@ -50,6 +51,11 @@ public class UserDto {
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
         this.email = user.getEmail();
+        if(user.getStaffId() != null){
+            this.startTime = user.getCalendarId().getDayStartTime().toString().substring(0, 5);
+            this.endTime = user.getCalendarId().getDayEndTime().toString().substring(0, 5);
+            this.room = user.getStaffId().getRoom();
+        }
     }
 
     public int getUserId() {

@@ -5,7 +5,7 @@
 package com.tutorial.booking.system.Constraint;
 
 import com.tutorial.booking.system.Repository.PasswordRepository;
-import com.tutorial.booking.system.Service.UserService;
+import com.tutorial.booking.system.Service.UserServiceImpl;
 import com.tutorial.booking.system.dto.PasswordDto;
 import com.tutorial.booking.system.dto.UserDto;
 import com.tutorial.booking.system.model.Password;
@@ -21,7 +21,7 @@ public class PasswordValidationImpl implements PasswordValidation {
     PasswordRepository passwordRepository;
 
     @Autowired
-    UserService userService;
+    UserServiceImpl userService;
 
     @Override
     public BindingResult validate(PasswordDto passwordDto, BindingResult bindingResult, UserDto user) {
