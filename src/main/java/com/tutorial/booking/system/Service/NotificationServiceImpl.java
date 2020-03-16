@@ -1,6 +1,5 @@
 package com.tutorial.booking.system.Service;
 
-import com.tutorial.booking.system.Repository.EventRepository;
 import com.tutorial.booking.system.Repository.NotificationRepository;
 import com.tutorial.booking.system.dto.UserDto;
 import com.tutorial.booking.system.model.Event;
@@ -14,28 +13,26 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-public class NotificationServiceImpl {
+public class NotificationServiceImpl implements NotificationService {
 
     @Autowired
     private NotificationRepository notificationRepository;
 
     @Autowired
-    private EventRepository eventRepository;
-
-    @Autowired
     private UserServiceImpl userService;
 
     @Autowired
-    private EventServiceImpl eventService;
+    private EventService eventService;
 
     @Autowired
     private EmailSender emailSender;
 
-
+    @Override
     public void saveNotification(Notification notification){
         notificationRepository.save(notification);
     }
 
+    @Override
     public void eventAddedCreator(Event event){
         Notification notification = new Notification();
 
@@ -53,6 +50,7 @@ public class NotificationServiceImpl {
         emailSender.sendMail(notification, event.getCreatorUserId());
     }
 
+    @Override
     public void eventAddedRecipient(Event event){
         Notification notification = new Notification();
 
@@ -70,6 +68,7 @@ public class NotificationServiceImpl {
         emailSender.sendMail(notification, event.getRecipientUserId());
     }
 
+    @Override
     public void eventRecurringAdded(User user){
         Notification notification = new Notification();
 
@@ -85,6 +84,7 @@ public class NotificationServiceImpl {
         emailSender.sendMail(notification, user);
     }
 
+    @Override
     public void eventCancelled(Event event){
         Notification notification = new Notification();
 
@@ -119,7 +119,8 @@ public class NotificationServiceImpl {
         }
     }
 
-   public void eventUpdated(Event event, String locationBefore){
+    @Override
+    public void eventUpdated(Event event, String locationBefore){
 
         if(!event.getLocation().equals(locationBefore)){
             eventLocationChanged(event);
@@ -157,6 +158,7 @@ public class NotificationServiceImpl {
 
     }
 
+    @Override
     public void eventLocationChanged(Event event){
         Notification notification = new Notification();
         notification.setTitle("Event Location Changed.");
@@ -189,6 +191,7 @@ public class NotificationServiceImpl {
         }
     }
 
+    @Override
     public void eventAccepted(Event event){
         Notification notification = new Notification();
 
@@ -206,6 +209,7 @@ public class NotificationServiceImpl {
         emailSender.sendMail(notification, event.getCreatorUserId());
     }
 
+    @Override
     public void accountCreated(User user){
         Notification notification = new Notification();
         notification.setTitle("Account Created!");
@@ -227,6 +231,7 @@ public class NotificationServiceImpl {
         emailSender.sendMail(notification, user);
     }
 
+    @Override
     public void passwordChanged(User user){
         Notification notification = new Notification();
 
@@ -241,18 +246,22 @@ public class NotificationServiceImpl {
         emailSender.sendMail(notification, user);
     }
 
+    @Override
     public List<Notification> getUserNotifications(int id){
         return notificationRepository.findAllByUserIdOrderByCreatedOnDesc(userService.getUserById(id));
     }
 
+    @Override
     public Notification getNotificationById(int id){
         return notificationRepository.getOne(id);
     }
 
+    @Override
     public String timeParse(String time){
         return time.replace("T", " ");
     }
 
+    @Override
     public void readAllUnreadNotifications(UserDto userDto){
         User user =  userService.getUserById(userDto.getUserId());
 
@@ -265,16 +274,17 @@ public class NotificationServiceImpl {
         }
     }
 
-    public void eventIn30Minutes(Event event){
+    @Override
+    public void notifyUpcomingEvent(Event event, String time){
         Notification notification = new Notification();
 
-        notification.setTitle("Event in 30 minutes!");
+        notification.setTitle("Event in " + time);
         notification.setCreatedOn(Timestamp.valueOf(LocalDateTime.now()));
         notification.setActionLink("/event/view/" + event.getEventId());
 
         String description = "Your event '"+ event.getTitle() + "' at: " +
                 timeParse(event.getEventStart().toLocalDateTime().toString()) + " , at location: "
-                + event.getLocation() + " is in 30 minutes.";
+                + event.getLocation() + " is in " + time + ".";
 
         notification.setUserId(event.getCreatorUserId());
         notification.setDescription(description);

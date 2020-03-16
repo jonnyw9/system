@@ -24,6 +24,16 @@
                 <td th:text="${user.getEmail()}"></td>
                 <td><button><a href="/user/edit/email">Edit Email</a></button></td>
             </tr>
+            <tr th:if="${user.isStaff()}">
+                <td>Room: </td>
+                <td th:text="${user.getRoom()}"></td>
+                <td><button><a href="/user/edit/room">Edit Room</a></button></td>
+            </tr>
+            <tr th:if="${user.isStaff()}">
+                <td>Times: </td>
+                <td th:text="'Start: ' + ${user.getStartTime()} + ' End: ' + ${user.getEndTime()}"></td>
+                <td><button><a href="/user/edit/times">Edit Times</a></button></td>
+            </tr>
             <tr>
                 <td><button><a href="/user/edit/password">Edit Password</a></button></td>
             </tr>

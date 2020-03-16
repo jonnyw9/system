@@ -2,9 +2,7 @@ package com.tutorial.booking.system.Controller;
 
 import com.tutorial.booking.system.Constraint.UserValidation;
 import com.tutorial.booking.system.Repository.CalendarRepository;
-import com.tutorial.booking.system.Service.EventServiceImpl;
-import com.tutorial.booking.system.Service.NotificationServiceImpl;
-import com.tutorial.booking.system.Service.UserService;
+import com.tutorial.booking.system.Service.*;
 
 import com.tutorial.booking.system.dto.UserDto;
 import com.tutorial.booking.system.model.Event;
@@ -150,7 +148,6 @@ public class FrontController {
                            RedirectAttributes redirectAttributes){
 
         bindingResult = userValidation.validate(user, bindingResult);
-        bindingResult = userValidation.validateEmail(user.getEmail(), bindingResult);
 
         if(!user.getPassword().equals(user.getConfirmPassword())){
             bindingResult.rejectValue("password", "password.mismatch",

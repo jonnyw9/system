@@ -77,46 +77,55 @@ public class UserServiceImpl implements UserService{
         user.setLastName(userDto.getLastName());
         user.setActive(true);
 
-        
+        //Create a new password
         Password password = new Password();
+        //Create a new instance of the password encoder
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        //Set the password as the encoded version
         password.setPassword(passwordEncoder.encode(userDto.getPassword()));
         user.setPassword(password);
 
+        //Create a new Roles
         Roles roles = new Roles();
+        //Set the roles to whether the user is staff or student
         roles.setStudent(userDto.isStudent());
         roles.setStaff(userDto.isStaff());
+        //TODO Implement admin functionality
         roles.setAdmin(false);
+        //Set the user roles to the roles entity created
         user.setRoleId(roles);
 
 
 
-
+        //IF the user is staff
         if(userDto.isStaff()){
+            //Create a staff entity and set the details
             Staff staff = new Staff();
             staff.setRoom(userDto.getRoom());
             user.setStaffId(staff);
 
+            //Create a new calendar entity and fill the details in
             Calendar calendar = new Calendar();
             calendar.setDayStartTime(parseFormTime(userDto.getStartTime()));
             calendar.setDayEndTime(parseFormTime(userDto.getEndTime()));
             user.setCalendarId(calendar);
         }
 
+        //If the user is a student. Create the necessary student entity and fill in the details
         if(userDto.isStudent()){
             Student student = new Student();
             student.setStudentNumber(userDto.getStudentNumber());
             user.setStudentId(student);
         }
 
+        //Save the user via the repository
         userRepository.save(user);
-
+        //Notify the user their account has been created.
         notificationService.accountCreated(user);
     }
-
+    @Override
     public void updateDetails(UserDto userDto, String edit){
         User user = getUserById(userDto.getUserId());
-
         switch (edit) {
             case "name":
                 if(userDto.getFirstName() != null){
@@ -149,11 +158,22 @@ public class UserServiceImpl implements UserService{
                     notificationService.passwordChanged(user);
                 }
                 break;
+            case "room":
+                Staff staff = staffRepository.getOne(user.getStaffId().getStaffId());
+                staff.setRoom(userDto.getRoom());
+                staffRepository.save(staff);
+                return;
+            case "times":
+                Calendar calendar = calendarRepository.getOne(user.getCalendarId().getCalendarId());
+                calendar.setDayStartTime(parseFormTime(userDto.getStartTime()));
+                calendar.setDayEndTime(parseFormTime(userDto.getEndTime()));
+                calendarRepository.save(calendar);
+                return;
         }
 
         userRepository.save(user);
     }
-
+    @Override
     public void deleteUserAccount(int id){
 
         User user = userRepository.getOne(id);
@@ -203,11 +223,11 @@ public class UserServiceImpl implements UserService{
         //Finally delete the user
         userRepository.delete(user);
     }
-
+    @Override
     public List<User> listUserByName(String name){
         return userRepository.findStaffByName(name);
     }
-
+    @Override
     public Time parseFormTime(String time){
         System.out.println(time);
         Time time1 = null;
@@ -218,7 +238,7 @@ public class UserServiceImpl implements UserService{
         }
         return time1;
     }
-
+    @Override
     public UserDto makeUserDto(Authentication authentication){
         System.out.println(authentication.getName());
         return getUserByUserName(authentication.getName());

@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class EventServiceImpl {
+public class EventServiceImpl implements EventService{
 
     @Autowired
     EventRepository eventRepository;
@@ -34,6 +34,7 @@ public class EventServiceImpl {
     @Autowired
     NotificationServiceImpl notificationService;
 
+    @Override
     public void add(EventDto eventDto, UserDto userDto, Boolean recurring) throws ParseException {
 
         ArrayList<Timestamp> timestamps = convertStringToTimeStamp(eventDto);
@@ -56,7 +57,7 @@ public class EventServiceImpl {
             notificationService.eventAddedRecipient(event);
         }
     }
-
+    @Override
     public void addRecurring(EventDto eventDto, UserDto userDto) throws ParseException{
         for (int i = 0; i < eventDto.getRecurringLength(); i++) {
             this.add(eventDto, userDto, true);
@@ -71,7 +72,7 @@ public class EventServiceImpl {
         }
         notificationService.eventRecurringAdded(userService.getUserById(userDto.getUserId()));
     }
-
+    @Override
     public List<Event> getEventsForUser(int userId){
 
         //Get List
@@ -119,14 +120,14 @@ public class EventServiceImpl {
         //This will return a List of events
         return events;
     }
-
+    @Override
     public Event getByEventId(int id){
 
         Optional<Event> optionalEvent = eventRepository.findEventByEventId(id);
 
         return optionalEvent.orElse(null);
     }
-
+    @Override
     public String changeTimestapToString(Timestamp time){
         String returnTime = time.toString().substring(0,16);
 
@@ -136,7 +137,7 @@ public class EventServiceImpl {
 
         return returnTime;
     }
-
+    @Override
     public void updateEvent(EventDto eventDto){
 
         System.out.println(eventDto.toString());
@@ -159,7 +160,7 @@ public class EventServiceImpl {
 
         notificationService.eventUpdated(event, locationBefore);
     }
-
+    @Override
     public void cancelEvent(int eventId){
 
         Event event = getByEventId(eventId);
@@ -173,7 +174,7 @@ public class EventServiceImpl {
 
 
     }
-
+    @Override
     public ArrayList<Timestamp> convertStringToTimeStamp(EventDto eventDto){
         ArrayList<Timestamp> returnTimeStamp = new ArrayList<>();
 
@@ -186,7 +187,7 @@ public class EventServiceImpl {
 
         return returnTimeStamp;
     }
-
+    @Override
     public ArrayList<Timestamp> calulateFreeTimeForTheWeek(Calendar calendar){
 
         LocalDateTime localDateTime = LocalDateTime.now();
@@ -268,7 +269,7 @@ public class EventServiceImpl {
 
         return availableEvents;
     }
-
+    @Override
     public void acceptEvent(int id){
         Event event = eventRepository.getOne(id);
 
@@ -278,7 +279,7 @@ public class EventServiceImpl {
 
         notificationService.eventAccepted(event);
     }
-
+    @Override
     public List<Event> listEventsNearTimeEventUsers(EventDto eventDto){
         List<Timestamp> timestamps = convertStringToTimeStamp(eventDto);
 
@@ -306,25 +307,25 @@ public class EventServiceImpl {
 
         return eventsReturned;
     }
-
+    @Override
     @Scheduled(fixedRate = 150000)
-    public void checkEvents30Mins(){
+    public void CheckUpcomingEvents(){
         //Check events that are in 30 mins
         Timestamp timestamp1 = Timestamp.valueOf(LocalDateTime.now().plusMinutes(28));
         Timestamp timestamp2 = Timestamp.valueOf(LocalDateTime.now().plusMinutes(32));
         List<Event> events = eventRepository.findAllByEventStartInXMins(timestamp1, timestamp2);
-        notifyUsers(events);
+        notifyUsersOfUpcomingEvents(events, "30 Minutes");
 
         //Check events that are in a hour
         timestamp1 = Timestamp.valueOf(LocalDateTime.now().plusMinutes(58));
         timestamp2 = Timestamp.valueOf(LocalDateTime.now().plusMinutes(62));
         events = eventRepository.findAllByEventStartInXMins(timestamp1, timestamp2);
-        notifyUsers(events);
+        notifyUsersOfUpcomingEvents(events, "1 Hour");
     }
-
-    public void notifyUsers(List<Event> events){
+    @Override
+    public void notifyUsersOfUpcomingEvents(List<Event> events, String time){
         for(Event event: events){
-            notificationService.eventIn30Minutes(event);
+            notificationService.notifyUpcomingEvent(event, time);
         }
     }
 }

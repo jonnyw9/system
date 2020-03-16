@@ -2,10 +2,13 @@ package com.tutorial.booking.system.Controller;
 
 import com.tutorial.booking.system.Constraint.PasswordValidation;
 import com.tutorial.booking.system.Constraint.UserValidation;
+import com.tutorial.booking.system.Repository.CalendarRepository;
 import com.tutorial.booking.system.Repository.PasswordRepository;
+import com.tutorial.booking.system.Repository.StaffRepository;
 import com.tutorial.booking.system.Service.UserServiceImpl;
 import com.tutorial.booking.system.dto.PasswordDto;
 import com.tutorial.booking.system.dto.UserDto;
+import com.tutorial.booking.system.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -31,6 +34,12 @@ public class UserController {
     PasswordRepository passwordRepository;
 
     @Autowired
+    CalendarRepository calendarRepository;
+
+    @Autowired
+    StaffRepository staffRepository;
+
+    @Autowired
     UserServiceImpl userService;
 
     @Autowired
@@ -43,6 +52,8 @@ public class UserController {
     public String viewAccount(Authentication authentication, Model model){
         user = userService.makeUserDto(authentication);
         System.out.println(user.toString());
+
+
 
         model.addAttribute("user", user);
 
@@ -76,6 +87,10 @@ public class UserController {
                         model.addAttribute("passwordDto", new PasswordDto());
                     }
                     return userTemplatePrefix + "editPassword";
+                case "room":
+                    return userTemplatePrefix + "editRoom";
+                case "times":
+                    return userTemplatePrefix + "editTimes";
                 default:
                     return "redirect:/user/view?badEditRequest";
             }
@@ -86,6 +101,7 @@ public class UserController {
     public String editDetails(@PathVariable String editRequest, @ModelAttribute(name = "user") UserDto userDto,
                               RedirectAttributes redirectAttributes,
                               BindingResult bindingResult){
+        User userModel;
         switch(editRequest){
             case "name":
                 bindingResult = userValidation.validateName(userDto.getFirstName(),
@@ -93,6 +109,23 @@ public class UserController {
                 break;
             case "email":
                 bindingResult = userValidation.validateEmail(userDto.getEmail(), bindingResult);
+                break;
+            case "room":
+                userModel = userService.getUserById(userDto.getUserId());
+                if(userModel.getStaffId() != null){
+                    bindingResult = userValidation.validateRoom(userDto.getRoom(), bindingResult);
+                }else{
+                    return "redirect:/user/view?badEditRequest";
+                }
+                break;
+            case "times":
+                userModel = userService.getUserById(userDto.getUserId());
+                if(userModel.getStaffId() != null){
+                    bindingResult = userValidation.validateTimes(userDto.getStartTime(), userDto.getEndTime(), bindingResult);
+                }else{
+                    return "redirect:/user/view?badEditRequest";
+                }
+                bindingResult = userValidation.validateTimes(userDto.getStartTime(), userDto.getEndTime(), bindingResult);
                 break;
             default:
                 return "redirect:/user/view?badEditRequest";

@@ -11,4 +11,6 @@ public interface UserValidation {
     BindingResult validate(UserDto userDto, BindingResult bindingResult);
     BindingResult validateEmail(String email, BindingResult bindingResult);
     BindingResult validateName(String firstname, String lastname, BindingResult bindingResult);
+    BindingResult validateTimes(String startTime, String endTime, BindingResult bindingResult);
+    BindingResult validateRoom(String room, BindingResult bindingResult);
 }
