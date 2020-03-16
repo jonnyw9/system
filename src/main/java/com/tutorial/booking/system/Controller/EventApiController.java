@@ -1,7 +1,9 @@
 package com.tutorial.booking.system.Controller;
 
 
+import com.tutorial.booking.system.Service.EventService;
 import com.tutorial.booking.system.Service.EventServiceImpl;
+import com.tutorial.booking.system.Service.UserService;
 import com.tutorial.booking.system.Service.UserServiceImpl;
 import com.tutorial.booking.system.dto.EventApiEntity;
 import com.tutorial.booking.system.model.Event;
@@ -22,10 +24,10 @@ import java.util.List;
 public class EventApiController {
 
     @Autowired
-    private EventServiceImpl eventService;
+    private EventService eventService;
 
     @Autowired
-    private UserServiceImpl userService;
+    private UserService userService;
 
 
     @GetMapping("getall/{id}")

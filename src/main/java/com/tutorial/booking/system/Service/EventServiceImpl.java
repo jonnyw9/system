@@ -32,7 +32,7 @@ public class EventServiceImpl implements EventService{
     UserServiceImpl userService;
 
     @Autowired
-    NotificationServiceImpl notificationService;
+    NotificationService notificationService;
 
     @Override
     public void add(EventDto eventDto, UserDto userDto, Boolean recurring) throws ParseException {
