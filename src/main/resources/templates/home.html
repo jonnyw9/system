@@ -32,28 +32,36 @@
     let isHome = true;
 </script>
 <div class="container-fluid">
-<h1 th:text="'Welcome ' + ${user.getFirstName()} + '!'"></h1>
-<ul>
-    <li><a href="/user/view">Account Details</a></li>
-    <!-- Here logout and go home -->
-    <li><a href="/logout">Logout</a></li>
-</ul>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <ul class="navbar-nav mr-auto">
+            <li class="navbar-brand">Booking System</li>
+            <li class="nav-item">
+                <a class="nav-link" href="/user/view">Account Details</a>
+            </li>
+            <!-- Here logout and go home -->
+            <li class="nav-item">
+                <a class="nav-link" href="/logout">Logout</a>
+            </li>
+            <li class="nav-item">
+                <a th:if="${unreadNotifications != 0}" th:text="${unreadNotifications + ' unread notification(s)'}" class="nav-link" th:href="@{'/notifications/'}"></a>
+                <a th:unless="${unreadNotifications != 0}" class="nav-link" th:href="@{'/notifications/'}">View Notifications</a>
+            </li>
+        </ul>
 
-<section id="user">
+        <section id="user">
+            <div th:if="${user.student}" class="search">
+                <h2>Search Staff</h2>
+                <form th:object="${name}" th:action="@{/search}" method="get" class="form-inline my-2 my-lg-0">
+                    <input type="text" name="name" id="name" th:value="${name}" class="form-control mr-sm-2"/>
+                    <input type="submit" value="Search" class="btn btn-secondary my-2 my-sm-0"/>
+                </form>
+            </div>
+        </section>
+    </nav>
+
+    <h1 th:text="'Welcome ' + ${user.getFirstName()} + '!'"></h1>
     <p th:if="${param.notYourNotif}">Not your notification(s)</p>
 
-    <h3 th:if="${unreadNotifications != 0}" th:text="${'You have ' + unreadNotifications + ' unread notifications'}"></h3>
-    <button><a th:href="@{'/notifications/'}">View Notifications</a></button>
-
-    <div th:if="${user.student}" class="search">
-        <h2>Search for the name of the staff member you wish to book!</h2>
-        <form th:object="${name}" th:action="@{/search}" method="get">
-            <input type="text" name="name" id="name" th:value="${name}" />
-            <input type="submit" value="Search" />
-        </form>
-        <button><a href="/search">View all staff</a></button>
-    </div>
-</section>
 <section id="events">
     <h2 th:if="${param.notYourEvent}">The event is none of you business!</h2>
     <h2 th:if="${param.cancel}">Event Successfully Cancelled/Declined!</h2>
