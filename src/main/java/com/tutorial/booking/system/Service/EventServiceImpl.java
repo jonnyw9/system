@@ -29,7 +29,7 @@ public class EventServiceImpl implements EventService{
     EventRepository eventRepository;
 
     @Autowired
-    UserServiceImpl userService;
+    UserService userService;
 
     @Autowired
     NotificationService notificationService;
