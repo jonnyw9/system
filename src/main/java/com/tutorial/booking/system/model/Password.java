@@ -16,6 +16,14 @@ public class Password implements Serializable {
 
     private String password;
 
+    public Password() {
+    }
+
+    public Password(int passwordId, String password){
+        this.passwordId = passwordId;
+        this.password = password;
+    }
+
     public int getPasswordId() {
         return passwordId;
     }

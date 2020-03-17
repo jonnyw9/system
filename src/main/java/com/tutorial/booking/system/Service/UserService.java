@@ -28,7 +28,8 @@ public interface UserService {
 
     /**
      * <p>Simple method which creates a UserDto {@link com.tutorial.booking.system.dto.UserDto} from an email provided.
-     * It gets the user from the database via the UserRepository {@Link com.tutorial.booking.system.repository.UserRepository}</p>
+     * It gets the user from the database via the UserRepository {@Link com.tutorial.booking.system.repository.UserRepository}.
+     * This method is used for the purposes of authentication during the runtime of the system.</p>
      * @param email the email of the user to get from the repository
      * @return a userDto created from the user return from the repository
      */
@@ -53,10 +54,15 @@ public interface UserService {
      * based on the details in the UserDto provided.</p>
      * @param userDto the Validated UserDto with the details of the user which is about the be created
      */
-    void saveNewUser(UserDto userDto);
+    User saveNewUser(UserDto userDto);
 
-
-    void updateDetails(UserDto userDto, String edit);
+    /**
+     * <p>A method which takes a UserDto {@link com.tutorial.booking.system.dto.UserDto} with some new information on
+     * and saves it to the database. It will take the type of edit which is to be made and edit that particular field.</p>
+     * @param userDto The data transfer object with the specific changed on it.
+     * @param edit The type of edit the user wished to do.
+     */
+    User updateDetails(UserDto userDto, String edit);
 
 
     void deleteUserAccount(int id);

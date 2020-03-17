@@ -4,6 +4,7 @@ import com.tutorial.booking.system.model.User;
 import org.springframework.security.core.parameters.P;
 
 import javax.validation.constraints.*;
+import java.util.Objects;
 
 public class UserDto {
 
@@ -170,5 +171,29 @@ public class UserDto {
                 ", startTime='" + startTime + '\'' +
                 ", endTime='" + endTime + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof UserDto)) return false;
+        UserDto userDto = (UserDto) o;
+        return getUserId() == userDto.getUserId() &&
+                isStudent() == userDto.isStudent() &&
+                isStaff() == userDto.isStaff() &&
+                Objects.equals(getFirstName(), userDto.getFirstName()) &&
+                Objects.equals(getLastName(), userDto.getLastName()) &&
+                Objects.equals(getEmail(), userDto.getEmail()) &&
+                Objects.equals(getPassword(), userDto.getPassword()) &&
+                Objects.equals(getConfirmPassword(), userDto.getConfirmPassword()) &&
+                Objects.equals(getRoom(), userDto.getRoom()) &&
+                Objects.equals(getStudentNumber(), userDto.getStudentNumber()) &&
+                Objects.equals(getStartTime(), userDto.getStartTime()) &&
+                Objects.equals(getEndTime(), userDto.getEndTime());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getUserId(), getFirstName(), getLastName(), getEmail(), getPassword(), getConfirmPassword(), isStudent(), isStaff(), getRoom(), getStudentNumber(), getStartTime(), getEndTime());
     }
 }

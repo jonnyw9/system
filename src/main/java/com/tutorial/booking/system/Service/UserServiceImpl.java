@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService{
     EventRepository eventRepository;
 
     @Autowired
-    EventServiceImpl eventService;
+    EventService eventService;
 
     @Autowired
     PasswordRepository passwordRepository;
@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService{
     CalendarRepository calendarRepository;
 
     @Autowired
-    NotificationServiceImpl notificationService;
+    NotificationService notificationService;
 
     @Override
     public UserDto getUserByUserName(String email){
@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void saveNewUser(UserDto userDto){
+    public User saveNewUser(UserDto userDto){
         //Create a new user and add the details from the UserDto
         User user = new User();
         user.setEmail(userDto.getEmail());
@@ -119,15 +119,20 @@ public class UserServiceImpl implements UserService{
         }
 
         //Save the user via the repository
-        userRepository.save(user);
+
         //Notify the user their account has been created.
         notificationService.accountCreated(user);
+        return userRepository.save(user);
     }
+
     @Override
-    public void updateDetails(UserDto userDto, String edit){
+    public User updateDetails(UserDto userDto, String edit){
+        //Get the existing User by ID
         User user = getUserById(userDto.getUserId());
+        //Switch for the type of edit the user wished to do.
         switch (edit) {
             case "name":
+                //Do a check on the name and update the field.
                 if(userDto.getFirstName() != null){
                     user.setFirstName(userDto.getFirstName());
                 }
@@ -135,44 +140,48 @@ public class UserServiceImpl implements UserService{
                     user.setLastName(userDto.getLastName());
                 }
 
-                userRepository.save(user);
-
                 break;
             case "email":
+                //Checks on email and update field
                 if(userDto.getEmail() != null){
                     user.setEmail(userDto.getEmail());
                 }
 
-                userRepository.save(user);
-
                 break;
             case "password":
+                //Bit of validation on the password
                 if(userDto.getPassword() != null && userDto.getConfirmPassword() != null
                         && userDto.getPassword().equals(userDto.getConfirmPassword())){
+                    //Get the password entity from the database
                     Password password = passwordRepository.getOne(user.getPassword().getPasswordId());
 
+                    //Encode the password
                     BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
                     password.setPassword(passwordEncoder.encode(userDto.getPassword()));
-
+                    //Save the password
                     passwordRepository.save(password);
+                    //Notify the user
                     notificationService.passwordChanged(user);
                 }
                 break;
             case "room":
+                //Get a staff member
                 Staff staff = staffRepository.getOne(user.getStaffId().getStaffId());
+                //Update the room and save it.
                 staff.setRoom(userDto.getRoom());
                 staffRepository.save(staff);
-                return;
+                break;
             case "times":
                 Calendar calendar = calendarRepository.getOne(user.getCalendarId().getCalendarId());
                 calendar.setDayStartTime(parseFormTime(userDto.getStartTime()));
                 calendar.setDayEndTime(parseFormTime(userDto.getEndTime()));
                 calendarRepository.save(calendar);
-                return;
+                break;
         }
-
-        userRepository.save(user);
+        //Save the updated user to the repository and return it
+        return userRepository.save(user);
     }
+
     @Override
     public void deleteUserAccount(int id){
 
@@ -223,10 +232,12 @@ public class UserServiceImpl implements UserService{
         //Finally delete the user
         userRepository.delete(user);
     }
+
     @Override
     public List<User> listUserByName(String name){
         return userRepository.findStaffByName(name);
     }
+
     @Override
     public Time parseFormTime(String time){
         System.out.println(time);
@@ -238,6 +249,7 @@ public class UserServiceImpl implements UserService{
         }
         return time1;
     }
+
     @Override
     public UserDto makeUserDto(Authentication authentication){
         System.out.println(authentication.getName());

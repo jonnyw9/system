@@ -308,11 +308,11 @@ public class EventServiceImpl implements EventService{
         return eventsReturned;
     }
     @Override
-    @Scheduled(fixedRate = 150000)
+    @Scheduled(fixedRate = 120000)
     public void CheckUpcomingEvents(){
         //Check events that are in 30 mins
-        Timestamp timestamp1 = Timestamp.valueOf(LocalDateTime.now().plusMinutes(28));
-        Timestamp timestamp2 = Timestamp.valueOf(LocalDateTime.now().plusMinutes(32));
+        Timestamp timestamp1 = Timestamp.valueOf(LocalDateTime.now().plusMinutes(29));
+        Timestamp timestamp2 = Timestamp.valueOf(LocalDateTime.now().plusMinutes(31));
         List<Event> events = eventRepository.findAllByEventStartInXMins(timestamp1, timestamp2);
         notifyUsersOfUpcomingEvents(events, "30 Minutes");
 
