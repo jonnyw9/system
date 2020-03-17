@@ -40,8 +40,8 @@ public class User {
     public User() {
     }
 
-    /**
-    public User(int userId, String email, String firstName, String lastName, Password password, boolean active, Roles roleId) {
+    public User(int userId, String email, String firstName, String lastName, Password password, boolean active, Roles roleId,
+                Calendar calendarId, Staff staffId, Student studentId) {
         this.userId = userId;
         this.email = email;
         this.firstName = firstName;
@@ -49,9 +49,11 @@ public class User {
         this.password = password;
         this.active = active;
         this.roleId = roleId;
+        this.calendarId = calendarId;
+        this.staffId = staffId;
+        this.studentId = studentId;
     }
 
-     **/
     public int getUserId() {
         return userId;
     }

@@ -28,7 +28,8 @@ public interface UserService {
 
     /**
      * <p>Simple method which creates a UserDto {@link com.tutorial.booking.system.dto.UserDto} from an email provided.
-     * It gets the user from the database via the UserRepository {@Link com.tutorial.booking.system.repository.UserRepository}</p>
+     * It gets the user from the database via the UserRepository {@Link com.tutorial.booking.system.repository.UserRepository}.
+     * This method is used for the purposes of authentication during the runtime of the system.</p>
      * @param email the email of the user to get from the repository
      * @return a userDto created from the user return from the repository
      */

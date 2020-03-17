@@ -18,7 +18,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     List<User> findAllByStaffIdIsNotNull();
 
-
     @Query("select u from User u where   u.lastName like %?1% and u.staffId is not null or u.firstName like %?1% and u.staffId is not null or concat(u.firstName, ' ', u.lastName)  like %?1% and u.staffId is not null")
     List<User> findStaffByName(String name);
 
