@@ -2,6 +2,7 @@ package com.tutorial.booking.system.model;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "bs_user")
@@ -132,5 +133,27 @@ public class User {
 
     public void setCalendarId(Calendar calendarId) {
         this.calendarId = calendarId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        User user = (User) o;
+        return
+                isActive() == user.isActive() &&
+                Objects.equals(getFirstName(), user.getFirstName()) &&
+                Objects.equals(getEmail(), user.getEmail()) &&
+                Objects.equals(getLastName(), user.getLastName()) &&
+                Objects.equals(getPassword(), user.getPassword()) &&
+                Objects.equals(getRoleId(), user.getRoleId()) &&
+                Objects.equals(getStaffId(), user.getStaffId()) &&
+                Objects.equals(getStudentId(), user.getStudentId()) &&
+                Objects.equals(getCalendarId(), user.getCalendarId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getUserId(), getFirstName(), getEmail(), getLastName(), getPassword(), isActive(), getRoleId(), getStaffId(), getStudentId(), getCalendarId());
     }
 }
