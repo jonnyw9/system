@@ -13,6 +13,16 @@ public class Roles {
     private boolean student;
     private boolean admin;
 
+    public Roles() {
+    }
+
+    public Roles(int roleId, boolean staff, boolean student, boolean admin) {
+        this.roleId = roleId;
+        this.staff = staff;
+        this.student = student;
+        this.admin = admin;
+    }
+
     public int getRoleId() {
         return roleId;
     }
