@@ -34,7 +34,6 @@ public class Event {
 
     public Event(){}
 
-    //Add date stuff
     public Event(int eventId, Timestamp eventStart, Timestamp eventEnd, String title, String description,
                  User creatorUserId, User recipientUserId, String location){
 

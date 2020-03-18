@@ -35,32 +35,33 @@ public class EventServiceImpl implements EventService{
     NotificationService notificationService;
 
     @Override
-    public void add(EventDto eventDto, UserDto userDto, Boolean recurring) throws ParseException {
-
+    public Event add(EventDto eventDto, UserDto userDto){
+        //Convert the string time from the eventDto to the required Timestamp
         ArrayList<Timestamp> timestamps = convertStringToTimeStamp(eventDto);
 
+        //Created the event object
         Event event = new Event(eventDto.getEventId(), timestamps.get(0), timestamps.get(1), eventDto.getTitle(),
                 eventDto.getDescription(), eventDto.getCreatorUserId(), eventDto.getRecipientUserId(),
                 eventDto.getLocation());
 
+        //If the user is booking themselves automatically accept the event.
         if(userDto.getUserId() == event.getRecipientUserId().getUserId()){
             event.setAccepted(true);
         }
 
-        this.eventRepository.save(event);
-
-        if(!recurring){
-            notificationService.eventAddedCreator(event);
-        }
-
-        if(event.getCreatorUserId().getUserId() != event.getRecipientUserId().getUserId()){
-            notificationService.eventAddedRecipient(event);
-        }
+        //Return the saved event.
+        return eventRepository.save(event);
     }
     @Override
-    public void addRecurring(EventDto eventDto, UserDto userDto) throws ParseException{
+    public List<Event> addRecurring(EventDto eventDto, UserDto userDto){
+        //Create a list of the events that will be made.
+        List<Event> events = new ArrayList<>();
+        //For the specified recurring length
         for (int i = 0; i < eventDto.getRecurringLength(); i++) {
-            this.add(eventDto, userDto, true);
+            //Add the event
+            Event event = add(eventDto, userDto);
+            events.add(event);
+            //Move the next event to be added forward by one week.
             LocalDateTime start = LocalDateTime.parse(eventDto.getEventStart());
             LocalDateTime end = LocalDateTime.parse(eventDto.getEventEnd());
 
@@ -70,53 +71,41 @@ public class EventServiceImpl implements EventService{
             eventDto.setEventStart(start.toString());
             eventDto.setEventEnd(end.toString());
         }
-        notificationService.eventRecurringAdded(userService.getUserById(userDto.getUserId()));
+        return events;
     }
     @Override
     public List<Event> getEventsForUser(int userId){
 
-        //Get List
+        //Get List of events that the user has created.
         List<Event> events = eventRepository.findByCreatorUserId(userService.getUserById(userId));
-
-        for (int i = 0; i < events.size() ; i++) {
-            System.out.println("CREATED:   " + events.get(i).toString());
-        }
-
-
-
+        //Get List of events that the user has received.
         List<Event> eventsReceived = eventRepository.findByRecipientUserId(userService.getUserById(userId));
-
-        for (int i = 0; i < eventsReceived.size() ; i++) {
-            System.out.println(eventsReceived.get(i).toString());
-        }
-
-
-
+        //If the received List not is empty
         if(!eventsReceived.isEmpty()){
+            //For look through the received events
             for(int i = 0; i < eventsReceived.size(); i++){
+                //If the created events not is empty
                 if(!events.isEmpty()){
                     boolean addable = true;
+                    //Go through the created events
                     for (int j = 0; j < events.size() ; j++) {
+                        //If the recieved event is the same as the created one
                         if(events.get(j).getEventId() == eventsReceived.get(i).getEventId()){
-                            System.out.println(events.get(j).getEventId() + " " + eventsReceived.get(i).getEventId());
+                            //Make sure it isn't addable
                             addable = false;
+                            break;
                         }
                     }
+                    //If if is addable add it
                     if(addable){
                         events.add(eventsReceived.get(i));
                     }
                 }else{
+                    //If there is no created events return the received events
                     return eventsReceived;
                 }
-
             }
         }
-
-        for (int i = 0; i < events.size(); i++) {
-            System.out.println("FULL LIST:   " + events.get(i).toString());
-        }
-       // events.
-
         //This will return a List of events
         return events;
     }
@@ -128,7 +117,7 @@ public class EventServiceImpl implements EventService{
         return optionalEvent.orElse(null);
     }
     @Override
-    public String changeTimestapToString(Timestamp time){
+    public String changeTimestampToString(Timestamp time){
         String returnTime = time.toString().substring(0,16);
 
         returnTime = returnTime.replace(' ', 'T');

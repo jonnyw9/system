@@ -2,8 +2,7 @@ package com.tutorial.booking.system.Controller;
 
 
 import com.tutorial.booking.system.Constraint.EventValidation;
-import com.tutorial.booking.system.Service.EventServiceImpl;
-import com.tutorial.booking.system.Service.UserServiceImpl;
+import com.tutorial.booking.system.Service.*;
 import com.tutorial.booking.system.dto.EventDto;
 import com.tutorial.booking.system.dto.UserDto;
 import com.tutorial.booking.system.model.Event;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.text.ParseException;
 import java.time.LocalDateTime;
 
 @Controller
@@ -29,10 +27,14 @@ public class EventController {
     private final String userTemplatePrefix = "event/";
 
     @Autowired
-    UserServiceImpl userService;
+    UserService userService;
 
     @Autowired
-    EventServiceImpl eventService;
+    EventService eventService;
+
+    @Autowired
+    NotificationService notificationService;
+
 
     @Autowired
     EventValidation eventValidation;
@@ -79,7 +81,7 @@ public class EventController {
 
     @PostMapping("add")
     public String addEvent(@ModelAttribute("event") @Valid EventDto event, BindingResult bindingResult,
-                           RedirectAttributes redirectAttributes) throws ParseException {
+                           RedirectAttributes redirectAttributes) {
 
         bindingResult = eventValidation.validate(event, bindingResult);
 
@@ -93,8 +95,13 @@ public class EventController {
         }
         if(event.getRecurringLength() != null){
             eventService.addRecurring(event, user);
+            notificationService.eventRecurringAdded(userService.getUserById(user.getUserId()));
         } else{
-            eventService.add(event, user, false);
+            Event event1 = eventService.add(event, user);
+            notificationService.eventAddedCreator(event1);
+            if(event.getCreatorUserId().getUserId() != event.getRecipientUserId().getUserId()){
+                notificationService.eventAddedRecipient(event1);
+            }
         }
         //Redirect to the homepage
         return "redirect:/home";
@@ -136,9 +143,9 @@ public class EventController {
         if(!model.containsAttribute("event")){
             EventDto eventDto = new EventDto(event);
 
-            eventDto.setEventStart(eventService.changeTimestapToString(event.getEventStart()));
+            eventDto.setEventStart(eventService.changeTimestampToString(event.getEventStart()));
 
-            eventDto.setEventEnd(eventService.changeTimestapToString(event.getEventEnd()));
+            eventDto.setEventEnd(eventService.changeTimestampToString(event.getEventEnd()));
 
             System.out.println("Start: " + eventDto.getEventStart() + " || End: " + eventDto.getEventEnd());
 

@@ -20,8 +20,8 @@ import java.util.List;
  * This class also acts as a buffer between the repository and the controllers so that certain pieces of logic can be
  * performed.</p>
  *
- * @Author Jonathan Watt
- * @Version 1.0.0
+ * @author  Jonathan Watt
+ * @version 1.0.0
  */
 @Service
 public interface UserService {
