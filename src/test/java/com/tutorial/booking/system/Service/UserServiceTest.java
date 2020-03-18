@@ -4,10 +4,7 @@
 
 package com.tutorial.booking.system.Service;
 
-import com.tutorial.booking.system.Repository.CalendarRepository;
-import com.tutorial.booking.system.Repository.PasswordRepository;
-import com.tutorial.booking.system.Repository.StaffRepository;
-import com.tutorial.booking.system.Repository.UserRepository;
+import com.tutorial.booking.system.Repository.*;
 import com.tutorial.booking.system.dto.UserDto;
 import com.tutorial.booking.system.model.*;
 import org.junit.Before;
@@ -19,17 +16,17 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import java.sql.Time;
 import java.util.Optional;
 
-import static org.assertj.core.internal.bytebuddy.matcher.ElementMatchers.is;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 
@@ -50,15 +47,17 @@ class UserServiceTest {
     private static Staff s2;
     private static Calendar c1;
     private static Calendar c2;
-
-    @Mock
-    UserRepository userRepository;
+    private static Roles r1;
+    private static List<Event> events;
 
     @InjectMocks
     UserService userService = new UserServiceImpl();
 
     @Mock
     NotificationService notificationService = new NotificationServiceImpl();
+
+    @Mock
+    UserRepository userRepository;
 
     @Mock
     CalendarRepository calendarRepository;
@@ -68,6 +67,18 @@ class UserServiceTest {
 
     @Mock
     StaffRepository staffRepository;
+
+    @Mock
+    EventRepository eventRepository;
+
+    @Mock
+    RolesRepository rolesRepository;
+
+    @Mock
+    StudentRepository studentRepository;
+
+    @Mock
+    EventService eventService = new EventServiceImpl();
 
     @Before
     public void setup(){
@@ -83,10 +94,11 @@ class UserServiceTest {
         s2 = new Staff(1000000, "testRoom2");
         st1 = new Student(10000, "123");
         Student st2 = new Student(10000, "1234");
+        r1 = new Roles(1100, true, true, false);
         c1 = new Calendar(1000000, Time.valueOf("09:00:00"), Time.valueOf("17:00:00"));
         c2 = new Calendar(1000000, Time.valueOf("08:00:00"), Time.valueOf("16:00:00"));
         u1 = new User(10000, "test@test.co.uk", "test", "testl", p1,
-                true, new Roles(), c1, s1, st1);
+                true, r1, c1, s1, st1);
         u2 = new User(10000, "test@test.com", "test1", "testl1", p2,
                 true, new Roles(), c2, s2, st2);
         udto1 = new UserDto(u1);
@@ -98,11 +110,17 @@ class UserServiceTest {
         udto2 = new UserDto(u2);
         udto2.setPassword("password1");
         udto2.setConfirmPassword("password1");
+
+        events = new ArrayList<>();
+        events.add(new Event());
+
     }
 
 
     @Test
     void getUserByUserName() {
+        udto2.setConfirmPassword(null);
+        udto2.setPassword(null);
         Mockito.when(userRepository.findByEmail("test@test.com")).thenReturn(Optional.of(u2));
         assertEquals(userService.getUserByUserName("test@test.com"), udto2);
         assertNotNull(userService.getUserByUserName("test@test.com"));
@@ -132,7 +150,6 @@ class UserServiceTest {
         udto1.setStaff(true);
         udto1.setStudent(true);
         udto1.setStudentNumber("123");
-        udto2 = new UserDto(u2);
         assertEquals(userService.saveNewUser(udto1), u1);
         udto1.setStaff(true);
         udto1.setStudent(false);
@@ -174,6 +191,9 @@ class UserServiceTest {
 
         assertEquals(userService.updateDetails(udto2, "email").getEmail(), u2.getEmail());
 
+        udto2.setConfirmPassword("password1");
+        udto2.setPassword("password1");
+
         assertTrue(bCryptPasswordEncoder.matches("password1",
                 userService.updateDetails(udto2, "password").getPassword().getPassword()));
 
@@ -188,17 +208,39 @@ class UserServiceTest {
 
     @Test
     void deleteUserAccount() {
+        Mockito.when(userRepository.getOne(10000)).thenReturn(u1);
+        Mockito.when(passwordRepository.getOne(u1.getPassword().getPasswordId())).thenReturn(p1);
+        Mockito.when(calendarRepository.getOne(u1.getCalendarId().getCalendarId())).thenReturn(c1);
+        Mockito.when(eventRepository.findByCreatorUserId(u1)).thenReturn(events);
+        Mockito.when(eventRepository.findByRecipientUserId(u1)).thenReturn(events);
+        Mockito.when(rolesRepository.getOne(u1.getRoleId().getRoleId())).thenReturn(r1);
+        userService.deleteUserAccount(10000);
+        Mockito.verify(userRepository, Mockito.times(1)).delete(u1);
+        Mockito.verify(passwordRepository, Mockito.times(1)).delete(p1);
+        Mockito.verify(staffRepository, Mockito.times(1)).delete(s1);
+        Mockito.verify(calendarRepository, Mockito.times(1)).delete(c1);
+        Mockito.verify(studentRepository, Mockito.times(1)).delete(st1);
+        Mockito.verify(eventRepository, Mockito.atLeast(0)).delete(any(Event.class));
     }
 
     @Test
     void listUserByName() {
+        List<User> users = new ArrayList<>();
+        users.add(u1);
+        users.add(u2);
+        Mockito.when(userRepository.findStaffByName("_")).thenReturn(users);
+        assertEquals(userService.listUserByName("_"), users);
+        users.remove(u2);
+        Mockito.when(userRepository.findStaffByName("test")).thenReturn(users);
+        assertEquals(userService.listUserByName("test"), users);
+        Mockito.verify(userRepository, Mockito.times(2)).findStaffByName(any(String.class));
     }
 
     @Test
     void parseFormTime() {
-    }
-
-    @Test
-    void makeUserDto() {
+        Time time = c1.getDayStartTime();
+        Time time1 = c1.getDayEndTime();
+        assertEquals(userService.parseFormTime("09:00"), time);
+        assertEquals(userService.parseFormTime("17:00"), time1);
     }
 }

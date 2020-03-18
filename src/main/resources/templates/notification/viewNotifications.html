@@ -20,6 +20,7 @@
             <td th:text="${notification.getCreatedOn().toLocaleString()}"></td>
             <td th:text="${notification.getTitle()}"></td>
             <td><a th:href="@{'/notifications/view/' + ${notification.getNotificationId()}}">View</a></td>
+            <td th:if="${not notification.isSeen()}">*</td>
         </tr>
     </tbody>
 </table>

@@ -20,8 +20,8 @@ import java.util.List;
  * This class also acts as a buffer between the repository and the controllers so that certain pieces of logic can be
  * performed.</p>
  *
- * @Author Jonathan Watt
- * @Version 1.0.0
+ * @author  Jonathan Watt
+ * @version 1.0.0
  */
 @Service
 public interface UserService {
@@ -53,6 +53,7 @@ public interface UserService {
      * <p>A method which takes a UserDto {@link com.tutorial.booking.system.dto.UserDto} and creates a new User entity
      * based on the details in the UserDto provided.</p>
      * @param userDto the Validated UserDto with the details of the user which is about the be created
+     * @return the user which has been created. For testing purposes only
      */
     User saveNewUser(UserDto userDto);
 
@@ -61,18 +62,36 @@ public interface UserService {
      * and saves it to the database. It will take the type of edit which is to be made and edit that particular field.</p>
      * @param userDto The data transfer object with the specific changed on it.
      * @param edit The type of edit the user wished to do.
+     * @return the user which has been saved. For testing purposes only.
      */
     User updateDetails(UserDto userDto, String edit);
 
-
+    /**
+     * <p>A method which deletes the user specified and all the entities which are linked to that user.</p>
+     * @param id the ID of the user wished to be deleted.
+     */
     void deleteUserAccount(int id);
 
 
+    /**
+     * <p>List a number of users based on a string. Used in the search staff function</p>
+     * @param name the name of the staff member the user wishes to get.
+     * @return The list return by the repository.
+     */
     List<User> listUserByName(String name);
 
-
+    /**
+     * <p>Parses the time from the user dto into a java.sql.time object to be stored in the database</p>
+     * @param time the time that is wished to be parsed.
+     * @return the Time object that has been made from the String passed in
+     */
     Time parseFormTime(String time);
 
-
+    /**
+     * <p>Creates a UserDto {@link com.tutorial.booking.system.dto.UserDto} from the authenticated user using the
+     * system.</p>
+     * @param authentication the authenticated user.
+     * @return The userDto for that user
+     */
     UserDto makeUserDto(Authentication authentication);
 }

@@ -51,8 +51,6 @@ public class EventDto {
     public EventDto(int eventId, String eventStart, String eventEnd, String title, String description, boolean accepted,
                     User creatorUserId, User recipientUserId, String location) {
         this.eventId = eventId;
-        this.eventStart = eventStart;
-        this.eventEnd = eventEnd;
         this.title = title;
         this.description = description;
         this.accepted = accepted;

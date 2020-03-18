@@ -304,4 +304,9 @@ public class NotificationServiceImpl implements NotificationService {
         }
 
     }
+
+    @Override
+    public void deleteNotification(Notification notification){
+        notificationRepository.delete(notification);
+    }
 }

@@ -228,6 +228,12 @@ public class UserServiceImpl implements UserService{
         }
 
 
+        //Get and delete all Notifications
+        List<Notification> notifications = notificationService.getUserNotifications(user.getUserId());
+
+        for(Notification notification: notifications){
+            notificationService.deleteNotification(notification);
+        }
 
         //Finally delete the user
         userRepository.delete(user);
@@ -235,18 +241,21 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public List<User> listUserByName(String name){
+        //Return what is found from the repository.
         return userRepository.findStaffByName(name);
     }
 
     @Override
     public Time parseFormTime(String time){
-        System.out.println(time);
+        //Makes a time object
         Time time1 = null;
         try{
+            //Parses that String into the time object
             time1 = Time.valueOf(time + ":00");
         }catch(Exception e){
             e.printStackTrace();
         }
+        //Returns it
         return time1;
     }
 
