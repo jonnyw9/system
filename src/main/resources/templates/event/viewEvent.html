@@ -19,7 +19,9 @@
     <div id="accepted"><p th:text="${'Has been accepted: ' + event.accepted}"></p></div>
 
     <button><a th:href="@{'/event/edit/' + ${event.eventId}}">Edit Event</a></button>
-    <button><a th:href="@{'/event/cancel/' + ${event.eventId}}">Cancel or Decline Event</a></button>
+    <button onclick="return confirm('Are you sure you would like to delete/cancel this event?');">
+        <a th:href="@{'/event/cancel/' + ${event.eventId}}">Cancel or Decline Event</a>
+    </button>
 
     <button th:if="${receive and !event.accepted}"><a th:href="@{'/event/accept/' + ${event.eventId}}">Accept</a></button>
 

@@ -227,6 +227,8 @@ public class UserServiceImpl implements UserService{
             studentRepository.delete(user.getStudentId());
         }
 
+
+        //Get and delete all Notifications
         List<Notification> notifications = notificationService.getUserNotifications(user.getUserId());
 
         for(Notification notification: notifications){
