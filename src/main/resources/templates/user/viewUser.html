@@ -38,7 +38,11 @@
                 <td><button><a href="/user/edit/password">Edit Password</a></button></td>
             </tr>
             <tr id="delete">
-                <td><button><a href="/user/edit/delete">Delete Account</a></button></td>
+                <td>
+                    <button onclick="return confirm('Are you sure you would like to delete your account?');">
+                        <a href="/user/edit/delete">Delete Account</a>
+                    </button>
+                </td>
             </tr>
             <tr>
                 <td><button><a href="/home">Home</a></button></td>
