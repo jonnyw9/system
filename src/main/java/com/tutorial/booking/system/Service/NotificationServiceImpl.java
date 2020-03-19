@@ -309,4 +309,18 @@ public class NotificationServiceImpl implements NotificationService {
     public void deleteNotification(Notification notification){
         notificationRepository.delete(notification);
     }
+
+    @Override
+    public int noUnreadNotifications(UserDto userDto) {
+        List<Notification> notifications = getUserNotifications(userDto.getUserId());
+
+        int unreadNotifications = 0;
+
+        for (int i = 0; i < notifications.size() ; i++) {
+            if(!notifications.get(i).isSeen()){
+                unreadNotifications++;
+            }
+        }
+        return unreadNotifications;
+    }
 }

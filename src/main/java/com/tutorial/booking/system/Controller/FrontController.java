@@ -97,17 +97,7 @@ public class FrontController {
 
         model.addAttribute("name", name);
 
-        List<Notification> notifications = notificationService.getUserNotifications(userId);
-
-        int unreadNotifications = 0;
-
-        for (int i = 0; i < notifications.size() ; i++) {
-            if(!notifications.get(i).isSeen()){
-                unreadNotifications++;
-            }
-        }
-
-        model.addAttribute("unreadNotifications", unreadNotifications);
+        model.addAttribute("unreadNotifications", notificationService.noUnreadNotifications(user));
 
         return "home";
     }
