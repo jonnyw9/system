@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href='fullcalendar/core/main.css' rel='stylesheet' />
     <link href='fullcalendar/daygrid/main.css' rel='stylesheet' />
     <link href='fullcalendar/timegrid/main.css' rel='stylesheet' />
@@ -69,8 +69,8 @@
     <p th:if="${param.notYourNotif}">Not your notification(s)</p>
 
 <section id="events">
-    <section class="text-center">
-        <h2>Your Calendar</h2>
+    <section>
+        <h2 class="text-center">Your Calendar</h2>
         <div id="calendar"></div>
     </section>
 </section>

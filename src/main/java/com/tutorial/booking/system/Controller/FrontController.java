@@ -106,7 +106,12 @@ public class FrontController {
                               Model model,
                               Authentication authentication){
 
-        UserDto user = userService.makeUserDto(authentication);
+        user =  userService.makeUserDto(authentication);
+
+        model.addAttribute("unreadNotifications", notificationService.noUnreadNotifications(user));
+
+        model.addAttribute("user", user);
+
         model.addAttribute("name", "");
         try{
             String nameReplace;
@@ -208,8 +213,18 @@ public class FrontController {
     */
 
     @GetMapping("staff/times/{id}")
-    private String getStaffTime(@PathVariable("id") int id, Model model){
+    private String getStaffTime(@PathVariable("id") int id, Model model,
+                                Authentication authentication){
+
+        user =  userService.makeUserDto(authentication);
+
+        model.addAttribute("unreadNotifications", notificationService.noUnreadNotifications(user));
+
+        model.addAttribute("user", user);
+
         User user = userService.getUserById(id);
+
+        model.addAttribute("staffName", user.getFirstName() + " " + user.getLastName());
         String dayStart =
                 Objects.requireNonNull(calendarRepository.findById(user.getCalendarId().
                         getCalendarId()).orElse(null)).getDayStartTime().toLocalTime().toString();
