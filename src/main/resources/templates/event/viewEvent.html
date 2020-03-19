@@ -2,30 +2,89 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>View Event</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <title>Booking System</title>
 </head>
 <body>
-<h1>View Event</h1>
-<section id="eventDetails">
-    <p th:if="${param.accepted}">Event Accepted!</p>
-    <p th:if="${param.updated}">Event Updated!</p>
-    <h2 th:text="${'Title: ' + event.title}"></h2>
-    <div id="eventStart"><p th:text="${'Start: ' + event.eventStart}"></p></div>
-    <div id="eventEnd"><p th:text="${'End: ' + event.eventEnd}"></p></div>
-    <div id="description"><p th:text="${'Description: ' + event.description}"></p></div>
-    <div id="location"><p th:text="${'Location: ' + event.location}"></p></div>
-    <div id="creator"><p th:text="${'Creator: ' + event.creatorUserId.getFirstName()} +' '+ ${event.creatorUserId.getLastName()}"></p></div>
-    <div id="recipient"><p th:text="${'Recipient: ' + event.recipientUserId.getFirstName()} +' '+ ${event.recipientUserId.getLastName()}"></p></div>
-    <div id="accepted"><p th:text="${'Has been accepted: ' + event.accepted}"></p></div>
+<div class="container-fluid">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <ul class="navbar-nav mr-auto">
+            <li>
+                <a class="navbar-brand" th:href="@{/home}">Booking System</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/user/view">Account Details</a>
+            </li>
+            <li class="nav-item">
+                <a th:if="${unreadNotifications != 0}" th:text="${unreadNotifications + ' unread notification(s)'}" class="nav-link" th:href="@{'/notifications/'}"></a>
+                <a th:unless="${unreadNotifications != 0}" class="nav-link" th:href="@{'/notifications/'}">View Notifications</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/logout">Logout</a>
+            </li>
+        </ul>
 
-    <button><a th:href="@{'/event/edit/' + ${event.eventId}}">Edit Event</a></button>
-    <button onclick="return confirm('Are you sure you would like to delete/cancel this event?');">
-        <a th:href="@{'/event/cancel/' + ${event.eventId}}">Cancel or Decline Event</a>
-    </button>
-
-    <button th:if="${receive and !event.accepted}"><a th:href="@{'/event/accept/' + ${event.eventId}}">Accept</a></button>
-
-    <button><a th:href="@{'/home'}">Home</a></button>
+        <section id="user">
+            <div th:if="${user.student}" class="search">
+                <h2 class="text-white">Search Staff</h2>
+                <form th:object="${name}" th:action="@{/search}" method="get" class="form-inline my-2 my-lg-0">
+                    <input type="text" name="name" id="name" th:value="${name}" class="form-control mr-sm-2"/>
+                    <input type="submit" value="Search" class="btn btn-secondary my-2 my-sm-0"/>
+                </form>
+            </div>
+        </section>
+    </nav>
+    <div class="masthead text-center">
+        <h2 class="alert-success" th:if="${param.accepted}">Event accepted!</h2>
+    </div>
+<section id="eventDetails" class="container text-center">
+    <h1>View Event</h1>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Start </th>
+                <th>End</th>
+                <th>Description</th>
+                <th>Location</th>
+                <th>Creator</th>
+                <th>Recipient</th>
+                <th>Accepted</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td th:text="${event.title}"></td>
+                <td th:text="${event.eventStart}"></td>
+                <td th:text="${event.eventEnd}"></td>
+                <td th:text="${event.description}"></td>
+                <td th:text="${event.location}"></td>
+                <td th:text="${event.creatorUserId.getFirstName()} +' '+ ${event.creatorUserId.getLastName()}"></td>
+                <td th:text="${event.recipientUserId.getFirstName()} +' '+ ${event.recipientUserId.getLastName()}"></td>
+                <td th:if="${event.accepted}" th:text="Yes"></td>
+                <td th:if="${not event.accepted}" th:text="No"></td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="btn-group">
+        <button class="btn-secondary">
+            <a class="text-white" th:href="@{'/event/edit/' + ${event.eventId}}">Edit Event</a>
+        </button>
+        <button class="btn-danger" onclick="return confirm('Are you sure you would like to delete/cancel this event?');">
+            <a class="text-white" th:href="@{'/event/cancel/' + ${event.eventId}}">Cancel or Decline Event</a>
+        </button>
+        <button class="btn-success" th:if="${receive and !event.accepted}">
+            <a class="text-white" th:href="@{'/event/accept/' + ${event.eventId}}">Accept</a>
+        </button>
+    </div>
 </section>
+</div>
 </body>
 </html>

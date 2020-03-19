@@ -13,37 +13,43 @@
     <title>Login</title>
 </head>
 <body>
-<div class="container">
-    <h1>Please Login</h1>
-    <form name="f" th:action="@{/login}" method="post">
-        <table>
-            <tr th:if="${param.error}">
-                <td>Invalid username and password.</td>
-            </tr>
-            <tr th:if="${param.logout}">
-                <td>You have successfully been logged out.</td>
-            </tr>
-            <tr th:if="${param.registered}">
-                <td>Account has been registered!</td>
-            </tr>
-            <tr th:if="${param.success}">
-                <td>Email or password successfully changed! Please login again with your new details.</td>
-            </tr>
-            <tr>
-                <td id="user-name-label">Email: </td>
-                <td><input type="text" id="username" name="username" /></td>
-            </tr>
-            <tr>
-                <td id="password-label">Password: </td>
-                <td><input type="password" id="password" name="password" /></td>
-            </tr>
-            <tr>
-                <td><input type="submit" name="submit" value="submit"/></td>
-            </tr>
-        </table>
-    </form>
-    <button><a href="/">Home</a></button>
-    <button><a href="/register">Register</a></button>
+<div class="container-fluid">
+    <div class="container">
+        <h1>Please Login</h1>
+        <div class="btn-group">
+            <button class="btn btn-secondary"><a class="text-white" href="/">Home</a></button>
+            <button class="btn btn-secondary"><a class="text-white" href="/register">Register</a></button>
+        </div>
+
+        <form name="f" th:action="@{/login}" method="post">
+            <table>
+                <tr class="form-group" th:if="${param.error}">
+                    <td>Invalid username and password.</td>
+                </tr>
+                <tr class="form-group" th:if="${param.logout}">
+                    <td>You have successfully been logged out.</td>
+                </tr>
+                <tr class="form-group"th:if="${param.registered}">
+                    <td>Account has been registered!</td>
+                </tr>
+                <tr class="form-group" th:if="${param.success}">
+                    <td>Email or password successfully changed! Please login again with your new details.</td>
+                </tr>
+                <tr class="form-group">
+                    <td id="user-name-label"><label for="username" class="col-form-label">Email:</label></td>
+                    <td><input type="text" id="username" name="username" class="form-control"/></td>
+                </tr>
+                <tr class="form-group">
+                    <td id="password-label"><label for="password" class="col-form-label">Password:</label> </td>
+                    <td><input type="password" id="password" name="password" class="form-control" /></td>
+                </tr>
+                <tr class="form-group">
+                    <td><input class="btn btn-primary" type="submit" name="submit" value="submit"/></td>
+                </tr>
+            </table>
+        </form>
+
+    </div>
 </div>
 </body>
 </html>

@@ -34,23 +34,25 @@
 <div class="container-fluid">
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <ul class="navbar-nav mr-auto">
-            <li class="navbar-brand">Booking System</li>
+            <li>
+                <a class="navbar-brand" th:href="@{/home}">Booking System</a>
+            </li>
             <li class="nav-item">
                 <a class="nav-link" href="/user/view">Account Details</a>
-            </li>
-            <!-- Here logout and go home -->
-            <li class="nav-item">
-                <a class="nav-link" href="/logout">Logout</a>
             </li>
             <li class="nav-item">
                 <a th:if="${unreadNotifications != 0}" th:text="${unreadNotifications + ' unread notification(s)'}" class="nav-link" th:href="@{'/notifications/'}"></a>
                 <a th:unless="${unreadNotifications != 0}" class="nav-link" th:href="@{'/notifications/'}">View Notifications</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/logout">Logout</a>
+            </li>
+
         </ul>
 
         <section id="user">
             <div th:if="${user.student}" class="search">
-                <h2 class="searchTitle">Search Staff</h2>
+                <h2 class="text-white">Search Staff</h2>
                 <form th:object="${name}" th:action="@{/search}" method="get" class="form-inline my-2 my-lg-0">
                     <input type="text" name="name" id="name" th:value="${name}" class="form-control mr-sm-2"/>
                     <input type="submit" value="Search" class="btn btn-secondary my-2 my-sm-0"/>
@@ -58,14 +60,16 @@
             </div>
         </section>
     </nav>
-
-    <h1 th:text="'Welcome ' + ${user.getFirstName()} + '!'"></h1>
+    <div class="masthead text-center">
+            <h2 class="alert-warning" th:if="${param.notYourEvent}">The event is none of you business!</h2>
+            <h2 class="alert-success" th:if="${param.cancel}">Event Successfully Cancelled/Declined!</h2>
+            <h2 class="alert-danger" th:if="${param.eventNotFound}">Event not found.</h2>
+        <h1 th:text="'Welcome ' + ${user.getFirstName()} + '!'"></h1>
+    </div>
     <p th:if="${param.notYourNotif}">Not your notification(s)</p>
 
 <section id="events">
-    <h2 th:if="${param.notYourEvent}">The event is none of you business!</h2>
-    <h2 th:if="${param.cancel}">Event Successfully Cancelled/Declined!</h2>
-    <section>
+    <section class="text-center">
         <h2>Your Calendar</h2>
         <div id="calendar"></div>
     </section>

@@ -32,6 +32,10 @@ public class NotificationController {
 
         user = userService.makeUserDto(authentication);
 
+        model.addAttribute("unreadNotifications", notificationService.noUnreadNotifications(user));
+
+        model.addAttribute("user", user);
+
         model.addAttribute("notifications", notificationService.getUserNotifications(user.getUserId()));
 
         return returnPrefix + "viewNotifications";
@@ -40,6 +44,10 @@ public class NotificationController {
     @GetMapping("/view/{id}")
     public String viewNotification(@PathVariable(name = "id") int id, Model model, Authentication authentication){
         user = userService.makeUserDto(authentication);
+
+        model.addAttribute("unreadNotifications", notificationService.noUnreadNotifications(user));
+
+        model.addAttribute("user", user);
 
         Notification notification = notificationService.getNotificationById(id);
 

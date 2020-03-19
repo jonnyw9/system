@@ -43,4 +43,6 @@ public interface NotificationService {
     void notifyUpcomingEvent(Event event, String time);
 
     void deleteNotification(Notification notification);
+
+    int noUnreadNotifications(UserDto userDto);
 }

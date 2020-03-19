@@ -44,6 +44,9 @@ public class EventController {
                            @RequestParam(name = "end", required = false) String end,
                            Authentication authentication, Model model){
         user =  userService.makeUserDto(authentication);
+
+        model.addAttribute("unreadNotifications", notificationService.noUnreadNotifications(user));
+
         model.addAttribute("user", user);
 
         User recipient =  userService.getUserById(id);
@@ -111,11 +114,19 @@ public class EventController {
     public String viewEvent(@PathVariable("id") int id, Model model, Authentication authentication){
         user =  userService.makeUserDto(authentication);
 
+        model.addAttribute("unreadNotifications", notificationService.noUnreadNotifications(user));
+
+        model.addAttribute("user", user);
+
         Event event = eventService.getByEventId(id);
+        if(event == null){
+            return "redirect:/home?eventNotFound";
+        }
         if(event.getCreatorUserId().getUserId() != user.getUserId()
                 && event.getRecipientUserId().getUserId() != user.getUserId()){
             return "redirect:/home?notYourEvent";
         }
+
 
         if(user.getUserId() == event.getRecipientUserId().getUserId()){
             model.addAttribute("receive", true);
@@ -131,6 +142,11 @@ public class EventController {
     @GetMapping("edit/{id}")
     public String editEvent(@PathVariable("id") int id, Model model, Authentication authentication){
         user =  userService.makeUserDto(authentication);
+
+        model.addAttribute("unreadNotifications", notificationService.noUnreadNotifications(user));
+
+        model.addAttribute("user", user);
+
         Event event = eventService.getByEventId(id);
 
         System.out.println(user.getUserId());
