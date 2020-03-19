@@ -153,7 +153,11 @@ public class FrontController {
             return "redirect:/register";
         }
 
-        userService.saveNewUser(user);
+        User user1 = userService.saveNewUser(user);
+
+        if(user1 != null){
+            notificationService.accountCreated(user1);
+        }
 
         return "redirect:/login?registered";
     }

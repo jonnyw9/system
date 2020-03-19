@@ -119,9 +119,6 @@ public class UserServiceImpl implements UserService{
         }
 
         //Save the user via the repository
-
-        //Notify the user their account has been created.
-        notificationService.accountCreated(user);
         return userRepository.save(user);
     }
 
