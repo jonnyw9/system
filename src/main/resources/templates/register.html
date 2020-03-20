@@ -24,54 +24,54 @@
                 <tr class="form-group">
                     <td><label for="firstName" class="col-form-label">Firstname: </label></td>
                     <td ><input id="firstName" name="firstName" th:field="*{firstName}" th:required="true" class="form-control" /></td>
-                    <td th:if="${#fields.hasErrors('firstName')}"
+                    <td class="alert-danger" th:if="${#fields.hasErrors('firstName')}"
                            th:errors="*{firstName}">Validation error</td>
                 </tr>
                 <tr class="form-group">
                     <td><label for="lastName" class="col-form-label">Lastname: </label></td>
                     <td><input id="lastName" name="lastName" th:field="*{lastName}" th:required="true" class="form-control" /></td>
-                    <td th:if="${#fields.hasErrors('lastName')}"
+                    <td class="alert-danger" th:if="${#fields.hasErrors('lastName')}"
                            th:errors="*{lastName}">Validation error</td>
                 </tr>
                 <tr class="form-group">
                     <td><label for="email" class="col-form-label">Email: </label></td>
                     <td><input id="email" name="email" th:field="*{email}" th:required="true" class="form-control" /></td>
-                    <td th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Validation error</td>
+                    <td class="alert-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Validation error</td>
                 </tr>
                 <tr class="form-group">
                     <td><label for="student" class="col-form-label">Student: </label></td>
                     <td><input type="checkbox" name="student" id="student" th:checked="*{student}" onclick="onCheck()" class="form-check" ></td>
-                    <td th:if="${#fields.hasErrors('student')}" th:errors="*{student}">Validation error</td>
+                    <td class="alert-danger" th:if="${#fields.hasErrors('student')}" th:errors="*{student}">Validation error</td>
                 </tr>
                 <tr class="form-group">
                     <td><label for="studentNumber" id="studentNumberLabel" style="display:none" class="col-form-label">Student Number: </label></td>
                     <td><input type="text" name="studentNumber" id="studentNumber" th:field="*{studentNumber}" style="display:none" class="form-control" /></td>
-                    <td th:if="${#fields.hasErrors('studentNumber')}" th:errors="*{studentNumber}">Validation error</td>
+                    <td class="alert-danger" th:if="${#fields.hasErrors('studentNumber')}" th:errors="*{studentNumber}">Validation error</td>
                 </tr>
                 <tr class="form-group">
                     <td><label for="staff" class="col-form-label">Staff: </label></td>
                     <td><input type="checkbox" name="staff" id="staff" th:checked="*{staff}" onclick="onCheck()" class="form-check" ></td>
-                    <td th:if="${#fields.hasErrors('staff')}" th:errors="*{staff}" class="col-md-3">Validation error</td>
+                    <td class="alert-danger" th:if="${#fields.hasErrors('staff')}" th:errors="*{staff}">Validation error</td>
                 </tr>
                 <tr class="form-group">
                     <td><label for="room" id="roomLabel"style="display:none" class="col-form-label">Room: </label></td>
                     <td><input type="text" name="room" id="room" th:field="*{room}" style="display:none" class="form-control" /></td>
-                    <td th:if="${#fields.hasErrors('room')}" th:errors="*{room}">Validation error</td>
+                    <td class="alert-danger" th:if="${#fields.hasErrors('room')}" th:errors="*{room}">Validation error</td>
                 </tr>
                 <tr class="form-group">
                     <td><label for="startTime" id="startTimeLabel" style="display: none" class="col-form-label">Day Start Time: </label></td>
                     <td><input type="time" name="startTime" id="startTime" th:field="*{startTime}" style="display: none" class="form-control" /></td>
-                    <td th:if="${#fields.hasErrors('startTime')}" th:errors="*{startTime}">Validation error</td>
+                    <td class="alert-danger" th:if="${#fields.hasErrors('startTime')}" th:errors="*{startTime}">Validation error</td>
                 </tr>
                 <tr class="form-group">
                     <td><label for="endTime" id="endTimeLabel" style="display: none" class="col-form-label">Day End Time: </label></td>
                     <td ><input type="time" name="endTime" id="endTime" class="form-control"  th:field="*{endTime}" style="display: none" /></td>
-                    <td th:if="${#fields.hasErrors('endTime')}" th:errors="*{endTime}">Validation error</td>
+                    <td class="alert-danger" th:if="${#fields.hasErrors('endTime')}" th:errors="*{endTime}">Validation error</td>
                 </tr>
                 <tr class="form-group">
                     <td><label for="password" class="col-form-label">Password: </label></td>
                     <td><input type="password" id="password" name="password" th:field="*{password}" th:required="true" class="form-control" /></td>
-                    <td th:if="${#fields.hasErrors('password')}" th:errors="*{password}" >Validation error</td>
+                    <td class="alert-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}" >Validation error</td>
                 </tr>
                 <tr>
                     <td><small class="text-muted">Passwords must be 8 characters or more.</small></td>
@@ -79,7 +79,7 @@
                 <tr class="form-group">
                     <td><label for="confirmPassword" class="col-form-label">Confirm Password: </label></td>
                     <td><input type="password" id="confirmPassword" name="confirmPassword" th:field="*{confirmPassword}" th:required="true" class="form-control" /></td>
-                    <td th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}">Validation error</td>
+                    <td class="alert-danger" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}">Validation error</td>
                 </tr>
                 <tr class="form-group">
                     <td><button class="btn btn-primary" type="submit" value="Submit">Submit</button></td>

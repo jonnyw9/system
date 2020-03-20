@@ -72,7 +72,12 @@ public class UserController {
     }
 
     @GetMapping(editPrefix + "{editRequest}")
-    public String editDetails(@PathVariable String editRequest, Model model){
+    public String editDetails(@PathVariable String editRequest, Model model,
+                              Authentication authentication){
+        user = userService.makeUserDto(authentication);
+
+        model.addAttribute("unreadNotifications", notificationService.noUnreadNotifications(user));
+
         if(!model.containsAttribute("user")){
             model.addAttribute("user", user);
         }

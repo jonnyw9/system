@@ -42,8 +42,8 @@
         </section>
     </nav>
     <div class="masterhead text-center">
-        <p th:if="${param.badEditRequest}" class="alert-danger">Bad Edit Request.</p>
-        <p th:if="${param.updated}" class="alert-danger">Successfully Updated.</p>
+        <h2 th:if="${param.badEditRequest}" class="alert-danger">Bad Edit Request.</h2>
+        <h2 th:if="${param.updated}" class="alert-success">Successfully Updated.</h2>
         <h1>View Account</h1>
     </div>
     <section class="container" id="userDetails">

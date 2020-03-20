@@ -65,12 +65,12 @@
         </section>
     </nav>
     <div class="masthead text-center">
-            <h2 class="alert-warning" th:if="${param.notYourEvent}">The event is none of you business!</h2>
-            <h2 class="alert-success" th:if="${param.cancel}">Event Successfully Cancelled/Declined!</h2>
-            <h2 class="alert-danger" th:if="${param.eventNotFound}">Event not found.</h2>
+        <h2 class="alert-warning" th:if="${param.notYourEvent}">The event is none of you business!</h2>
+        <h2 class="alert-success" th:if="${param.cancel}">Event Successfully Cancelled/Declined!</h2>
+        <h2 class="alert-danger" th:if="${param.eventNotFound}">Event not found.</h2>
+        <h2 class="alert-warning" th:if="${param.notYourNotif}">Not your notification(s)</h2>
         <h1 th:text="'Welcome ' + ${user.getFirstName()} + '!'"></h1>
     </div>
-    <p th:if="${param.notYourNotif}">Not your notification(s)</p>
 
 <section id="events">
     <section>
