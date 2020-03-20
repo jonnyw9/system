@@ -87,6 +87,7 @@ public class EventController {
                            RedirectAttributes redirectAttributes) {
 
         bindingResult = eventValidation.validate(event, bindingResult);
+        bindingResult = eventValidation.validateTimeConflicts(event, bindingResult);
 
         //Save the event
         if(bindingResult.hasErrors()){
@@ -181,6 +182,7 @@ public class EventController {
 
         if(bindingResult.hasErrors()){
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.event", bindingResult);
+            System.out.println(bindingResult.getAllErrors());
             redirectAttributes.addFlashAttribute("event", event);
             return "redirect:/event/edit/" + event.getEventId();
         }

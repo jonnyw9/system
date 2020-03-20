@@ -10,5 +10,7 @@ public interface EventValidation{
 
     public boolean timeConflictCheck(EventDto eventDto);
 
+    BindingResult validateTimeConflicts(EventDto eventDto, BindingResult bindingResult);
+
     public BindingResult validate(EventDto eventDto, BindingResult bindingResult);
 }
