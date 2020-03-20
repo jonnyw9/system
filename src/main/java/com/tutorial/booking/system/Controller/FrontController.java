@@ -183,7 +183,7 @@ public class FrontController {
 
     @GetMapping("error")
     public String error(){
-        return "login";
+        return "error";
     }
 
 
