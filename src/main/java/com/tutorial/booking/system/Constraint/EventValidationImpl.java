@@ -48,6 +48,13 @@ public class EventValidationImpl implements EventValidation{
         return true;
     }
 
+    public BindingResult validateTimeConflicts(EventDto eventDto, BindingResult bindingResult){
+        if(!timeConflictCheck(eventDto)){
+            bindingResult.reject("time.conflict", "You have a conflict with the times suggested.");
+        }
+        return bindingResult;
+    }
+
     @Override
     public BindingResult validate(EventDto eventDto, BindingResult bindingResult){
 
@@ -57,9 +64,7 @@ public class EventValidationImpl implements EventValidation{
         if(!timeValidation(eventDto.getEventEnd())){
             bindingResult.rejectValue("eventEnd","time.error", "Time not allowed!");
         }
-        if(!timeConflictCheck(eventDto)){
-            bindingResult.reject("time.conflict", "You have a conflict with the times suggested.");
-        }
+
 
         return bindingResult;
     }
