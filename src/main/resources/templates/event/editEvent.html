@@ -52,27 +52,27 @@
                 <tr class="form-group">
                     <td><label for="eventStartDummy" class="col-form-label">Event Start: </label></td>
                     <td><input type="datetime-local" id="eventStartDummy" th:value="${event.eventStart}" readonly class="form-control"/></td>
-                    <td th:if="${#fields.hasErrors('eventStart')}" th:errors="*{eventStart}">Validation error</td>
+                    <td class="alert-danger" th:if="${#fields.hasErrors('eventStart')}" th:errors="*{eventStart}">Validation error</td>
                 </tr>
                 <tr class="form-group">
                     <td><label for="eventEndDummy" class="col-form-label">Event End: </label></td>
                     <td><input type="datetime-local" id="eventEndDummy" th:value="${event.eventEnd}" readonly class="form-control" /></td>
-                    <td th:if="${#fields.hasErrors('eventEnd')}" th:errors="*{eventEnd}">Validation error</td>
+                    <td class="alert-danger" th:if="${#fields.hasErrors('eventEnd')}" th:errors="*{eventEnd}">Validation error</td>
                 </tr>
                 <tr class="form-group">
                     <td><label for="title" class="col-form-label">Title: </label></td>
                     <td><input type="text" id="title" name="title" th:value="*{title}" th:required="true" class="form-control"/></td>
-                    <td th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Validation error</td>
+                    <td class="alert-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Validation error</td>
                 </tr>
                 <tr class="form-group">
                     <td><label for="description" class="col-form-label">Description: </label></td>
                     <td><textarea id="description" name="description" th:value="*{description}" th:text="${event.description}" th:required="true" class="form-control"></textarea></td>
-                    <td th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Validation error</td>
+                    <td class="alert-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Validation error</td>
                 </tr>
                 <tr class="form-group">
                     <td><label for="location" class="col-form-label">Location: </label></td>
                     <td><input type="text" id="location" name="location" th:value="*{location}" th:required="true" class="form-control"/></td>
-                    <td th:if="${#fields.hasErrors('location')}" th:errors="*{location}">Validation error</td>
+                    <td class="alert-danger" th:if="${#fields.hasErrors('location')}" th:errors="*{location}">Validation error</td>
                 </tr>
                 <tr class="form-group">
                     <td><input type="submit" value="Submit" class="btn btn-primary"></td>

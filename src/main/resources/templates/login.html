@@ -16,6 +16,10 @@
 <div class="container-fluid">
     <div class="container">
         <h1>Please Login</h1>
+        <h2 class="alert-danger" th:if="${param.error}">Invalid username and password.</h2>
+        <h2 class="alert-info" th:if="${param.logout}">You have successfully been logged out.</h2>
+        <h2 class="alert-success" th:if="${param.registered}">Account has been registered!</h2>
+        <h2 class="alert-success" th:if="${param.success}">Email or password successfully changed! Please login again with your new details.</h2>
         <div class="btn-group">
             <button class="btn btn-secondary"><a class="text-white" href="/">Home</a></button>
             <button class="btn btn-secondary"><a class="text-white" href="/register">Register</a></button>
@@ -23,18 +27,6 @@
 
         <form name="f" th:action="@{/login}" method="post">
             <table>
-                <tr class="form-group" th:if="${param.error}">
-                    <td>Invalid username and password.</td>
-                </tr>
-                <tr class="form-group" th:if="${param.logout}">
-                    <td>You have successfully been logged out.</td>
-                </tr>
-                <tr class="form-group"th:if="${param.registered}">
-                    <td>Account has been registered!</td>
-                </tr>
-                <tr class="form-group" th:if="${param.success}">
-                    <td>Email or password successfully changed! Please login again with your new details.</td>
-                </tr>
                 <tr class="form-group">
                     <td id="user-name-label"><label for="username" class="col-form-label">Email:</label></td>
                     <td><input type="text" id="username" name="username" class="form-control"/></td>
