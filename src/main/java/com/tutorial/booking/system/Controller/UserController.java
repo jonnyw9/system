@@ -5,6 +5,7 @@ import com.tutorial.booking.system.Constraint.UserValidation;
 import com.tutorial.booking.system.Repository.CalendarRepository;
 import com.tutorial.booking.system.Repository.PasswordRepository;
 import com.tutorial.booking.system.Repository.StaffRepository;
+import com.tutorial.booking.system.Service.NotificationService;
 import com.tutorial.booking.system.Service.UserServiceImpl;
 import com.tutorial.booking.system.dto.PasswordDto;
 import com.tutorial.booking.system.dto.UserDto;
@@ -48,12 +49,14 @@ public class UserController {
     @Autowired
     PasswordValidation passwordValidation;
 
+    @Autowired
+    NotificationService notificationService;
+
     @GetMapping("view")
     public String viewAccount(Authentication authentication, Model model){
         user = userService.makeUserDto(authentication);
-        System.out.println(user.toString());
 
-
+        model.addAttribute("unreadNotifications", notificationService.noUnreadNotifications(user));
 
         model.addAttribute("user", user);
 
