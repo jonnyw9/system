@@ -6,7 +6,6 @@
     <link href='fullcalendar/core/main.css' rel='stylesheet' />
     <link href='fullcalendar/daygrid/main.css' rel='stylesheet' />
     <link href='fullcalendar/timegrid/main.css' rel='stylesheet' />
-    <link href="css/home.css" rel="stylesheet"/>
 
     <script src='fullcalendar/core/main.js'></script>
     <script src='fullcalendar/daygrid/main.js'></script>
@@ -25,6 +24,8 @@
             integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
             integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+    <script src="https://kit.fontawesome.com/1713ffcfce.js" crossorigin="1317F4ED-2CC9-4D31-B966-78491FFC289A"></script>
 
     <title>Booking System</title>
 </head>
@@ -45,7 +46,7 @@
                 <a class="nav-link" th:href="@{/user/view}">Account Details</a>
             </li>
             <li class="nav-item">
-                <a th:if="${unreadNotifications != 0}" th:text="${unreadNotifications + ' unread notification(s)'}" class="nav-link" th:href="@{'/notifications/'}"></a>
+                <a th:if="${unreadNotifications != 0}" th:text="${unreadNotifications + ' unread notification(s)'}" class="nav-link alert-primary text-danger" th:href="@{'/notifications/'}"></a>
                 <a th:unless="${unreadNotifications != 0}" class="nav-link" th:href="@{'/notifications/'}">View Notifications</a>
             </li>
             <li class="nav-item">
@@ -75,6 +76,7 @@
 <section id="events">
     <section>
         <h2 class="text-center">Your Calendar</h2>
+        <small class="text-muted">Please click, hold and drag on the calendar to create an event.</small>
         <div id="calendar"></div>
     </section>
 </section>

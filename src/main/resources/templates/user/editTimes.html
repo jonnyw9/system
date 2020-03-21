@@ -23,7 +23,7 @@
                 <a class="nav-link" href="/user/view">Account Details</a>
             </li>
             <li class="nav-item">
-                <a th:if="${unreadNotifications != 0}" th:text="${unreadNotifications + ' unread notification(s)'}" class="nav-link" th:href="@{'/notifications/'}"></a>
+                <a th:if="${unreadNotifications != 0}" th:text="${unreadNotifications + ' unread notification(s)'}" class="nav-link alert-primary text-danger" th:href="@{'/notifications/'}"></a>
                 <a th:unless="${unreadNotifications != 0}" class="nav-link" th:href="@{'/notifications/'}">View Notifications</a>
             </li>
             <li class="nav-item">
