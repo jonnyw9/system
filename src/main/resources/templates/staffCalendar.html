@@ -45,7 +45,7 @@
                 <a class="nav-link" href="/user/view">Account Details</a>
             </li>
             <li class="nav-item">
-                <a th:if="${unreadNotifications != 0}" th:text="${unreadNotifications + ' unread notification(s)'}" class="nav-link" th:href="@{'/notifications/'}"></a>
+                <a th:if="${unreadNotifications != 0}" th:text="${unreadNotifications + ' unread notification(s)'}" class="nav-link alert-primary text-danger" th:href="@{'/notifications/'}"></a>
                 <a th:unless="${unreadNotifications != 0}" class="nav-link" th:href="@{'/notifications/'}">View Notifications</a>
             </li>
             <li class="nav-item">
@@ -65,8 +65,8 @@
     </nav>
     <section>
         <h1 class="text-center" th:text="${staffName + ' Calendar'}"></h1>
+        <small class="text-muted">Events are only half an hour and must be made more than 24 hours in advance. Please click on a slot to book.</small>
         <div id="calendar"></div>
-        <small class="text-muted">Events are only half an hour and must be made more than 24 hours in advance. </small>
     </section>
 </div>
 </body>
