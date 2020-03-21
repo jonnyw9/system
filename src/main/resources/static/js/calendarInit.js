@@ -2,8 +2,20 @@ document.addEventListener('DOMContentLoaded', function(){
     var calendarE1 = document.getElementById('calendar');
 
     var calendar = new FullCalendar.Calendar(calendarE1, {
-        plugins: [ 'timeGrid', 'interaction' ],
+        plugins: ['dayGrid', 'timeGrid', 'interaction', 'bootstrap', 'list'],
         defaultView: 'timeGridWeek',
+        header: {
+            left: 'timeGridWeek dayGridMonth listWeek',
+            center: 'title',
+            right: 'today prev next'
+        },
+        buttonText: {
+            today: 'Today',
+            month: 'Month',
+            week: 'Week',
+            list: 'List Events'
+        },
+        themeSystem: 'bootstrap',
         minTime: dayStart,
         maxTime: dayEnd,
         nowIndicator: true,
