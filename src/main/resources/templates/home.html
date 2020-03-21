@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+    <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+    <script src="http://code.jquery.com/ui/1.8.21/jquery-ui.min.js"></script>
+    <script src="/js/jquery.ui.touch-punch.min.js"></script>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+    <script src="https://kit.fontawesome.com/1713ffcfce.js" crossorigin="anonymous"></script>
+
+    <link href='fullcalendar/core/main.css' rel='stylesheet' />
+    <link href='fullcalendar/daygrid/main.css' rel='stylesheet' />
+    <link href='fullcalendar/timegrid/main.css' rel='stylesheet' />
+    <link href='fullcalendar/list/main.css' rel='stylesheet' />
+    <link href='fullcalendar/bootstrap/main.css' rel='stylesheet' />
+
+    <script src='fullcalendar/core/main.js'></script>
+    <script src='fullcalendar/daygrid/main.js'></script>
+    <script src='fullcalendar/timegrid/main.js'></script>
+    <script src='fullcalendar/interaction/main.js'></script>
+    <script src='fullcalendar/list/main.js'></script>
+    <script src='fullcalendar/bootstrap/main.js'></script>
+    <script src="js/calendarInit.js"></script>
+
+    <title>Booking System</title>
+</head>
+<script th:inline="javascript">
+    let eventUrl = /*[[${url}]]*/ "";
+    let dayStart = "06:00";
+    let dayEnd = "20:00";
+    let userId = /*[[${user.getUserId()}]]*/ "";
+    let isHome = true;
+</script>
+<div class="container-fluid">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <ul class="navbar-nav mr-auto">
+            <li>
+                <a class="navbar-brand" th:href="@{/home}">Booking System</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/user/view}">Account Details</a>
+            </li>
+            <li class="nav-item">
+                <a th:if="${unreadNotifications != 0}" th:text="${unreadNotifications + ' unread notification(s)'}" class="nav-link alert-primary text-danger" th:href="@{'/notifications/'}"></a>
+                <a th:unless="${unreadNotifications != 0}" class="nav-link" th:href="@{'/notifications/'}">View Notifications</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/logout">Logout</a>
+            </li>
+
+        </ul>
+
+        <section id="user">
+            <div th:if="${user.student}" class="search">
+                <h2 class="text-white">Search Staff</h2>
+                <form th:object="${name}" th:action="@{/search}" method="get" class="form-inline my-2 my-lg-0">
+                    <input type="text" name="name" id="name" th:value="${name}" class="form-control mr-sm-2"/>
+                    <input type="submit" value="Search" class="btn btn-secondary my-2 my-sm-0"/>
+                </form>
+            </div>
+        </section>
+    </nav>
+    <div class="masthead text-center">
+        <h2 class="alert-warning" th:if="${param.notYourEvent}">The event is none of you business!</h2>
+        <h2 class="alert-success" th:if="${param.cancel}">Event Successfully Cancelled/Declined!</h2>
+        <h2 class="alert-danger" th:if="${param.eventNotFound}">Event not found.</h2>
+        <h2 class="alert-warning" th:if="${param.notYourNotif}">Not your notification(s)</h2>
+        <h1 th:text="'Welcome ' + ${user.getFirstName()} + '!'"></h1>
+    </div>
+
+<section id="events">
+    <section>
+        <h2 class="text-center">Your Calendar</h2>
+        <small class="text-muted">Please click, hold and drag on the calendar to create an event.</small>
+        <div id="calendar"></div>
+    </section>
+</section>
+</div>
+</body>
+</html>
