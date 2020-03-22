@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function(){
             let startString = info.startStr.substring(0,16);
             let endString = info.endStr.substring(0,16);
 
-            window.location.href = "http://localhost:8080/event/add/" + userId + "?time=" + startString + "&end=" + endString;
+            window.location.href = "/event/add/" + userId + "?time=" + startString + "&end=" + endString;
         }
     });
 
