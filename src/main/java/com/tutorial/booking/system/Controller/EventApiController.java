@@ -34,7 +34,7 @@ public class EventApiController {
     @ResponseBody
     public ResponseEntity<List<EventApiEntity>> findAll(@PathVariable int id){
 
-        String urlBase = "https://jwbookingsystem.herokuapp.com/event/view/";
+        String urlBase = "/event/view/";
         List<Event> events = eventService.getEventsForUser(id);
 
         if(events == null){
@@ -73,7 +73,7 @@ public class EventApiController {
             availableDates.add(localDateTime);
         }
 
-        String urlBase = "https://jwbookingsystem.herokuapp.com/event/add/";
+        String urlBase = "/event/add/";
 
         if(availableDates.isEmpty()){
             return ResponseEntity.notFound().build();
