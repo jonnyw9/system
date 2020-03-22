@@ -67,7 +67,7 @@ public class FrontController {
 
         model.addAttribute("user", user);
 
-        String url ="/api/event/getall/" + String.valueOf(userId);
+        String url = "/api/event/getall/" + String.valueOf(userId);
 
         User userById = userService.getUserById(userId);
 
