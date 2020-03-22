@@ -46,8 +46,6 @@ public class FrontController {
     @Autowired
     UserValidation userValidation;
 
-    private static final String prefix  = "https://jwbookingsystem.herokuapp.com/";
-
     @GetMapping("/")
     public String index(Model model){
         return "index";
