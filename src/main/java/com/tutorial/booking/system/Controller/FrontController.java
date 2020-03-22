@@ -46,8 +46,6 @@ public class FrontController {
     @Autowired
     UserValidation userValidation;
 
-    private static final String prefix  = "https://jwbookingsystem.herokuapp.com/";
-
     @GetMapping("/")
     public String index(Model model){
         return "index";
@@ -69,7 +67,7 @@ public class FrontController {
 
         model.addAttribute("user", user);
 
-        String url = prefix + "api/event/getall/" + String.valueOf(userId);
+        String url ="/api/event/getall/" + String.valueOf(userId);
 
         User userById = userService.getUserById(userId);
 
@@ -239,7 +237,7 @@ public class FrontController {
                         .getCalendarId()).orElse(null)).getDayEndTime().toLocalTime().toString();
         model.addAttribute("dayEnd", dayEnd);
         model.addAttribute("staff", user);
-        String url = prefix + "api/event/getall/" + String.valueOf(id);
+        String url = "/api/event/getall/" + String.valueOf(id);
         model.addAttribute("url", url);
 
         return "staffCalendar";
