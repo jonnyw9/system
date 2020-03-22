@@ -67,7 +67,7 @@ public class FrontController {
 
         model.addAttribute("user", user);
 
-        String url = "http://localhost:8080/api/event/getall/" + String.valueOf(userId);
+        String url = "/api/event/getall/" + String.valueOf(userId);
 
         User userById = userService.getUserById(userId);
 
@@ -237,7 +237,7 @@ public class FrontController {
                         .getCalendarId()).orElse(null)).getDayEndTime().toLocalTime().toString();
         model.addAttribute("dayEnd", dayEnd);
         model.addAttribute("staff", user);
-        String url = "http://localhost:8080/api/event/getall/" + String.valueOf(id);
+        String url = "/api/event/getall/" + String.valueOf(id);
         model.addAttribute("url", url);
 
         return "staffCalendar";
