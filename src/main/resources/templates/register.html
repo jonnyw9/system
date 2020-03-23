@@ -17,7 +17,7 @@
 <div class="container-fluid">
     <div class="container">
         <h1 class="text-left">Register</h1>
-        <button class="btn btn-secondary"><a class="text-white" href="/">Home</a></button>
+        <a class="btn btn-secondary" href="/">Home</a>
         <form action="#" th:action="@{/register}" th:object="${user}" method="post" class="needs-validation">
             <table class="col-md-8 order-md-1">
                 <tr class="form-group">
@@ -53,7 +53,7 @@
                     <td class="alert-danger" th:if="${#fields.hasErrors('staff')}" th:errors="*{staff}">Validation error</td>
                 </tr>
                 <tr class="form-group">
-                    <td><label for="room" id="roomLabel"style="display:none" class="col-form-label">Room: </label></td>
+                    <td><label for="room" id="roomLabel" style="display:none" class="col-form-label">Room: </label></td>
                     <td><input type="text" name="room" id="room" th:field="*{room}" style="display:none" class="form-control" /></td>
                     <td class="alert-danger" th:if="${#fields.hasErrors('room')}" th:errors="*{room}">Validation error</td>
                 </tr>

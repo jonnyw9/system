@@ -21,8 +21,8 @@
         <h2 class="alert-success" th:if="${param.registered}">Account has been registered!</h2>
         <h2 class="alert-success" th:if="${param.success}">Email or password successfully changed! Please login again with your new details.</h2>
         <div class="btn-group">
-            <button class="btn btn-secondary"><a class="text-white" href="/">Home</a></button>
-            <button class="btn btn-secondary"><a class="text-white" href="/register">Register</a></button>
+            <a class="btn btn-secondary" th:href="@{/}">Home</a>
+            <a class="btn btn-secondary" th:href="@{/register}">Register</a>
         </div>
 
         <form name="f" th:action="@{/login}" method="post">
