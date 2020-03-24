@@ -65,7 +65,6 @@ document.addEventListener('DOMContentLoaded', function(){
                 return info.start.getTime() > new Date();
             }else{
                 var duration = info.end.getTime() - info.start.getTime();
-                console.log(duration);
                 if(duration > 1800000){
                     return false;
                 }else{
@@ -77,7 +76,6 @@ document.addEventListener('DOMContentLoaded', function(){
             }
         },
         select: function (info) {
-            console.log(info);
             let startString = info.startStr.substring(0,16);
             let endString = info.endStr.substring(0,16);
 
