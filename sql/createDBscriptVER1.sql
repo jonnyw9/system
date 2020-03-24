@@ -94,6 +94,8 @@ CREATE TABLE eventUser(
     foreign key (recipientUserId) references bs_user(userId)
 );
 
+
+
 ALTER TABLE bs_user ADD FOREIGN KEY (userPassID) REFERENCES userPassword(userPassID);
 ALTER TABLE bs_user ADD FOREIGN KEY (calendarUserID) REFERENCES calendarUser(calendarUserID);
 

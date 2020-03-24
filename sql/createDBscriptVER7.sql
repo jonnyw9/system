@@ -23,6 +23,7 @@ CREATE TABLE bs_user(
 	first_name varchar(100) NOT NULL,
 	last_name varchar(100) NOT NULL,
 	calendar_id int(150),
+	active tinyint(1),
 	role_id int(150),
     staff_id int(150),
     student_id int(150),
@@ -34,6 +35,12 @@ CREATE TABLE bs_user(
 CREATE TABLE staff(
 	staff_id int(150) auto_increment primary key NOT NULL,
 	room varchar(50)
+);
+
+
+CREATE TABLE student(
+	student_id int(150) auto_increment primary key NOT NULL,
+	student_number varchar(9)
 );
 
 CREATE TABLE calendar(
@@ -60,7 +67,8 @@ CREATE TABLE bs_event(
 CREATE TABLE roles(
 	role_id int(150) auto_increment primary key NOT NULL,
     staff tinyint(1),
-    student tinyint(1)
+    student tinyint(1),
+    admin tinyint(1)
 );
 
 
