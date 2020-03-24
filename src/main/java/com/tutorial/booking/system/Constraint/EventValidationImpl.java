@@ -25,32 +25,20 @@ public class EventValidationImpl implements EventValidation{
         }
         int minutes = Integer.parseInt(time.substring(14, 16));
 
-        System.out.println(minutes);
-
         if(minutes != 0){
-            if(minutes != 30){
-                return false;
-            }
+            return minutes == 30;
         }
         return true;
     }
 
     @Override
     public boolean timeConflictCheck(EventDto eventDto){
-        List<Event> events = eventService.listEventsNearTimeEventUsers(eventDto);
-        for (int i = 0; i < events.size(); i++) {
-            System.out.println("Events: " + events.get(i));
-        }
-
-        if(!eventService.listEventsNearTimeEventUsers(eventDto).isEmpty()){
-            return false;
-        }
-        return true;
+        return eventService.listEventsNearTimeEventUsers(eventDto).isEmpty();
     }
 
     public BindingResult validateTimeConflicts(EventDto eventDto, BindingResult bindingResult){
         if(!timeConflictCheck(eventDto)){
-            bindingResult.reject("time.conflict", "You have a conflict with the times suggested.");
+            bindingResult.reject("time.conflict","You have a conflict with the times suggested.");
         }
         return bindingResult;
     }
