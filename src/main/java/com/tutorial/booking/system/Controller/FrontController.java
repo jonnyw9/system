@@ -47,7 +47,7 @@ public class FrontController {
     UserValidation userValidation;
 
     @GetMapping("/")
-    public String index(Model model){
+    public String index(){
         return "index";
     }
 
@@ -61,35 +61,10 @@ public class FrontController {
         user = userService.makeUserDto(authentication);
 
         int userId = user.getUserId();
-        List<Event> events = eventService.getEventsForUser(userId);
-
-        model.addAttribute("events", events);
 
         model.addAttribute("user", user);
 
         String url = "/api/event/getall/" + String.valueOf(userId);
-
-        User userById = userService.getUserById(userId);
-
-        String dayStart = "";
-        String dayEnd = "";
-
-        if(user.isStudent() && !user.isStaff()){
-            dayStart = "06:00";
-            dayEnd = "20:00";
-        }else if(user.isStaff()){
-            dayStart = Objects.requireNonNull(calendarRepository.findById(userById.getCalendarId()
-                    .getCalendarId()).orElse(null)).getDayStartTime().toLocalTime().toString();
-            dayEnd = Objects.requireNonNull(calendarRepository.findById(userById.getCalendarId()
-                    .getCalendarId()).orElse(null)).getDayEndTime().toLocalTime().toString();
-        }
-
-
-        model.addAttribute("dayStart", dayStart);
-
-
-        model.addAttribute("dayEnd", dayEnd);
-        model.addAttribute("staff", user);
 
         model.addAttribute("url", url);
 
@@ -132,7 +107,6 @@ public class FrontController {
 
     @GetMapping("register")
     public String register(Model model){
-
         if(!model.containsAttribute("user")){
             UserDto userDto = new UserDto();
             model.addAttribute("user", userDto);
