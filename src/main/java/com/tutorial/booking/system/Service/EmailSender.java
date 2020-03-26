@@ -27,7 +27,7 @@ public class EmailSender {
 
         if(notification.getActionLink() != null){
             if(!notification.getActionLink().isEmpty()){
-                body += " Click here to view: https://www.jwbooking.tech/" + notification.getActionLink();
+                body += " Click here to view: https://www.jwbooking.tech" + notification.getActionLink();
             }
         }
 
