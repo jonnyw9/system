@@ -36,6 +36,7 @@ public class EventValidationImpl implements EventValidation{
         return eventService.listEventsNearTimeEventUsers(eventDto).isEmpty();
     }
 
+    @Override
     public BindingResult validateTimeConflicts(EventDto eventDto, BindingResult bindingResult){
         if(!timeConflictCheck(eventDto)){
             bindingResult.reject("time.conflict","You have a conflict with the times suggested.");
