@@ -1,11 +1,13 @@
 package com.tutorial.booking.system.model;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 import java.sql.Timestamp;
 
 
 
 @Entity
+@Transactional
 @Table(name = "bs_event")
 public class Event {
 
