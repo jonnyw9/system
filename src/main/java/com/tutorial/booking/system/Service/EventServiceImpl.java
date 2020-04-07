@@ -111,69 +111,66 @@ public class EventServiceImpl implements EventService{
     }
     @Override
     public Event getByEventId(int id){
-
+        //Get the Optional of that event from the database
         Optional<Event> optionalEvent = eventRepository.findEventByEventId(id);
-
+        //Return the event, or if it's not there. Return null
         return optionalEvent.orElse(null);
     }
+
     @Override
     public String changeTimestampToString(Timestamp time){
-        String returnTime = time.toString().substring(0,16);
+        try {
+            //Remove the parts of the string that it aren't needed for the conversion
+            String returnTime = time.toString().substring(0,16);
+            //Replace the space with the T
+            returnTime = returnTime.replace(' ', 'T');
+            //Return that string
+            return returnTime;
+        }catch (Exception e){
+            //If it fails return a generic time
+            return "0000-01-01T00:00";
+        }
 
-        returnTime = returnTime.replace(' ', 'T');
-
-        System.out.println(returnTime);
-
-        return returnTime;
     }
     @Override
-    public void updateEvent(EventDto eventDto){
+    public Event updateEvent(EventDto eventDto){
 
-        System.out.println(eventDto.toString());
-
+        //Get the event by the id
         Event event = getByEventId(eventDto.getEventId());
 
-        String locationBefore = event.getLocation();
-
-        System.out.println(event.toString());
-
-        ArrayList<Timestamp> timestamps = convertStringToTimeStamp(eventDto);
-
+        //Update the details
         event.setDescription(eventDto.getDescription());
-        event.setEventEnd(timestamps.get(1));
-        event.setEventStart(timestamps.get(0));
         event.setTitle(eventDto.getTitle());
         event.setLocation(eventDto.getLocation());
 
-        eventRepository.save(event);
-
-        notificationService.eventUpdated(event, locationBefore);
+        //Save and return the event
+        return eventRepository.save(event);
     }
     @Override
     public void cancelEvent(int eventId){
-
+        //Get the event to cancelled
         Event event = getByEventId(eventId);
+        //Send a notification of cancellation
         notificationService.eventCancelled(event);
         //Can't delete with these columns containing data so have to nullify them
         event.setCreatorUserId(null);
         event.setRecipientUserId(null);
         eventRepository.save(event);
-
+        //Finally Delete
         eventRepository.delete(event);
-
-
     }
     @Override
     public ArrayList<Timestamp> convertStringToTimeStamp(EventDto eventDto){
+        //Declare the ArrayList to be returned
         ArrayList<Timestamp> returnTimeStamp = new ArrayList<>();
-
+        //Parse the string of the event start timestamp into a Timestamp
         Timestamp eventStart = Timestamp.valueOf((eventDto.getEventStart() + ":00").replace("T", " "));
-
+        //Parse the string of the event end timestamp into a Timestamp
         Timestamp eventEnd = Timestamp.valueOf((eventDto.getEventEnd() + ":00").replace("T", " "));
-
+        //Add the timestamps to the ArrayLists
         returnTimeStamp.add(eventStart);
         returnTimeStamp.add(eventEnd);
-
+        //return the ArrayList
         return returnTimeStamp;
     }
     @Override
@@ -260,12 +257,13 @@ public class EventServiceImpl implements EventService{
     }
     @Override
     public void acceptEvent(int id){
+        //Get the event to be accepted
         Event event = eventRepository.getOne(id);
-
+        //Set it to accepted
         event.setAccepted(true);
-
+        //Save it
         eventRepository.save(event);
-
+        //Send the notification
         notificationService.eventAccepted(event);
     }
     @Override
