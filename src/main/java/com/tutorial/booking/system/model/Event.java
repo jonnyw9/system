@@ -1,8 +1,12 @@
+/*
+ * Copyright (c) 2020. To JWIndustries
+ */
+
 package com.tutorial.booking.system.model;
 
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 
 import java.sql.Timestamp;
 
