@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @SpringBootApplication
 @EnableJpaRepositories(basePackages = "com.tutorial.booking.system.Repository")
 @EnableScheduling
-@EnableTransactionManagement
 public class SystemApplication {
 
     public static void main(String[] args) {
