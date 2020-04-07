@@ -59,6 +59,9 @@ class EventServiceTest {
     @Mock
     EventRepository eventRepository;
 
+    @Mock
+    UserService userService = new UserServiceImpl();
+
     @Before
     public void setup(){
         MockitoAnnotations.initMocks(this);
@@ -92,10 +95,8 @@ class EventServiceTest {
 
     @Test
     void addRecurring() {
-
         events = new ArrayList<>();
         events.add(e1);
-
         e2 = e1;
         LocalDateTime start = LocalDateTime.parse(edto1.getEventStart()).plusDays(7);
         LocalDateTime end = LocalDateTime.parse(edto1.getEventStart()).plusDays(7);
@@ -107,11 +108,6 @@ class EventServiceTest {
         events.add(e2);
         events.get(0).setRecipientUserId(u1);
         events.get(1).setRecipientUserId(u1);
-        System.out.println(e1);
-        System.out.println(e2);
-        System.out.println(edto1);
-        System.out.println(edto2);
-        System.out.println(events);
         Mockito.doReturn(e1).when(eventService).add(edto1, udto1);
         Mockito.doReturn(e2).when(eventService).add(edto2, udto1);
         assertEquals(eventService.addRecurring(edto1, udto1), events);
@@ -119,35 +115,58 @@ class EventServiceTest {
 
     @Test
     void getEventsForUser() {
+        //2x Event which is both created by and recieved by the user.
+        //Event which user is creator but not receiver.
+        //Event which user is reciever but not creator
+        events = new ArrayList<>();
+        events.add(e1);
+        Event ev2 = new Event();
+        ev2.setEventId(2);
+        ev2.setCreatorUserId(u1);
+        ev2.setRecipientUserId(u1);
+        ev2.setTitle("test");
+        ev2.setDescription("dff");
+        ev2.setLocation("222");
+        ev2.setAccepted(true);
+        ev2.setEventEnd(t1);
+        ev2.setEventStart(t2);
+        events.add(ev2);
+        System.out.println(events.get(0).toString()+ "::::" + events.get(1).toString());
+        List<Event> eventsReceived = new ArrayList<>();
+        eventsReceived.add(ev2);
+        Event ev3 = new Event();
+        ev3.setCreatorUserId(u2);
+        ev3.setRecipientUserId(u1);
+        ev3.setEventId(3);
+        ev3.setTitle("test");
+        ev3.setDescription("dff");
+        ev3.setLocation("222");
+        ev3.setAccepted(true);
+        ev3.setEventEnd(t1);
+        ev3.setEventStart(t2);
+        eventsReceived.add(ev3);
+        System.out.println(eventsReceived.get(0).toString() + ";;;;;" + eventsReceived.get(1).toString());
+        Mockito.when(userService.getUserById(10000)).thenReturn(u1);
+        Mockito.when(eventRepository.findByCreatorUserId(u1)).thenReturn(events);
+        Mockito.when(eventRepository.findByRecipientUserId(u1)).thenReturn(eventsReceived);
 
-    }
-
-    @Test
-    void getByEventId() {
+        assertEquals(eventService.getEventsForUser(10000).size(), 3);
+        Mockito.verify(eventRepository, Mockito.times(1)).findByCreatorUserId(u1);
+        Mockito.verify(eventRepository, Mockito.times(1)).findByRecipientUserId(u1);
     }
 
     @Test
     void changeTimestapToString() {
-    }
-
-    @Test
-    void updateEvent() {
-    }
-
-    @Test
-    void cancelEvent() {
+        assertEquals(eventService.changeTimestampToString(t1), "2020-03-19T09:00");
+        assertEquals(eventService.changeTimestampToString(t2),"2020-03-19T11:00");
     }
 
     @Test
     void convertStringToTimeStamp() {
-    }
-
-    @Test
-    void calulateFreeTimeForTheWeek() {
-    }
-
-    @Test
-    void acceptEvent() {
+        ArrayList<Timestamp> timestamps = new ArrayList<>();
+        timestamps.add(t1);
+        timestamps.add(t2);
+        assertEquals(eventService.convertStringToTimeStamp(edto1), timestamps);
     }
 
     @Test

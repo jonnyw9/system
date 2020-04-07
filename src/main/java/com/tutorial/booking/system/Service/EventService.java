@@ -48,12 +48,46 @@ public interface EventService {
      * @return The List of events attached to that user.
      */
     List<Event> getEventsForUser(int userId);
+
+    /**
+     * <p>Gets the event by the Id passed in </p>
+     * @param id - The ID of the event
+     * @return The event if it exists or null if it doesn't
+     */
     Event getByEventId(int id);
+
+    /**
+     * <p>Returns a string parsed from a timestamp for use in browsers</p>
+     * @param time - The timestamp to be converted to a string
+     * @return String - the timestamp parsed from the timestamp to be used in browsers.
+     */
     String changeTimestampToString(Timestamp time);
-    void updateEvent(EventDto eventDto);
+
+    /**
+     *<p>Updates a given event with the new details.</p>
+     * @param eventDto - The eventDTO with the new user details on
+     * @return Updated event
+     */
+    Event updateEvent(EventDto eventDto);
+
+    /**
+     * <p>Deletes a given event</p>
+     * @param eventId - the Id of the event to be deleted
+     */
     void cancelEvent(int eventId);
+
+    /**
+     * <p>Converts the start and end times of an eventDTO to timestamps</p>
+     * @param eventDto - The eventDTO with the strings to be converted in
+     * @return An ArrayList containing the converted strings to timestamps
+     */
     ArrayList<Timestamp> convertStringToTimeStamp(EventDto eventDto);
     ArrayList<Timestamp> calulateFreeTimeForTheWeek(Calendar calendar);
+
+    /**
+     * <p>Accept a given event</p>
+     * @param id - The id of the event to be accepted
+     */
     void acceptEvent(int id);
     List<Event> listEventsNearTimeEventUsers(EventDto eventDto);
     @Scheduled(fixedRate = 120000)

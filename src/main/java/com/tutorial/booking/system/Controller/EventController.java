@@ -150,8 +150,6 @@ public class EventController {
 
         Event event = eventService.getByEventId(id);
 
-        System.out.println(user.getUserId());
-
         if(event.getCreatorUserId().getUserId() != user.getUserId()
                 && event.getRecipientUserId().getUserId() != user.getUserId()){
             return "redirect:/home?notYourEvent";
@@ -164,8 +162,6 @@ public class EventController {
 
             eventDto.setEventEnd(eventService.changeTimestampToString(event.getEventEnd()));
 
-            System.out.println("Start: " + eventDto.getEventStart() + " || End: " + eventDto.getEventEnd());
-
             model.addAttribute("event", eventDto);
         }
 
@@ -176,8 +172,6 @@ public class EventController {
     public String editEvent(@ModelAttribute @Valid EventDto event, BindingResult bindingResult,
                             RedirectAttributes redirectAttributes){
 
-        System.out.println("Start: " + event.getEventStart() + " || End: " + event.getEventEnd());
-
         bindingResult = eventValidation.validate(event, bindingResult);
 
         if(bindingResult.hasErrors()){
@@ -186,7 +180,10 @@ public class EventController {
             redirectAttributes.addFlashAttribute("event", event);
             return "redirect:/event/edit/" + event.getEventId();
         }
-        eventService.updateEvent(event);
+        String locationBefore = eventService.getByEventId(event.getEventId()).getLocation();
+        Event updatedEvent = eventService.updateEvent(event);
+
+        notificationService.eventUpdated(updatedEvent, locationBefore);
         return "redirect:/event/view/" + event.getEventId() + "?updated";
     }
 
