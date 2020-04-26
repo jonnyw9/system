@@ -89,8 +89,25 @@ public interface EventService {
      * @param id - The id of the event to be accepted
      */
     void acceptEvent(int id);
-    List<Event> listEventsNearTimeEventUsers(EventDto eventDto);
+
+    /**
+     * <p>Returns a list of events which overlap with the event that is attempting to be booked</p>
+     * @param eventDto - The event which is intended to be booked.
+     * @return An ArrayList containing any events which overlap with the one to be booked.
+     */
+    boolean listEventsNearTimeEventUsers(EventDto eventDto);
+
+    /**
+     * <p>A method which runs every 2 minutes which checks if an event is 30 minutes away and
+     * if an event is one hour away.</p>
+     */
     @Scheduled(fixedRate = 120000)
     void CheckUpcomingEvents();
+
+    /**
+     * <p>Notifies a user if their event is 30 minutes or 1 hour away.</p>
+     * @param events - List of events which are 30 minutes or one hour away.
+     * @param time - how long the event is away. 1 hour or 30 minutes
+     */
     void notifyUsersOfUpcomingEvents(List<Event> events, String time);
 }

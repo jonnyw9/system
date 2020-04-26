@@ -267,9 +267,11 @@ public class EventServiceImpl implements EventService{
         notificationService.eventAccepted(event);
     }
     @Override
-    public List<Event> listEventsNearTimeEventUsers(EventDto eventDto){
+    public boolean listEventsNearTimeEventUsers(EventDto eventDto){
+        //Get timestamps of the event.
         List<Timestamp> timestamps = convertStringToTimeStamp(eventDto);
 
+        //Get events for the creator and the recipient and add them to the same list.
         List<Event> eventsCreator = getEventsForUser(eventDto.getCreatorUserId().getUserId());
         List<Event> eventsRecipient = getEventsForUser(eventDto.getRecipientUserId().getUserId());
 
@@ -278,8 +280,7 @@ public class EventServiceImpl implements EventService{
         events.addAll(eventsCreator);
         events.addAll(eventsRecipient);
 
-        List<Event> eventsReturned = new ArrayList<>();
-
+        //Loop through the list of all the events to see which ones overlap
         for (int i = 0; i < events.size(); i++) {
             Event event = events.get(i);
             LocalDateTime startA = event.getEventStart().toLocalDateTime();
@@ -288,11 +289,12 @@ public class EventServiceImpl implements EventService{
             LocalDateTime startB = timestamps.get(0).toLocalDateTime();
             LocalDateTime endB = timestamps.get(1).toLocalDateTime();
             if(startA.isBefore(endB) && startB.isBefore(endA)){
-                eventsReturned.add(event);
+                //If they overlap return true
+                return true;
             }
         }
-
-        return eventsReturned;
+        //Return false because there are no conflicts
+        return false;
     }
     @Override
     @Scheduled(fixedRate = 120000)
@@ -311,6 +313,7 @@ public class EventServiceImpl implements EventService{
     }
     @Override
     public void notifyUsersOfUpcomingEvents(List<Event> events, String time){
+        //Notifies everyone for all the events
         for(Event event: events){
             notificationService.notifyUpcomingEvent(event, time);
         }

@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2020. To JWIndustries
+ */
+
 package com.tutorial.booking.system.model;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -6,6 +10,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.*;
 
+/**
+ * <p>A class which holds all the information for an authenticated user on the system.</p>
+ * @author Jonathan Watt
+ */
 public class MyUserDetails implements UserDetails {
 
     private String email;
@@ -41,7 +49,6 @@ public class MyUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        System.out.println(this.password.getPassword());
         return this.password.getPassword();
     }
 

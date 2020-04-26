@@ -1,7 +1,15 @@
+/*
+ * Copyright (c) 2020. To JWIndustries
+ */
+
 package com.tutorial.booking.system.model;
 
 import javax.persistence.*;
 
+/**
+ * <p>Entity class for the Roles table. The Roles table will map to this class.</p>
+ * @author Jonathan Watt
+ */
 @Entity
 @Table(name = "roles")
 public class Roles {

@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2020. To JWIndustries
+ */
+
 package com.tutorial.booking.system.dto;
 
 import com.tutorial.booking.system.model.User;
@@ -6,6 +10,10 @@ import org.springframework.security.core.parameters.P;
 import javax.validation.constraints.*;
 import java.util.Objects;
 
+/**
+ * <p>A class used during the runtime which holds elements of the User table but which is not mapped to it.</p>
+ * @author Jonathan Watt
+ */
 public class UserDto {
 
     private int userId;

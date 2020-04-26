@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2020. To JWIndustries
+ */
+
 package com.tutorial.booking.system.Controller;
 
 import com.tutorial.booking.system.Constraint.UserValidation;
@@ -25,6 +29,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.*;
 
+/**
+ * <p>A controller for the front of the system aswell as other mappings which don't fall into any easy categories</p>
+ * @author Jonathan Watt
+ */
 @Controller
 @RequestMapping("/")
 public class FrontController {
@@ -46,18 +54,24 @@ public class FrontController {
     @Autowired
     UserValidation userValidation;
 
+    /**
+     * <p>Displays the landing page of the web app.</p>
+     * @return - the index page.
+     */
     @GetMapping("/")
     public String index(){
         return "index";
     }
 
-    @GetMapping("admin")
-    public String admin(){
-        return "admin";
-    }
-
+    /**
+     * <p>Method for the homepage once the user is logged in.</p>
+     * @param authentication - The authenticated user.
+     * @param model - the model to add attributes to.
+     * @return - The homepage template.
+     */
     @RequestMapping(value = "home", method = {RequestMethod.GET, RequestMethod.POST})
     public String home(Authentication authentication, Model model){
+        //Add the pertinent information for the page. See the home.html for what needs to be added.
         user = userService.makeUserDto(authentication);
 
         int userId = user.getUserId();
@@ -77,6 +91,13 @@ public class FrontController {
         return "home";
     }
 
+    /**
+     * <p>Handles the mapping for the search.</p>
+     * @param name - The name to search
+     * @param model - the model to add attributes to.
+     * @param authentication - The authenticated user.
+     * @return - The view to render.
+     */
     @GetMapping("search")
     public String searchStaff(@RequestParam(value = "name") Optional<String> name,
                               //@RequestParam(value = "page") Optional<Integer> page,
@@ -89,8 +110,10 @@ public class FrontController {
 
         model.addAttribute("user", user);
 
-        model.addAttribute("name", "");
+        //Apply the searched name to the model
+        model.addAttribute("name", name.orElse(""));
         try{
+            //try getting a list from the database with the name given
             String nameReplace;
 
             nameReplace = name.orElse("_").replace("+", "");
@@ -99,12 +122,18 @@ public class FrontController {
                     userService.listUserByName(nameReplace));
 
         }catch (Exception e){
+            //If it fails search for all names.
             model.addAttribute("searchResults",
                     userService.listUserByName(name.orElse("_")));
         }
         return "searchStaff";
     }
 
+    /**
+     * <p>Handles the getting of attributes for the register mapping.</p>
+     * @param model - the model to add attributes to.
+     * @return - The register view.
+     */
     @GetMapping("register")
     public String register(Model model){
         if(!model.containsAttribute("user")){
@@ -114,80 +143,89 @@ public class FrontController {
         return "register";
     }
 
+    /**
+     * <p>Handles the post mapping for registration.</p>
+     * @param user - The userDto of the user to sign up.
+     * @param bindingResult - The bindingResult for any potential errors.
+     * @param redirectAttributes - The redirectAttributes.
+     * @return - redirect to the register form or the login page.
+     */
     @PostMapping("register")
     public String register(@ModelAttribute("user") @Valid UserDto user, BindingResult bindingResult,
                            RedirectAttributes redirectAttributes){
 
+        //Validate the user
         bindingResult = userValidation.validate(user, bindingResult);
 
+        //Validate the password
         if(!user.getPassword().equals(user.getConfirmPassword())){
             bindingResult.rejectValue("password", "password.mismatch",
                     "The passwords do not match.");
         }
 
+        //Check for errors and if there are redirect back to form
         if(bindingResult.hasErrors()){
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.user",
                     bindingResult);
             redirectAttributes.addFlashAttribute("user", user);
             return "redirect:/register";
         }
-
+        //Save the user and send a notification
         User user1 = userService.saveNewUser(user);
 
         if(user1 != null){
             notificationService.accountCreated(user1);
         }
-
+        //Send to login page.
         return "redirect:/login?registered";
     }
 
+    /**
+     * <p>Mapping to log a user out of a system.</p>
+     * @param request - the request
+     * @param response - the response
+     * @return - The login page.
+     */
     @GetMapping("logout")
     public String logout(HttpServletRequest request, HttpServletResponse response){
+        //Get the context of the authentication
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        //If there is a context (Someone is logged in)
         if(authentication != null){
+            //Log the user out of the context.
             new SecurityContextLogoutHandler().logout(request, response, authentication);
             user = null;
         }
         return "redirect:/login?logout";
     }
 
+    /**
+     * <p>Generic method to handle login. Spring security will handle the authentication.
+     * This method just points to the form.</p>
+     * @return - The login form
+     */
     @GetMapping("login")
     public String login(){
         return "login";
     }
 
 
+    /**
+     * <p>Mapping to handle errors.</p>
+     * @return - The error page.
+     */
     @GetMapping("error")
     public String error(){
         return "error";
     }
 
-
-    /*
-    @GetMapping("staff/times/{id}")
-    public String getStaffTime(@PathVariable("id") int id, Model model){
-
-        User user = userService.getUserById(id);
-
-        model.addAttribute("staff", user);
-
-        List<Timestamp> availableTimes = eventService.calulateFreeTimeForTheWeek(user.getCalendarId());
-
-        List<LocalDateTime> availableDates = new ArrayList<>();
-
-
-        for(Timestamp timestamp: availableTimes){
-            LocalDateTime localDateTime = timestamp.toLocalDateTime();
-            availableDates.add(localDateTime);
-        }
-
-
-        model.addAttribute("dates", availableDates);
-
-        return "displayAvailableTimes";
-    }
-    */
-
+    /**
+     * <p>Gets the calendar for a staff member.</p>
+     * @param id - The id of the staff member
+     * @param model - The model to add attributes to.
+     * @param authentication - The authenticated user
+     * @return - The staff calendar view.
+     */
     @GetMapping("staff/times/{id}")
     private String getStaffTime(@PathVariable("id") int id, Model model,
                                 Authentication authentication){
@@ -201,16 +239,19 @@ public class FrontController {
         User user = userService.getUserById(id);
 
         model.addAttribute("staffName", user.getFirstName() + " " + user.getLastName());
+        //Gets the start day of the staff member
         String dayStart =
                 Objects.requireNonNull(calendarRepository.findById(user.getCalendarId().
                         getCalendarId()).orElse(null)).getDayStartTime().toLocalTime().toString();
         model.addAttribute("dayStart", dayStart);
 
+        //Gets the end day of the staff member
         String dayEnd =
                 Objects.requireNonNull(calendarRepository.findById(user.getCalendarId()
                         .getCalendarId()).orElse(null)).getDayEndTime().toLocalTime().toString();
         model.addAttribute("dayEnd", dayEnd);
         model.addAttribute("staff", user);
+        //Adds the url for the API to allow fullCalendar to get it.
         String url = "/api/event/getall/" + String.valueOf(id);
         model.addAttribute("url", url);
 

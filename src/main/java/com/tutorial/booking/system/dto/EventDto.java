@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2020. To JWIndustries
+ */
+
 package com.tutorial.booking.system.dto;
 
 import com.tutorial.booking.system.model.Event;
@@ -9,6 +13,10 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.sql.Timestamp;
 
+/**
+ * <p>A class used during the runtime which holds elements of the Event table but which is not mapped to it.</p>
+ * @author Jonathan Watt
+ */
 public class EventDto {
 
     private int eventId;

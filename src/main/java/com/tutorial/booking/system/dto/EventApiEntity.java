@@ -1,5 +1,14 @@
+/*
+ * Copyright (c) 2020. To JWIndustries
+ */
+
 package com.tutorial.booking.system.dto;
 
+/**
+ * <p>A class used during the runtime which holds elements of the Event table but which is not mapped to it.
+ * It is used to send to the calendar via an API.</p>
+ * @author Jonathan Watt
+ */
 public class EventApiEntity {
 
     private int id;
