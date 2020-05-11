@@ -1,9 +1,17 @@
+/*
+ * Copyright (c) 2020. To JWIndustries
+ */
+
 package com.tutorial.booking.system.model;
 
 import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * <p>Entity class for the User table. The User table will map to this class.</p>
+ * @author Jonathan Watt
+ */
 @Entity
 @Table(name = "bs_user")
 public class User {

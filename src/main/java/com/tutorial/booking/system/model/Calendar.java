@@ -1,8 +1,16 @@
+/*
+ * Copyright (c) 2020. To JWIndustries
+ */
+
 package com.tutorial.booking.system.model;
 
 import javax.persistence.*;
 import java.sql.Time;
 
+/**
+ * <p>Entity class for the Calendar table. The calendar table will map to this class.</p>
+ * @author Jonathan Watt
+ */
 @Entity
 @Table(name = "calendar")
 public class Calendar{

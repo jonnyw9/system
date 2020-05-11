@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2020. To JWIndustries
+ */
+
 package com.tutorial.booking.system.Service;
 
 import com.tutorial.booking.system.Repository.NotificationRepository;
@@ -10,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -34,6 +39,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public void eventAddedCreator(Event event){
+        //Create a notification and save details of that notification
         Notification notification = new Notification();
 
         String description = "Your event '"+ event.getTitle() + "' at: " +
@@ -45,6 +51,7 @@ public class NotificationServiceImpl implements NotificationService {
         notification.setActionLink("/event/view/" + event.getEventId());
         notification.setCreatedOn(Timestamp.valueOf(LocalDateTime.now()));
 
+        //Save notification and send email
         saveNotification(notification);
 
         emailSender.sendMail(notification, event.getCreatorUserId());
@@ -85,9 +92,11 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public void eventCancelled(Event event){
+    public List<Notification> eventCancelled(Event event){
+        //Create a list of notifications to be returned
+        List<Notification> notifications = new ArrayList<>();
         Notification notification = new Notification();
-
+        //Add general details to the notifications
         String title = "Event Cancelled";
         notification.setTitle(title);
         String description = "Your event '"+ event.getTitle() + "' at: " +
@@ -95,18 +104,23 @@ public class NotificationServiceImpl implements NotificationService {
         Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now());
         notification.setDescription(description);
 
+        //If the creator of the event is also the recipient
         if(event.getCreatorUserId().getUserId() == event.getRecipientUserId().getUserId()){
             User user = userService.getUserById(event.getCreatorUserId().getUserId());
             notification.setUserId(user);
             notification.setCreatedOn(Timestamp.valueOf(LocalDateTime.now()));
             saveNotification(notification);
             emailSender.sendMail(notification, event.getRecipientUserId());
+            notifications.add(notification);
         }else{
+            //If the user is not both the creator and recipient, save a notification for the creator and another
+            //for the recipient.
             User user = userService.getUserById(event.getCreatorUserId().getUserId());
             notification.setUserId(user);
             notification.setCreatedOn(Timestamp.valueOf(LocalDateTime.now()));
             saveNotification(notification);
             emailSender.sendMail(notification, user);
+            notifications.add(notification);
 
             Notification notification1 = new Notification();
             User user1 = userService.getUserById(event.getRecipientUserId().getUserId());
@@ -116,15 +130,18 @@ public class NotificationServiceImpl implements NotificationService {
             notification1.setCreatedOn(Timestamp.valueOf(LocalDateTime.now()));
             saveNotification(notification1);
             emailSender.sendMail(notification, event.getRecipientUserId());
+            notifications.add(notification1);
         }
+        return notifications;
     }
 
     @Override
     public void eventUpdated(Event event, String locationBefore){
-
+        //If the location is changed, notify on location
         if(!event.getLocation().equals(locationBefore)){
             eventLocationChanged(event);
         }else{
+            //If the update is not location based
             Notification notification = new Notification();
             notification.setTitle("Event Details Updated");
 
@@ -160,6 +177,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public void eventLocationChanged(Event event){
+        //Notifies users that the location has changed on their event
         Notification notification = new Notification();
         notification.setTitle("Event Location Changed.");
         notification.setActionLink("/event/view/" + event.getEventId());
@@ -263,10 +281,11 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public void readAllUnreadNotifications(UserDto userDto){
+        //Gets the user
         User user =  userService.getUserById(userDto.getUserId());
-
+        //Gets all unread notifications
         List<Notification> notifications = notificationRepository.findAllByUserIdAndSeenIsFalse(user);
-
+        //For each one, read it and save
         for (int i = 0; i < notifications.size(); i++) {
             Notification notification = notifications.get(i);
             notification.setSeen(true);
@@ -312,10 +331,11 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public int noUnreadNotifications(UserDto userDto) {
+        //Gets a list of notifications for the user
         List<Notification> notifications = getUserNotifications(userDto.getUserId());
 
         int unreadNotifications = 0;
-
+        //Loops through the notifications and totals up the unread ones
         for (int i = 0; i < notifications.size() ; i++) {
             if(!notifications.get(i).isSeen()){
                 unreadNotifications++;

@@ -49,30 +49,31 @@
         </section>
     </nav>
     <div class="container">
-    <h1>View Notification</h1>
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Received</th>
-                <th>Title</th>
-                <th>Description</th>
-                <th th:if="${notification.getActionLink()}">Link</th>
-            </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td th:text="${notification.getCreatedOn().toLocaleString()}"></td>
-            <td th:text="${notification.getTitle()}"></td>
-            <td th:text="${notification.getDescription()}"></td>
-            <td th:if="${notification.getActionLink()}">
-                <button class="btn btn-secondary"><a class="text-white" th:href="@{${notification.getActionLink()}}">View</a></button>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-    <button class="btn btn-primary">
-        <a class="text-white"  th:href="@{/notifications}">Back to notifications</a>
-    </button>
+        <h1 class="text-center">Help</h1>
+        <h2>Events</h2>
+        <p>To book an event for yourself, click and drag on your calendar on the homepage and highlight the slot you wish to book.</p>
+        <p>To book an event with a staff member. Search the name of the staff member in the top right-hand corner.
+            Don't worry if you can't spell your lecturers name as only a few letters may return them to you.
+            Likewise, if you have no idea of even the first few letters, you can also search with a blank box to return all lecturers!
+        </p>
+        <p>Once you have found your chosen staff member click the 'Book' button next to their name.</p>
+        <p>You will then be taken to that staff members calendar where you can proceed to book them.
+            Remember however, you can only book staff members to half an hour slots, at least 24 hours beforehand,
+            therefore only click and don't try and drag!</p>
+        <h2>Notifications</h2>
+        <p>To read your notifications click on the 'View notifications' button on the menu at the top. Please note if you have notifications,
+            it will 'x unread notifications' instead, with x being the number of unread notifications.</p>
+        <p>On the 'Your notifications' page, the unread notifications will have a star with a coloured background next to them.</p>
+        <p>To read all notifications, click the 'Read all notifications' button at the top.</p>
+        <p>To read just one notification, click the 'view' button next to the notifications.</p>
+        <p>To click through to the entity that notified you, click the 'view' button, under the 'Link' column when viewing
+            one notification.</p>
+        <h2>Account Details</h2>
+        <p>To view your account details, click the 'Account Details' on the menu at the top of the page.</p>
+        <p>Here you can view the details of your account as well as edit, or delete, your account.</p>
+        <p>To edit something on your account, click the 'edit' button next to what you would like to edit. Please note, editing
+            your email or password will log you out.</p>
+        <p>To delete your account, click the delete account button.</p>
     </div>
 </div>
 </body>

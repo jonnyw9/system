@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2020. To JWIndustries
+ */
+
 package com.tutorial.booking.system.Controller;
 
 import com.tutorial.booking.system.Constraint.PasswordValidation;
@@ -21,6 +25,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 
 
+/**
+ * <p>A controller for the user class.</p>
+ * @author Jonathan Watt
+ */
 @Controller
 @RequestMapping("/user/")
 public class UserController {
@@ -52,6 +60,12 @@ public class UserController {
     @Autowired
     NotificationService notificationService;
 
+    /**
+     * <p>Views thew account of a given user.</p>
+     * @param authentication - The authenticated user in the system.
+     * @param model - the model to add attributes to.
+     * @return - the view user account view.
+     */
     @GetMapping("view")
     public String viewAccount(Authentication authentication, Model model){
         user = userService.makeUserDto(authentication);
@@ -63,6 +77,10 @@ public class UserController {
         return userTemplatePrefix + "viewUser";
     }
 
+    /**
+     * <p>Method to delete a users account.</p>
+     * @return - The landing page of the web app.
+     */
     @GetMapping(editPrefix + "delete")
     public String deleteAccount(){
 
@@ -71,6 +89,13 @@ public class UserController {
         return "redirect:/?deleted";
     }
 
+    /**
+     * <p>General method to handle the editing of different attributes of a users account.</p>
+     * @param editRequest - The attribute to edit.
+     * @param model - The model to add attributes to.
+     * @param authentication - The authenticated user.
+     * @return - The form for the editing of the attribute or the view page.
+     */
     @GetMapping(editPrefix + "{editRequest}")
     public String editDetails(@PathVariable String editRequest, Model model,
                               Authentication authentication){
@@ -82,6 +107,7 @@ public class UserController {
             model.addAttribute("user", user);
         }
 
+        //Return the page to go to depending on the edit request
         if(editRequest == null){
             return "redirect:/user/view?badEditRequest";
         }else{
@@ -105,10 +131,19 @@ public class UserController {
         }
     }
 
+    /**
+     * <p>Post mapping to handle certain edit requests for a user.</p>
+     * @param editRequest - The edit request.
+     * @param userDto - the userdto
+     * @param redirectAttributes - The redirectAttributes if needed
+     * @param bindingResult - The bindingResult to add errors too.
+     * @return - See code for further details.
+     */
     @PostMapping(editPrefix + "{editRequest}")
     public String editDetails(@PathVariable String editRequest, @ModelAttribute(name = "user") UserDto userDto,
                               RedirectAttributes redirectAttributes,
                               BindingResult bindingResult){
+        //switch based on the edit request and handle things accordingly
         User userModel;
         switch(editRequest){
             case "name":
@@ -123,6 +158,7 @@ public class UserController {
                 if(userModel.getStaffId() != null){
                     bindingResult = userValidation.validateRoom(userDto.getRoom(), bindingResult);
                 }else{
+                    //If user is not staff redirect back to view user.
                     return "redirect:/user/view?badEditRequest";
                 }
                 break;
@@ -131,11 +167,13 @@ public class UserController {
                 if(userModel.getStaffId() != null){
                     bindingResult = userValidation.validateTimes(userDto.getStartTime(), userDto.getEndTime(), bindingResult);
                 }else{
+                    //If user is not staff redirect back to view user.
                     return "redirect:/user/view?badEditRequest";
                 }
                 bindingResult = userValidation.validateTimes(userDto.getStartTime(), userDto.getEndTime(), bindingResult);
                 break;
             default:
+                //If the edit request does not exists redirect back to view user.
                 return "redirect:/user/view?badEditRequest";
         }
 
@@ -143,18 +181,29 @@ public class UserController {
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.user",
                     bindingResult);
             redirectAttributes.addFlashAttribute("user", userDto);
+            //If there are errors redirect to the edit form
             return "redirect:/user/edit/" + editRequest;
         }
 
+        //Update the details
         userService.updateDetails(userDto, editRequest);
 
+        //If the user changed their email address send them to the login page.
         if(editRequest.equals("email")){
             return "redirect:/login?success";
         }
-
+        //Redirect to the view page.
         return "redirect:/user/view?updated";
     }
 
+    /**
+     * <p>Method to handle the post of editing a password.</p>
+     * @param passwordDto - The passwordDTO
+     * @param bindingResult - The bindingResult to add errors too.
+     * @param redirectAttributes - The redirectAttributes if needed
+     * @param authentication - The authenticated user.
+     * @return - The login page or the form.
+     */
     @PostMapping(editPrefix + "password")
     public String editPassword(@ModelAttribute(name = "passwordDto") @Valid PasswordDto passwordDto,
                                BindingResult bindingResult,

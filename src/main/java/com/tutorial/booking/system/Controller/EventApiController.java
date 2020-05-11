@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2020. To JWIndustries
+ */
+
 package com.tutorial.booking.system.Controller;
 
 
@@ -19,6 +23,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * <p>A REST Controller used by the FullCalendar to get events onto the calendar.</p>
+ * @author Jonathan Watt
+ */
 @RestController
 @RequestMapping("/api/event/")
 public class EventApiController {
@@ -30,18 +38,28 @@ public class EventApiController {
     private UserService userService;
 
 
+    /**
+     * <p>Gets all the Events for a given user Id.</p>
+     * @param id - The user id given.
+     * @return - The JSON of the eventApiEntity of the list of events for that user.
+     */
     @GetMapping("getall/{id}")
     @ResponseBody
     public ResponseEntity<List<EventApiEntity>> findAll(@PathVariable int id){
 
+        //Sets up a URL to view the event
         String urlBase = "/event/view/";
+        //Gets the event
         List<Event> events = eventService.getEventsForUser(id);
 
+        //If there are no events respond with not found.
         if(events == null){
             return ResponseEntity.notFound().build();
         }else{
+            //Create a list of eventApiEntities to return
             List<EventApiEntity> eventApiReturn = new ArrayList<>();
 
+            //For all the events map the pertinent information to the eventApiEntity
             for(Event event: events){
                 EventApiEntity eventApiEntity = new EventApiEntity();
                 eventApiEntity.setId(event.getEventId());
@@ -52,6 +70,7 @@ public class EventApiController {
                 eventApiReturn.add(eventApiEntity);
             }
 
+            //Return the JSON
             URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(id)
                     .toUri();
 

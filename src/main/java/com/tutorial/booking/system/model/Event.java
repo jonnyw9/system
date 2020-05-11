@@ -10,7 +10,10 @@ import javax.transaction.Transactional;
 import java.sql.Timestamp;
 
 
-
+/**
+ * <p>Entity class for the Event table. The Event table will map to this class.</p>
+ * @author Jonathan Watt
+ */
 @Entity
 @Transactional
 @Table(name = "bs_event")
