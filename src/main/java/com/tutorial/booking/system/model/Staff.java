@@ -1,8 +1,16 @@
+/*
+ * Copyright (c) 2020. To JWIndustries
+ */
+
 package com.tutorial.booking.system.model;
 
 import javax.jws.soap.SOAPBinding;
 import javax.persistence.*;
 
+/**
+ * <p>Entity class for the Staff table. The Staff table will map to this class.</p>
+ * @author Jonathan Watt
+ */
 @Entity
 @Table(name = "staff")
 public class Staff {

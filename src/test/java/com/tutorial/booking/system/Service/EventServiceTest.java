@@ -171,13 +171,51 @@ class EventServiceTest {
 
     @Test
     void listEventsNearTimeEventUsers() {
+        events = new ArrayList<>();
+        events.add(e1);
+        Event eve2 = new Event();
+        eve2.setEventId(2);
+        eve2.setCreatorUserId(u1);
+        eve2.setRecipientUserId(u1);
+        eve2.setTitle("test");
+        eve2.setDescription("dff");
+        eve2.setLocation("222");
+        eve2.setAccepted(true);
+        eve2.setEventEnd(Timestamp.valueOf(t1.toLocalDateTime().plusMinutes(60)));
+        eve2.setEventStart(Timestamp.valueOf(t2.toLocalDateTime().plusMinutes(60)));
+        events.add(eve2);
+        Event eve3 = new Event();
+        eve3.setCreatorUserId(u2);
+        eve3.setRecipientUserId(u1);
+        eve3.setEventId(3);
+        eve3.setTitle("test");
+        eve3.setDescription("dff");
+        eve3.setLocation("222");
+        eve3.setAccepted(true);
+        eve3.setEventEnd(Timestamp.valueOf(t1.toLocalDateTime().plusMinutes(180)));
+        eve3.setEventStart(Timestamp.valueOf(t2.toLocalDateTime().plusMinutes(180)));
+        events.add(eve3);
+        List<Event> eventsCreator = new ArrayList<>();
+        eventsCreator.add(eve3);
+        Event eve4 = new Event();
+        eve4.setCreatorUserId(u2);
+        eve4.setRecipientUserId(u1);
+        eve4.setEventId(3);
+        eve4.setTitle("test");
+        eve4.setDescription("dff");
+        eve4.setLocation("222");
+        eve4.setAccepted(true);
+        eve4.setEventEnd(Timestamp.valueOf(t1.toLocalDateTime().minusMinutes(180)));
+        eve4.setEventStart(Timestamp.valueOf(t2.toLocalDateTime().minusMinutes(180)));
+        eventsCreator.add(eve4);
+        Mockito.doReturn(events).when(eventService).getEventsForUser(edto1.getCreatorUserId().getUserId());
+        Mockito.doReturn(eventsCreator).when(eventService).getEventsForUser(edto1.getRecipientUserId().getUserId());
+        assertEquals(eventService.listEventsNearTimeEventUsers(edto1), true);
+        events.remove(e1);
+        assertEquals(eventService.listEventsNearTimeEventUsers(edto1), false);
+        events.remove(eve2);
+        assertEquals(eventService.listEventsNearTimeEventUsers(edto1), false);
+        Mockito.verify(eventService, Mockito.times(6)).getEventsForUser(any(Integer.class));
     }
 
-    @Test
-    void checkUpcomingEvents() {
-    }
-
-    @Test
-    void notifyUsersOfUpcomingEvents() {
-    }
 }

@@ -1,9 +1,17 @@
+/*
+ * Copyright (c) 2020. To JWIndustries
+ */
+
 package com.tutorial.booking.system.dto;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+/**
+ * <p>A class used during the runtime which holds elements of the Password table but which is not mapped to it.</p>
+ * @author Jonathan Watt
+ */
 public class PasswordDto {
 
     @NotNull

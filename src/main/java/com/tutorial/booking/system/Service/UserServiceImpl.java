@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2020. To JWIndustries
+ */
+
 package com.tutorial.booking.system.Service;
 
 import com.tutorial.booking.system.Repository.*;
@@ -90,7 +94,6 @@ public class UserServiceImpl implements UserService{
         //Set the roles to whether the user is staff or student
         roles.setStudent(userDto.isStudent());
         roles.setStaff(userDto.isStaff());
-        //TODO Implement admin functionality
         roles.setAdmin(false);
         //Set the user roles to the roles entity created
         user.setRoleId(roles);
@@ -258,7 +261,6 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UserDto makeUserDto(Authentication authentication){
-        System.out.println(authentication.getName());
         return getUserByUserName(authentication.getName());
     }
 }

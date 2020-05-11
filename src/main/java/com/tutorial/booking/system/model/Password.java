@@ -1,8 +1,16 @@
+/*
+ * Copyright (c) 2020. To JWIndustries
+ */
+
 package com.tutorial.booking.system.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
+/**
+ * <p>Entity class for the Password table. The Password table will map to this class.</p>
+ * @author Jonathan Watt
+ */
 @Entity
 @Table(name = "password")
 public class Password implements Serializable {
