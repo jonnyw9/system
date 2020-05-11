@@ -9,11 +9,8 @@ import com.tutorial.booking.system.Repository.CalendarRepository;
 import com.tutorial.booking.system.Service.*;
 
 import com.tutorial.booking.system.dto.UserDto;
-import com.tutorial.booking.system.model.Event;
-import com.tutorial.booking.system.model.Notification;
 import com.tutorial.booking.system.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -23,7 +20,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -258,5 +254,16 @@ public class FrontController {
         return "staffCalendar";
     }
 
+    @GetMapping("help")
+    public String help(Model model,
+                       Authentication authentication){
+        user =  userService.makeUserDto(authentication);
+
+        model.addAttribute("unreadNotifications", notificationService.noUnreadNotifications(user));
+
+        model.addAttribute("user", user);
+
+        return "help";
+    }
 
 }
